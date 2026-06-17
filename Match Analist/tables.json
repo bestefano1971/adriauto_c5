@@ -1,0 +1,300 @@
+{
+  "Report": {
+    "sheet": "1T",
+    "ref": "A22:R55",
+    "columns": [
+      "TIMING",
+      "PT",
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4",
+      "IN",
+      "OUT",
+      "MUR",
+      "PAR",
+      "GF",
+      "GS",
+      "PP",
+      "PR",
+      "FF",
+      "FS",
+      "A",
+      "E"
+    ]
+  },
+  "Giocatori": {
+    "sheet": "1T",
+    "ref": "A1:P20",
+    "columns": [
+      "1\u00b0 T",
+      "1",
+      "12",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "8",
+      "9",
+      "10",
+      "11",
+      "13",
+      "14",
+      "15",
+      "16"
+    ]
+  },
+  "Giocatori2T": {
+    "sheet": "2T",
+    "ref": "A1:P20",
+    "columns": [
+      "2\u00b0 T",
+      "1",
+      "12",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "8",
+      "9",
+      "10",
+      "11",
+      "13",
+      "14",
+      "15",
+      "16"
+    ]
+  },
+  "Report2T": {
+    "sheet": "2T",
+    "ref": "A22:R54",
+    "columns": [
+      "TIMING",
+      "PT",
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4",
+      "IN",
+      "OUT",
+      "MUR",
+      "PAR",
+      "GF",
+      "GS",
+      "PP",
+      "PR",
+      "FF",
+      "FS",
+      "A",
+      "E"
+    ]
+  },
+  "Giocatori_Massivo": {
+    "sheet": "Giocatori",
+    "ref": "A43:P61",
+    "columns": [
+      "MASSIVO",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17"
+    ]
+  },
+  "Report_1T": {
+    "sheet": "Giocatori",
+    "ref": "A5:P18",
+    "columns": [
+      "RIEPILOGO",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17"
+    ]
+  },
+  "Report_2T": {
+    "sheet": "Giocatori",
+    "ref": "A21:P40",
+    "columns": [
+      "RIEPILOGO",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17"
+    ]
+  },
+  "Quartetti_Massivo": {
+    "sheet": "Rendimento Quartetti",
+    "ref": "A18:J26",
+    "columns": [
+      "Quartetti",
+      "TF",
+      "TS",
+      "GF",
+      "GS",
+      "PP",
+      "PR",
+      "FREQ",
+      "TIME",
+      "REND"
+    ]
+  },
+  "Quartetti_1T": {
+    "sheet": "Rendimento Quartetti",
+    "ref": "A2:J6",
+    "columns": [
+      "Quartetti",
+      "TF",
+      "TS",
+      "GF",
+      "GS",
+      "PP",
+      "PR",
+      "FREQ",
+      "TIME",
+      "REND"
+    ]
+  },
+  "Quartetti_2T": {
+    "sheet": "Rendimento Quartetti",
+    "ref": "A10:J14",
+    "columns": [
+      "Quartetti",
+      "TF",
+      "TS",
+      "GF",
+      "GS",
+      "PP",
+      "PR",
+      "FREQ",
+      "TIME",
+      "REND"
+    ]
+  },
+  "Tabella4": {
+    "sheet": "Rendimento Giocatori",
+    "ref": "A18:B30",
+    "columns": [
+      "LEGENDA",
+      "Note"
+    ]
+  },
+  "Report_Massivo": {
+    "sheet": "Rendimento Giocatori",
+    "ref": "A1:N14",
+    "columns": [
+      "NOME",
+      "TIMING",
+      "TIN",
+      "TOUT",
+      "FF",
+      "FS",
+      "PP",
+      "PR",
+      "GF",
+      "PRES.GF",
+      "PRES.GS",
+      "GS",
+      "DIFF",
+      "REND"
+    ]
+  },
+  "Rendimento_Totale": {
+    "sheet": "Rendimento totale",
+    "ref": "A1:J20",
+    "columns": [
+      "NOME",
+      "PARTITE",
+      "TIN",
+      "TOUT",
+      "PP",
+      "PR",
+      "GF",
+      "PRES.GF",
+      "PRES.GS",
+      "RENDIMENTO"
+    ]
+  },
+  "Tabella8": {
+    "sheet": "Giocatori Profili",
+    "ref": "A2:F10",
+    "columns": [
+      "GIOCATORE",
+      "CHECCHIN Tommaso",
+      "PADOAN Gioele",
+      "DALPEZZO Francesco",
+      "LUCA Cristian",
+      "ENRIETTE Gabriele"
+    ]
+  },
+  "Tabella10": {
+    "sheet": "Giocatori Profili",
+    "ref": "A12:F20",
+    "columns": [
+      "GIOCATORE",
+      "SERAFIN Nicol\u00f2",
+      "BOSCOLO Giorgio",
+      "D'ALESSANDRO Tommaso",
+      "SOTTILE Pietro",
+      "JEONG Alessandro"
+    ]
+  },
+  "Tabella11": {
+    "sheet": "Giocatori Profili",
+    "ref": "A22:F30",
+    "columns": [
+      "GIOCATORE",
+      "PILLON Davide",
+      "SAVOIANI Filippo",
+      "MANENTE Rocco",
+      "OMRANE Ismaele",
+      "BACCARIN Alessandro"
+    ]
+  },
+  "Tabella12": {
+    "sheet": "Giocatori Profili",
+    "ref": "A32:F40",
+    "columns": [
+      "GIOCATORE",
+      "LENZI Antonio",
+      "TOPAN Sammy",
+      "RECCHIA Marco",
+      "Colonna1",
+      "Colonna3"
+    ]
+  }
+}
