@@ -5506,7 +5506,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 errorMsg.style.display = 'none';
                 currentUser = { username: found.username, role: found.role };
                 localStorage.setItem('futsal_current_user', JSON.stringify(currentUser));
-                window.location.href = 'dashboard.html';
+                window.location.href = 'index.html';
             } else {
                 errorMsg.style.display = 'block';
             }
@@ -5525,7 +5525,7 @@ function checkAuth() {
         }
     } else {
         if(isLoginPage) {
-            window.location.href = 'dashboard.html';
+            window.location.href = 'index.html';
         } else {
             applyRolePermissions();
         }
