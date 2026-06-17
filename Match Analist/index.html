@@ -2509,7 +2509,7 @@
         <div class="modal-content"
             style="width: 440px; text-align: center; padding: 2rem; background: rgba(9, 9, 11, 0.98); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;">
             <h3 style="margin-bottom: 1.5rem; color: var(--danger);">⚠️ USCITA DAL MATCH ANALYST</h3>
-            <p style="margin-bottom: 2rem; font-size: 1.1rem; color: var(--text-muted);">Vuoi esportare i dati finali prima di tornare alla dashboard?</p>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem; color: var(--text-muted);">Vuoi esportare i dati finali prima di tornare all'index?</p>
             <div style="display:flex; flex-direction:column; gap: 1rem;">
                 <button class="dashboard-action-btn btn-green" onclick="confirmExitWithSave()">
                     <span class="main-label">✅ SÌ, SALVA ED ESCI</span>
@@ -4122,16 +4122,16 @@
             try {
                 document.getElementById('exit-modal').style.display = 'none';
                 await downloadData();
-                console.log("Salvataggio completato. Ritorno alla dashboard...");
-                window.location.href = '../dashboard.html';
+                console.log("Salvataggio completato. Ritorno all'index...");
+                window.location.href = '../index.html';
             } catch (err) {
                 console.error("Errore durante l'uscita:", err);
-                window.location.href = '../dashboard.html';
+                window.location.href = '../index.html';
             }
         }
 
         function confirmExitWithoutSave() {
-            window.location.href = '../dashboard.html';
+            window.location.href = '../index.html';
         }
 
         function handleTeamSelection(side) {
