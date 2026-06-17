@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        window.onerror = function(msg, url, line, col, error) {
+            alert("JS Error: " + msg + " al rigo " + line);
+            return false;
+        };
+    </script>
+    <title>Futsal Performance Portal - Gestione Rosa & Valutazioni</title>
+    <meta name="description" content="Portale premium per la gestione della rosa di calcio a 5, con autovalutazioni dei giocatori, valutazioni del mister, grafici di confronto e piani di crescita individuali.">
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+    <!-- LOGIN IS NOW IN LOGIN.HTML -->
+    <div class="background-decorations">
+        <div class="glow-sphere glow-1"></div>
+        <div class="glow-sphere glow-2"></div>
+        <div class="glow-sphere glow-3"></div>
+    </div>
+
+    <!-- APP HEADER -->
+    <header class="app-header">
+        <div class="header-content container" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 1rem 0;">
+            <div class="logo-area" onclick="switchTabTo('tab-dashboard')" style="display: flex; align-items: center; gap: 1rem; cursor: pointer;">
+                <div class="team-logo-container" style="position: relative; width: 60px; height: 60px; border-radius: 50%; background: rgba(0,0,0,0.3); border: 2px dashed var(--color-tecn); display: flex; justify-content: center; align-items: center; overflow: hidden; flex-shrink: 0;" title="Torna alla Dashboard">
+                    <img id="team-logo-img" src="" alt="Team Logo" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                    <span id="team-logo-placeholder" style="color: var(--color-tecn); text-align: center; font-size: 0.6rem;">Nessun<br>Logo</span>
+                </div>
+                <div class="titles">
+                    <h1 id="team-name-display" style="margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;" title="Torna alla Dashboard">
+                        Nome Squadra Futsal
+                    </h1>
+                    
+                    <p id="team-season-display" style="margin: 0.2rem 0 0 0; color: #a0aec0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 0.5rem;">
+                        Stagione Sportiva
+                    </p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span id="current-user-display" style="color: var(--color-tecn); font-weight: 600; font-size: 0.9rem;"></span>
+                <button class="btn-logout" onclick="performLogout()">Logout</button>
+                <button id="btn-fullscreen" onclick="toggleFullScreen()" title="Schermo Intero" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; flex-shrink: 0;" onmouseover="this.style.color='white'; this.style.background='rgba(255,255,255,0.15)';" onmouseout="this.style.color='var(--text-muted)'; this.style.background='rgba(255,255,255,0.05)';">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main container">
+
+        <!-- ==========================================
+             TAB 0: DASHBOARD PRINCIPALE
+             ========================================== -->
+        <section id="tab-dashboard" class="tab-panel active">
+            <div class="dashboard-main-grid">
+                <!-- Card: Profilo Giocatori -->
+                <div class="main-dashboard-card glass-panel" data-tab="tab-profile" onclick="switchTabTo('tab-profile', 'subtab-roster-list')">
+                    <div class="dashboard-card-icon" style="color: var(--color-player);">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                          <path d="M6 21V19C6 16.7909 7.79086 15 10 15H14C16.2091 15 18 16.7909 18 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Profilo Giocatori</h3>
+                    <p>Gestione rosa e anagrafica atleti</p>
+                </div>
+
+                <!-- Card: Presenze -->
+                <div class="main-dashboard-card glass-panel" data-tab="tab-attendance" onclick="switchTabTo('tab-attendance')">
+                    <div class="dashboard-card-icon" style="color: var(--color-tecn);">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M8 7V3M16 7V3M3 11H21M5 5H19C20.1046 5 21 5.89543 21 7V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V7C3 5.89543 3.89543 5 5 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Presenze</h3>
+                    <p>Tabellone convocazioni e allenamenti</p>
+                </div>
+                
+                <!-- Card: Performance -->
+                <div class="main-dashboard-card glass-panel" data-tab="tab-roster" onclick="switchTabTo('tab-roster')">
+                    <div class="dashboard-card-icon" style="color: var(--color-psic);">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M21 21H3V3M21 9L13 17L9 13L3 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Performance</h3>
+                    <p>Valutazioni, schede giocatore e trend</p>
+                </div>
+
+                <!-- Card: Test -->
+                <div class="main-dashboard-card glass-panel" data-tab="tab-athletic" onclick="switchTabTo('tab-athletic')">
+                    <div class="dashboard-card-icon" style="color: var(--color-fisi);">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9 11L12 14L22 4M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Test</h3>
+                    <p>Storico e inserimento test fisici</p>
+                </div>
+
+                <!-- Card: Preparazione Atletica -->
+                <div class="main-dashboard-card glass-panel" data-tab="tab-preparation" onclick="switchTabTo('tab-preparation')">
+                    <div class="dashboard-card-icon" style="color: var(--color-tatt);">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M6 12L10 16L18 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>Preparazione Atletica</h3>
+                    <p>Programmi e piani di allenamento</p>
+                </div>
+
+                <!-- Card: Classifica e Risultati -->
+                <div class="main-dashboard-card glass-panel" data-tab="tab-results" onclick="switchTabTo('tab-results')">
+                    <div class="dashboard-card-icon" style="color: var(--color-player);">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 19V6.2C4 5.0799 4 4.51984 4.21799 4.09202C4.40973 3.71569 4.71569 3.40973 5.09202 3.21799C5.51984 3 6.0799 3 7.2 3H16.8C17.9201 3 18.4802 3 18.908 3.21799C19.2843 3.40973 19.5903 3.71569 19.782 4.09202C20 4.51984 20 5.0799 20 6.2V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 19L12 15L20 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Classifica e Risultati</h3>
+                    <p>Statistiche partite e andamento</p>
+                </div>
+
+                <!-- Card: Match Analyst -->
+                <div class="main-dashboard-card glass-panel" data-tab="tab-match-analyst" onclick="window.location.href='Match Analist/index.html'">
+                    <div class="dashboard-card-icon" style="color: var(--color-tatt);">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M15 10L20 5.5V18.5L15 14V18C15 19.1046 14.1046 20 13 20H5C3.89543 20 3 19.1046 3 18V6C3 4.89543 3.89543 4 5 4H13C14.1046 4 15 4.89543 15 6V10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M10 9L15 12L10 15V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Match Analyst</h3>
+                    <p>Analisi video e tagging tattico</p>
+                </div>
+
+                <!-- Card: Schemi -->
+                <div class="main-dashboard-card glass-panel" data-tab="tab-schemi" onclick="switchTabTo('tab-schemi')">
+                    <div class="dashboard-card-icon" style="color: var(--color-tecn);">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                          <path d="M3 9H21" stroke="currentColor" stroke-width="2"/>
+                          <path d="M9 21V9" stroke="currentColor" stroke-width="2"/>
+                          <circle cx="15" cy="15" r="2" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <h3>Schemi e Lavagna</h3>
+                    <p>Playbook tattico e animazioni</p>
+                </div>
+
+                <!-- Card: Impostazioni -->
+                <div class="main-dashboard-card glass-panel" data-tab="tab-settings" onclick="switchTabTo('tab-settings')">
+                    <div class="dashboard-card-icon" style="color: #cbd5e1;">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Impostazioni</h3>
+                    <p>Setup squadra, loghi e regolamenti</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PROFILO GIOCATORI
+             ========================================== -->
+        <section id="tab-profile" class="tab-panel">
+            <!-- SCHERMATA PRINCIPALE ELENCO GIOCATORI -->
+            <div id="subtab-roster-list" class="profile-subtab-content" style="display: block; margin-bottom: 3rem;">
+                <div class="glass-panel" style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                        <h2 style="margin: 0; color: var(--color-player);">Report Giocatori</h2>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <select id="roster-sort-select" onchange="renderRoster()" class="form-control" style="height: 38px; padding: 0 1rem; font-size: 0.85rem; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+                                <option value="role">Ordina per Ruolo</option>
+                                <option value="alpha">Ordine Alfabetico</option>
+                            </select>
+                            <button type="button" class="btn btn-primary" onclick="window.print()" style="height: 38px; padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+                                Salva in PDF
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="exportPlayers()" style="height: 38px; padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:1.1rem; height:1.1rem; margin-right: 0.25rem;">
+                                    <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-3 3m0 0l-3-3m3 3V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Esporta Rosa</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('import-players-input').click()" style="height: 38px; padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:1.1rem; height:1.1rem; margin-right: 0.25rem;">
+                                    <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-3-3m0 0L10 8m3-3v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Importa Analyst</span>
+                            </button>
+                            <input type="file" id="import-players-input" accept=".json" style="display: none;" onchange="importPlayersFromJson(event)">
+                            <button type="button" class="btn btn-primary" onclick="openAddPlayerModal()" style="height: 38px; padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:1.1rem; height:1.1rem; margin-right: 0.25rem;">
+                                    <path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span>Aggiungi Giocatore</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="roster-grid" class="roster-grid">
+                        <!-- Dynamic player cards -->
+                        <div class="empty-roster-msg">
+                            <p>Nessun giocatore registrato.</p>
+                            <span class="subtext">Compila il modulo a sinistra per inserire i tuoi atleti nella rosa.</span>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- close profile-subtab-content -->
+
+            <!-- SCHERMATA QUARTETTI -->
+            <style>
+                .futsal-pitch-rhombus {
+                    position: relative;
+                    width: 100%;
+                    height: 550px;
+                    background: #1e3a8a;
+                    background-image: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+                    border: 2px solid #fff;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+                }
+                .futsal-pitch-rhombus::before {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    width: 100%;
+                    height: 2px;
+                    background: #fff;
+                }
+                .futsal-pitch-rhombus::after {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 60px;
+                    height: 60px;
+                    border: 2px solid #fff;
+                    border-radius: 50%;
+                    transform: translate(-50%, -50%);
+                }
+                /* Linee area di rigore */
+                .pitch-area-top, .pitch-area-bottom {
+                    position: absolute;
+                    width: 180px;
+                    height: 90px;
+                    border: 2px solid rgba(255,255,255,0.6);
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+                .pitch-area-top {
+                    top: 0;
+                    border-top: none;
+                    border-radius: 0 0 90px 90px;
+                }
+                .pitch-area-bottom {
+                    bottom: 0;
+                    border-bottom: none;
+                    border-radius: 90px 90px 0 0;
+                }
+                .pitch-penalty-top, .pitch-penalty-bottom {
+                    position: absolute;
+                    width: 6px;
+                    height: 6px;
+                    background: rgba(255,255,255,0.6);
+                    border-radius: 50%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+                .pitch-penalty-top { top: 75px; }
+                .pitch-penalty-bottom { bottom: 75px; }
+
+                .rhombus-slot {
+                    position: absolute;
+                    width: 110px;
+                    text-align: center;
+                    transform: translate(-50%, -50%);
+                    z-index: 2;
+                }
+                .slot-top { top: 15%; left: 50%; }
+                .slot-left { top: 40%; left: 20%; }
+                .slot-right { top: 40%; left: 80%; }
+                .slot-bottom { top: 65%; left: 50%; }
+                .slot-goalie { top: 90%; left: 50%; }
+
+                /* Slots Quinto Piramide (1-2-2) */
+                .slot-pir-vert { top: 30%; left: 50%; }
+                .slot-pir-latSx { top: 60%; left: 35%; }
+                .slot-pir-latDx { top: 60%; left: 65%; }
+                .slot-pir-pivSx { top: 90%; left: 12%; }
+                .slot-pir-pivDx { top: 90%; left: 88%; }
+
+                /* Slots Quinto 1-2-2 (ex 3-2) */
+                .slot-32-cent { top: 40%; left: 50%; }
+                .slot-32-latSx { top: 60%; left: 10%; }
+                .slot-32-latDx { top: 65%; left: 70%; }
+                .slot-32-pivSx { top: 90%; left: 10%; }
+                .slot-32-pivDx { top: 90%; left: 90%; }
+
+                /* Slots Quinto 2-1-2 */
+                .slot-212-difSx { top: 90%; left: 10%; }
+                .slot-212-difDx { top: 90%; left: 90%; }
+                .slot-212-cent { top: 75%; left: 50%; }
+                .slot-212-pivSx { top: 55%; left: 10%; }
+                .slot-212-pivDx { top: 55%; left: 90%; }
+
+                .rhombus-player {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    position: relative;
+                }
+                .rhombus-player .avatar {
+                    width: 50px; height: 50px;
+                    border-radius: 50%;
+                    background: var(--color-player);
+                    display: flex; align-items: center; justify-content: center;
+                    font-weight: bold; font-size: 1.2rem; margin-bottom: 4px;
+                    overflow: hidden;
+                    border: 2px solid var(--color-player);
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+                    transition: transform 0.2s, box-shadow 0.2s;
+                }
+                .rhombus-player:hover .avatar {
+                    transform: scale(1.1);
+                }
+                .rhombus-player .avatar img {
+                    width: 100%; height: 100%; object-fit: cover;
+                }
+                .rhombus-player-name {
+                    position: absolute;
+                    bottom: -25px;
+                    background: rgba(0,0,0,0.8);
+                    color: white;
+                    padding: 3px 8px;
+                    border-radius: 4px;
+                    font-size: 0.75rem;
+                    white-space: nowrap;
+                    opacity: 0;
+                    pointer-events: none;
+                    transition: opacity 0.2s, transform 0.2s;
+                    transform: translateY(-5px);
+                    z-index: 10;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+                }
+                .rhombus-player:hover .rhombus-player-name {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+                .rhombus-empty {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    width: 60px; height: 60px;
+                    background: rgba(255,255,255,0.1);
+                    border: 2px dashed rgba(255,255,255,0.5);
+                    border-radius: 50%;
+                    color: rgba(255,255,255,0.8);
+                    margin: 0 auto;
+                    font-size: 0.7rem;
+                    text-align: center;
+                    backdrop-filter: blur(2px);
+                }
+            </style>
+            <div id="subtab-quartets" class="profile-subtab-content">
+                <div class="glass-panel" style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+                        <h2 style="margin: 0; color: var(--color-player);">Quartetti di Rotazione (Rombo)</h2>
+                        <button class="btn btn-primary" onclick="renderQuartets()">Aggiorna Vista</button>
+                    </div>
+                    
+                    <div class="quartets-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+                        <!-- 1° Quartetto -->
+                        <div class="quartet-box">
+                            <h3 style="text-align: center; color: var(--color-player); margin-bottom: 1rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 6px;">1° Quartetto (Titolari)</h3>
+                            <div class="futsal-pitch-rhombus" id="pitch-quartet-1">
+                                <!-- Slots generated via JS -->
+                            </div>
+                        </div>
+                        <!-- 2° Quartetto -->
+                        <div class="quartet-box">
+                            <h3 style="text-align: center; color: var(--color-player); margin-bottom: 1rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 6px;">2° Quartetto (Prime Rotazioni)</h3>
+                            <div class="futsal-pitch-rhombus" id="pitch-quartet-2">
+                            </div>
+                        </div>
+                        <!-- 3° Quartetto -->
+                        <div class="quartet-box">
+                            <h3 style="text-align: center; color: var(--color-player); margin-bottom: 1rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 6px;">3° Quartetto (Seconde Rotazioni)</h3>
+                            <div class="futsal-pitch-rhombus" id="pitch-quartet-3">
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PERFORMANCE
+             ========================================== -->
+        <section id="tab-roster" class="tab-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; max-width: fit-content; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
+                <div class="sub-tab-container glass-panel" style="margin-bottom: 0; padding: 0.4rem; display: flex; gap: 0.5rem;">
+                    <button class="tab-btn active roster-sub-tab-btn" data-subtab="subtab-evaluation">
+                        <span>Nuova Valutazione</span>
+                    </button>
+                    <button class="tab-btn roster-sub-tab-btn" data-subtab="subtab-trends">
+                        <span>Storico & Trend</span>
+                    </button>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="window.print()" style="height: 38px; padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+                    Salva in PDF
+                </button>
+            </div>
+
+        <!-- ==========================================
+             SUB-TAB 2: NUOVA VALUTAZIONE
+             ========================================== -->
+        <div id="subtab-evaluation" class="roster-subtab-content">
+            <div class="evaluation-setup-bar glass-panel">
+                <div class="setup-grid">
+                    <div class="form-group">
+                        <label for="select-player">Seleziona Giocatore</label>
+                        <select id="select-player">
+                            <option value="">-- Seleziona Giocatore --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assessment-date">Data Valutazione</label>
+                        <input type="date" id="assessment-date">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Roster empty alert -->
+            <div id="evaluation-warning" class="warning-box glass-panel hidden">
+                <p>⚠️ Attenzione: Devi inserire almeno un giocatore nella scheda <strong>"Rosa Squadra"</strong> prima di poter inserire una valutazione.</p>
+            </div>
+
+            <!-- ATHLETE MINI PROFILE -->
+            <div id="athlete-profile-card" class="athlete-profile-card glass-panel hidden">
+                <div class="profile-header">
+                    <div class="profile-avatar-wrapper" id="profile-card-avatar-container">
+                        <!-- Image or initials rendered dynamically -->
+                    </div>
+                    <div class="profile-titles">
+                        <div class="profile-name-row">
+                            <h3 id="profile-card-name">Nome Giocatore</h3>
+                            <span id="profile-card-number" class="jersey-badge">10</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-details-grid">
+                    <h3 class="panel-title" style="grid-column: 1 / -1; margin-bottom: 0.5rem;">Profilo personale</h3>
+                    <div class="profile-detail-item">
+                        <span class="lbl">Anno di Nascita:</span>
+                        <strong id="profile-card-birth-year">--</strong>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="lbl">Peso:</span>
+                        <strong id="profile-card-weight">--</strong> kg
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="lbl">Altezza:</span>
+                        <strong id="profile-card-height">--</strong> cm
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="lbl">Ruolo:</span>
+                        <strong id="profile-card-role">--</strong>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="lbl">Piede Dominante:</span>
+                        <strong id="profile-card-foot">--</strong>
+                    </div>
+                    <div class="profile-detail-item bio" style="grid-column: 1 / -1; border-top: 1px solid hsla(224, 20%, 90%, 0.05); padding-top: 0.5rem; margin-top: 0.25rem;">
+                        <span class="lbl">Esperienze Pregresse:</span>
+                        <p id="profile-card-experience" style="font-weight: 700; color: var(--text-primary); margin-top: 0.2rem;">--</p>
+                    </div>
+                    <div class="profile-detail-item">
+                        <span class="lbl">Professione:</span>
+                        <strong id="profile-card-job">--</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid" id="evaluation-core-container">
+                <!-- LEFT COLUMN: SLIDERS & ACTION PLAN -->
+                <div class="sliders-section">
+
+                    <!-- CATEGORY 1: STATO PSICOLOGICO -->
+                    <div class="category-card glass-panel" data-category="psicologia">
+                        <div class="category-header">
+                            <div class="category-icon-wrapper psic-accent">
+                                <svg class="category-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 12H15M12 9V15M12 3C7.02944 3 3 7.02944 3 12C3 14.887 4.3541 17.457 6.45831 19.1L5 22L9.25907 20.58C10.1179 20.854 11.0416 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="category-info">
+                                <h2>Stato Psicologico</h2>
+                            </div>
+                            <div class="category-averages-box">
+                                <span class="avg-label">Gioc: <strong id="avg-psicologia-player">5.0</strong></span>
+                                <span class="avg-label">Mist: <strong id="avg-psicologia-coach">5.0</strong></span>
+                            </div>
+                        </div>
+                        <div class="sliders-list">
+                            <!-- Slider 1 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Focus</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="psic-focus-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-psic-focus-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="psic-focus-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-psic-focus-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 2 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Stress</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="psic-stress-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-psic-stress-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="psic-stress-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-psic-stress-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 3 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Grinta</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="psic-grinta-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-psic-grinta-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="psic-grinta-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-psic-grinta-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 4 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Team</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="psic-team-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-psic-team-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="psic-team-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-psic-team-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORY 2: TECNICA INDIVIDUALE -->
+                    <div class="category-card glass-panel" data-category="tecnica">
+                        <div class="category-header">
+                            <div class="category-icon-wrapper tecn-accent">
+                                <svg class="category-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 6C9 9 9 15 12 18" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M12 6C15 9 15 15 12 18" stroke="currentColor" stroke-width="1.5"/>
+                                </svg>
+                            </div>
+                            <div class="category-info">
+                                <h2>Tecnica Individuale</h2>
+                            </div>
+                            <div class="category-averages-box">
+                                <span class="avg-label">Gioc: <strong id="avg-tecnica-player">5.0</strong></span>
+                                <span class="avg-label">Mist: <strong id="avg-tecnica-coach">5.0</strong></span>
+                            </div>
+                        </div>
+                        <div class="sliders-list">
+                            <!-- Slider 1 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Controllo</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="tecn-control-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-tecn-control-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="tecn-control-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-tecn-control-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 2 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Passaggio</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="tecn-pass-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-tecn-pass-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="tecn-pass-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-tecn-pass-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 3 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Tiro</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="tecn-shot-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-tecn-shot-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="tecn-shot-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-tecn-shot-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 4 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Dribbling</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="tecn-dribble-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-tecn-dribble-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="tecn-dribble-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-tecn-dribble-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORY 3: CONDIZIONE FISICA -->
+                    <div class="category-card glass-panel" data-category="fisica">
+                        <div class="category-header">
+                            <div class="category-icon-wrapper fisi-accent">
+                                <svg class="category-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13 10V3L4 14H11V21L20 10H13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="category-info">
+                                <h2>Condizione Fisica</h2>
+                            </div>
+                            <div class="category-averages-box">
+                                <span class="avg-label">Gioc: <strong id="avg-fisica-player">5.0</strong></span>
+                                <span class="avg-label">Mist: <strong id="avg-fisica-coach">5.0</strong></span>
+                            </div>
+                        </div>
+                        <div class="sliders-list">
+                            <!-- Slider 1 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Velocità</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="fisi-speed-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-fisi-speed-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="fisi-speed-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-fisi-speed-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 2 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Resistenza</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="fisi-stamina-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-fisi-stamina-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="fisi-stamina-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-fisi-stamina-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 3 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Forza</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="fisi-strength-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-fisi-strength-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="fisi-strength-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-fisi-strength-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 4 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Agilità</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="fisi-agility-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-fisi-agility-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="fisi-agility-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-fisi-agility-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORY 4: TATTICA -->
+                    <div class="category-card glass-panel" data-category="tattica">
+                        <div class="category-header">
+                            <div class="category-icon-wrapper tatt-accent">
+                                <svg class="category-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 3H9V9H3V3Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M15 3H21V9H15V3Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M3 15H9V21H3V15Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M15 15H21V21H15V15Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M9 6H15M6 9V15M18 9V15M9 18H15" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2"/>
+                                </svg>
+                            </div>
+                            <div class="category-info">
+                                <h2>Tattica</h2>
+                            </div>
+                            <div class="category-averages-box">
+                                <span class="avg-label">Gioc: <strong id="avg-tattica-player">5.0</strong></span>
+                                <span class="avg-label">Mist: <strong id="avg-tattica-coach">5.0</strong></span>
+                            </div>
+                        </div>
+                        <div class="sliders-list">
+                            <!-- Slider 1 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Movimento</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="tatt-movement-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-tatt-movement-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="tatt-movement-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-tatt-movement-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 2 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Difesa</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="tatt-defense-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-tatt-defense-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="tatt-defense-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-tatt-defense-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 3 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Transizioni</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="tatt-transition-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-tatt-transition-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="tatt-transition-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-tatt-transition-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slider 4 -->
+                            <div class="slider-group-dual">
+                                <div class="slider-header-title">Lettura</div>
+                                <div class="dual-sliders-container">
+                                    <div class="single-slider-wrapper player-slider">
+                                        <span class="role-lbl">Gioc:</span>
+                                        <input type="range" id="tatt-reading-player" min="1" max="10" value="5" class="slider-input slider-player">
+                                        <span class="slider-value" id="val-tatt-reading-player">5</span>
+                                    </div>
+                                    <div class="single-slider-wrapper coach-slider">
+                                        <span class="role-lbl">Mist:</span>
+                                        <input type="range" id="tatt-reading-coach" min="1" max="10" value="5" class="slider-input slider-coach">
+                                        <span class="slider-value" id="val-tatt-reading-coach">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GROWTH PLAN FORM (BILANCIO, OBIETTIVI E PIANO D'AZIONE) -->
+                    <div class="growth-plan-card glass-panel">
+                        <div class="growth-card-header">
+                            <svg class="growth-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 20V10M12 10L9 13M12 10L15 13M17 17H21M3 17H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M12 4C13.5 4 14.5 5 15.5 6.5C16.5 8 18 8.5 20 8.5C20 12 19 14.5 17 16C15.5 17 13.5 18 12 18C10.5 18 8.5 17 7 16C5 14.5 4 12 4 8.5C6 8.5 7.5 8 8.5 6.5C9.5 5 10.5 4 12 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <h3>Piano di Crescita Individuale</h3>
+                        </div>
+                        
+                        <div class="plan-section">
+                            <div class="plan-header strength">
+                                <span class="dot"></span>
+                                <span>Punto di Forza Principale: <strong id="detected-strength">Rilevamento...</strong></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="strength-plan">Obiettivo e Piano di Valorizzazione</label>
+                                <textarea id="strength-plan" rows="2" placeholder="Es: Come utilizzare al meglio questa qualità durante le partite, schemi specifici..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="plan-section">
+                            <div class="plan-header weakness">
+                                <span class="dot"></span>
+                                <span>Punto Debole Principale: <strong id="detected-weakness">Rilevamento...</strong></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="weakness-goal">Obiettivo Specifico di Miglioramento (Goal)</label>
+                                <textarea id="weakness-goal" rows="2" placeholder="Es: Aumentare la tenuta atletica nel secondo tempo, migliorare l'efficacia del passaggio filtrante..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="weakness-action">Piano d'Azione (Action Plan)</label>
+                                <textarea id="weakness-action" rows="2" placeholder="Es: Esercizi di HIIT mirati, 15 minuti extra di passaggi con il piede debole a fine seduta..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: VISUALIZATION & ACTIONS (STICKY) -->
+                <div class="dashboard-sidebar">
+                    <div class="dashboard-panel glass-panel">
+                        <h3 class="panel-title">Profilo Comparativo</h3>
+                        
+                        <div class="dual-score-overview">
+                            <div class="dual-score-box player">
+                                <span class="score-val" id="player-overall-score">5.0</span>
+                                <span class="score-lbl">Giocatore</span>
+                            </div>
+                            <div class="dual-score-box gap">
+                                <span class="score-val" id="gap-overall-score">0.0</span>
+                                <span class="score-lbl">Differenza</span>
+                            </div>
+                            <div class="dual-score-box coach">
+                                <span class="score-val" id="coach-overall-score">5.0</span>
+                                <span class="score-lbl">Mister</span>
+                            </div>
+                        </div>
+
+                        <div class="gap-analysis-msg" id="gap-analysis-text">
+                            Allineamento perfetto
+                        </div>
+
+                        <div class="chart-container">
+                            <canvas id="performance-chart"></canvas>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="btn-save" class="btn btn-primary">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 4H16M8 4V8H16V4M8 4H4V20H20V4H16M12 12V18M9 15H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span>Salva Scheda</span>
+                            </button>
+                            <button id="btn-print" class="btn btn-secondary">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 9V2H18V9M6 18H4C2.89543 18 2 17.1046 2 16V11C2 9.89543 2.89543 9 4 9H20C21.1046 9 22 9.89543 22 11V16C22 17.1046 21.1046 18 20 18H18M6 14H18V22H6V14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span>Stampa / Salva PDF</span>
+                            </button>
+                            <button id="btn-reset" class="btn btn-danger">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 7L18.1327 19.1422C18.051 20.1859 17.1882 21 16.1402 21H7.85978C6.81175 21 5.94899 20.1859 5.86732 19.1422L5 7M4 7H20M16 7L14.7397 3.52C14.5369 2.96 14 2.6 13.4 2.6H10.6C10 2.6 9.46307 2.96 9.26027 3.52L8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span>Resetta Valori</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             SUB-TAB 3: STORICO & TREND
+             ========================================== -->
+        <div id="subtab-trends" class="roster-subtab-content hidden">
+            <div class="trend-setup-bar glass-panel">
+                <div class="trend-select-grid">
+                    <div class="form-group">
+                        <label for="select-trend-player">Seleziona Giocatore</label>
+                        <select id="select-trend-player">
+                            <option value="">-- Seleziona Giocatore --</option>
+                        </select>
+                    </div>
+                    <div class="trend-stats-summary" id="player-career-stats">
+                        <div class="stat-bubble">
+                            <span class="num" id="stat-sheets-count">0</span>
+                            <span class="lbl">Valutazioni</span>
+                        </div>
+                        <div class="stat-bubble">
+                            <span class="num" id="stat-player-best">0.0</span>
+                            <span class="lbl">Max Giocatore</span>
+                        </div>
+                        <div class="stat-bubble">
+                            <span class="num" id="stat-coach-best">0.0</span>
+                            <span class="lbl">Max Mister</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warning if no player selected -->
+            <div id="trends-warning" class="warning-box glass-panel">
+                <p>💡 Seleziona un giocatore dal menu a discesa per visualizzare il suo andamento nel lungo periodo e lo storico delle valutazioni.</p>
+            </div>
+
+            <div class="trends-dashboard-grid hidden" id="trends-core-container">
+                <!-- LEFT COLUMN: HISTORICAL LINE GRAPH -->
+                <div class="trend-chart-card glass-panel">
+                    <h3>Andamento nel Lungo Periodo</h3>
+                    <p class="section-desc">Grafico dell'evoluzione dell'Indice Globale (Giocatore vs Mister)</p>
+                    <div class="trend-chart-container">
+                        <canvas id="trend-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: HISTORY TABLE / CARDS -->
+                <div class="history-log-card glass-panel">
+                    <h3>Storico Schede</h3>
+                    <div id="player-history-list" class="player-history-list">
+                        <!-- Dynamic history cards -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 4: PRESENZE & CONVOCAZIONI
+             ========================================== -->
+        <section id="tab-attendance" class="tab-panel">
+            <!-- SUB-TAB NAVIGATION -->
+            <div style="display: flex; justify-content: space-between; align-items: center; max-width: fit-content; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
+                <div class="sub-tab-container glass-panel" style="margin-bottom: 0; padding: 0.4rem; display: flex; gap: 0.5rem;">
+                    <button class="tab-btn active sub-tab-btn" data-subtab="subtab-board">
+                        <span>Tabellone Stagionale</span>
+                    </button>
+                    <button class="tab-btn sub-tab-btn" data-subtab="subtab-trainings">
+                        <span>Allenamenti</span>
+                    </button>
+                    <button class="tab-btn sub-tab-btn" data-subtab="subtab-matches">
+                        <span>Convocazioni Partita</span>
+                    </button>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="window.print()" style="height: 38px; padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+                    Salva in PDF
+                </button>
+            </div>
+
+            <!-- SUB-TAB 1: ALLENAMENTI -->
+            <div id="subtab-trainings" class="subtab-panel-content hidden">
+                <!-- CHART CONTAINER -->
+                <div id="training-chart-container" class="glass-panel" style="margin-bottom: 1.5rem; padding: 1.5rem;">
+                    <h3 style="margin-bottom: 0.25rem;">Presenze Allenamento per Giocatore</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0 0 1.25rem 0;">Numero totale di allenamenti disputati (stato Presente) da ciascun giocatore.</p>
+                    <div style="position: relative; height: 260px; width: 100%;">
+                        <canvas id="trainings-attendance-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="attendance-history-container">
+                    <div class="section-title-bar">
+                        <h3>Storico Allenamenti</h3>
+                        <span id="training-count" class="badge">0 Sessioni</span>
+                    </div>
+                    <div id="training-history-grid" class="training-history-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.25rem;">
+                        <!-- Dynamic training sessions list -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 2: CONVOCAZIONI -->
+            <div id="subtab-matches" class="subtab-panel-content hidden">
+                <div class="attendance-history-container">
+                    <div class="section-title-bar">
+                        <h3>Storico Convocazioni</h3>
+                        <span id="convocation-count" class="badge">0 Partite</span>
+                    </div>
+                    <div id="convocation-history-grid" class="training-history-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.25rem; margin-bottom: 2rem;">
+                        <!-- Convocations items list -->
+                    </div>
+
+                    <!-- DISTINTA PREVIEW AREA (STILE CARTELLINA) -->
+                    <div id="distinta-container" class="distinta-container glass-panel hidden" style="padding: 2rem; border: 2px solid var(--color-player);">
+                        <div class="distinta-header" style="text-align: center; border-bottom: 2px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                            <h2 style="font-weight: 800; color: var(--color-player); letter-spacing: 1px;">DISTINTA CONVOCATI</h2>
+                            <p id="distinta-match-title" style="font-size: 1.2rem; font-weight: 700; margin-top: 0.5rem;">vs Avversario</p>
+                            <p id="distinta-match-details" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Data: DD/MM/YYYY | Note: Details</p>
+                        </div>
+                        
+                        <div class="distinta-lists-grid" style="display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 2rem;">
+                            <div>
+                                <h4 style="color: var(--color-tatt); margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.25rem; font-weight: 700;">CONVOCATI</h4>
+                                <ol id="distinta-called-list" style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                                    <!-- Convocati list -->
+                                </ol>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--color-danger); margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.25rem; font-weight: 700;">NON CONVOCATI / INFORTUNATI</h4>
+                                <ul id="distinta-uncalled-list" style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; list-style-type: square; color: var(--text-secondary);">
+                                    <!-- Non convocati list -->
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div id="distinta-notes-box" style="margin-top: 2rem; padding: 1rem; background: hsla(224, 45%, 4%, 0.4); border-radius: var(--border-radius-md); border: 1px solid var(--border-color);">
+                            <strong style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem;">Note e Indicazioni:</strong>
+                            <p id="distinta-notes-text" style="font-size: 0.9rem; line-height: 1.4; color: var(--text-secondary);">Note...</p>
+                        </div>
+                        
+                        <div class="distinta-actions" style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                            <button id="btn-print-distinta" class="btn btn-primary btn-mini">Stampa Distinta</button>
+                            <button id="btn-close-distinta" class="btn btn-secondary btn-mini">Chiudi Anteprima</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 3: TABELLONE STAGIONALE -->
+            <div id="subtab-board" class="subtab-panel-content">
+                <div class="glass-panel" style="padding: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <h3 style="margin-bottom: 0.25rem;">Tabellone Presenze Stagionale</h3>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Monitora e modifica lo stato di presenza dei giocatori per l'intera stagione sportiva 2026/2027.</p>
+                        </div>
+                        <div style="display: flex; align-items: flex-end; gap: 1rem; flex-wrap: wrap;">
+                            <!-- MONTH FILTER -->
+                            <div class="form-group" style="margin: 0; min-width: 180px;">
+                                <label for="board-month-filter" style="font-size: 0.75rem;">Filtra per Mese</label>
+                                <select id="board-month-filter">
+                                    <option value="all">Tutta la Stagione</option>
+                                    <option value="2026-08">Agosto 2026</option>
+                                    <option value="2026-09">Settembre 2026</option>
+                                    <option value="2026-10">Ottobre 2026</option>
+                                    <option value="2026-11">Novembre 2026</option>
+                                    <option value="2026-12">Dicembre 2026</option>
+                                    <option value="2027-01">Gennaio 2027</option>
+                                    <option value="2027-02">Febbraio 2027</option>
+                                    <option value="2027-03">Marzo 2027</option>
+                                    <option value="2027-04">Aprile 2027</option>
+                                    <option value="2027-05">Maggio 2027</option>
+                                </select>
+                            </div>
+                            <!-- PIANIFICA PARTITA BUTTON -->
+                            <button type="button" class="btn btn-primary" onclick="openAddMatchModal()" style="height: 38px; padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:1.1rem; height:1.1rem;">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span>Pianifica Seduta</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="board-legend" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; padding: 0.5rem 1rem; background: hsla(224, 45%, 4%, 0.4); border-radius: var(--border-radius-sm); border: 1px solid var(--border-color); font-size: 0.75rem;">
+                        <span style="font-weight: 700; color: var(--text-muted); margin-right: 0.5rem;">LEGENDA:</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-tatt);"></span> P: Presente</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-danger);"></span> A: Assente</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-fisi);"></span> I: Infortunato</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-primary);"></span> G: Giustificato</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-player);"></span> C: Convocato</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-psic);"></span> T: Test</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: hsla(224, 45%, 2%, 0.6); border: 1px solid var(--border-color);"></span> -: Non registrato</span>
+                    </div>
+
+                    <!-- TABLE WRAPPER FOR HORIZONTAL SCROLLING -->
+                    <div class="board-table-wrapper" style="overflow-x: auto; overflow-y: auto; max-height: 65vh; max-width: 100%; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); background: hsla(224, 45%, 2%, 0.4);">
+                        <table id="attendance-board-table" class="attendance-board-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                            <!-- Dynamically generated head and body -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 3: PREPARAZIONE ATLETICA
+             ========================================== -->
+        <section id="tab-athletic" class="tab-panel">
+            <!-- SUB-TAB NAVIGATION -->
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
+                <div class="sub-tab-container glass-panel" style="margin-bottom: 0; padding: 0.4rem; display: flex; gap: 0.5rem; flex-wrap: wrap; max-width: fit-content;">
+                    <button class="tab-btn active athletic-sub-tab-btn" data-subtab="subtab-athletic-history">
+                        <span>Storico Test</span>
+                    </button>
+                    <button class="tab-btn athletic-sub-tab-btn" data-subtab="subtab-athletic-insert">
+                        <span>Inserimento / Modifica</span>
+                    </button>
+                    <button class="tab-btn athletic-sub-tab-btn" data-subtab="subtab-athletic-analysis">
+                        <span>Analisi Progressi</span>
+                    </button>
+                    <button class="tab-btn athletic-sub-tab-btn" data-subtab="subtab-athletic-team-fitness">
+                        <span>Stato Squadra</span>
+                    </button>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="window.print()" style="height: 38px; padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+                    Salva in PDF
+                </button>
+            </div>
+
+            <!-- SUB-TAB: INSERIMENTO / MODIFICA -->
+            <div id="subtab-athletic-insert" class="athletic-subtab-content hidden">
+                <div class="glass-panel" style="padding: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                        <h3 id="athletic-insert-title" style="color: var(--color-tecn); display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1.5rem;height:1.5rem;">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10 9 9 9 8 9"/>
+                            </svg>
+                            Inserisci Valutazione Test Fisico
+                        </h3>
+                    </div>
+                    
+                    <form id="form-athletic-test-inline" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="form-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 1rem;">
+                            <div class="form-group">
+                                <label for="athletic-player-select">Giocatore</label>
+                                <select id="athletic-player-select" required style="width: 100%; padding: 0.75rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-color);">
+                                    <option value="">-- Seleziona Giocatore --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="athletic-test-date">Data Valutazione</label>
+                                <input type="date" id="athletic-test-date" required style="width: 100%; padding: 0.75rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-color);">
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                            <div class="form-group">
+                                <label for="input-yoyo-distance">Yo-Yo IR1 (Metri)</label>
+                                <input type="number" id="input-yoyo-distance" placeholder="Es. 1600" min="40" max="4000" step="40" style="width: 100%; padding: 0.75rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-color);">
+                                <img src="yoyo_test.png" style="width: 100%; border-radius: var(--border-radius-sm); margin-top: 0.5rem; opacity: 0.8;" alt="Yo-Yo Test">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="input-agility-time">T-Test Agility (Secondi)</label>
+                                <input type="number" id="input-agility-time" placeholder="Es. 10.5" step="0.01" min="8" max="20" style="width: 100%; padding: 0.75rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-color);">
+                                <img src="t_test_agility.png" style="width: 100%; border-radius: var(--border-radius-sm); margin-top: 0.5rem; opacity: 0.8;" alt="T-Test Agility">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="input-sprint-time">30m Sprint (Secondi)</label>
+                                <input type="number" id="input-sprint-time" placeholder="Es. 4.20" step="0.01" min="3.5" max="8" style="width: 100%; padding: 0.75rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-color);">
+                                <img src="sprint_30m.png" style="width: 100%; border-radius: var(--border-radius-sm); margin-top: 0.5rem; opacity: 0.8;" alt="30m Sprint">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="input-cmj-height">Vertical CMJ (Centimetri)</label>
+                                <input type="number" id="input-cmj-height" placeholder="Es. 45" step="0.5" min="20" max="80" style="width: 100%; padding: 0.75rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-color);">
+                                <img src="cmj_jump.png" style="width: 100%; border-radius: var(--border-radius-sm); margin-top: 0.5rem; opacity: 0.8;" alt="CMJ Jump">
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                            <button type="button" id="btn-cancel-athletic-test" class="btn btn-secondary" style="padding: 0.75rem 1.5rem;">Annulla</button>
+                            <button type="button" id="btn-save-athletic-test" class="btn btn-primary" style="padding: 0.75rem 1.5rem;" onclick="saveAthleticTest(event)">Salva Valutazione</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- SUB-TAB 3: STORICO TEST -->
+            <div id="subtab-athletic-history" class="athletic-subtab-content">
+                <div class="glass-panel" style="padding: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+                        <h3 style="color: var(--color-fisi); display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1.5rem;height:1.5rem;">
+                                <path d="M12 8v4l3 3"/>
+                                <circle cx="12" cy="12" r="9"/>
+                            </svg>
+                            Storico Valutazioni Atletiche
+                        </h3>
+                        
+                        <!-- Filters -->
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                            <select id="filter-athletic-player" style="min-width: 150px; font-size: 0.8rem; padding: 0.4rem; font-family: inherit;">
+                                <option value="all">Tutti i Giocatori</option>
+                            </select>
+                            <input type="date" id="filter-athletic-date" style="font-size: 0.8rem; padding: 0.4rem; font-family: inherit;" title="Filtra per data">
+                        </div>
+                    </div>
+                    
+                    <div class="board-table-wrapper" style="overflow-x: auto; max-width: 100%; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); background: hsla(224, 45%, 2%, 0.4);">
+                        <table class="attendance-board-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                            <thead>
+                                <tr>
+                                    <th>Giocatore</th>
+                                    <th>Data</th>
+                                    <th>Yo-Yo IR1</th>
+                                    <th>T-Test Agility</th>
+                                    <th>30m Sprint</th>
+                                    <th>Vertical CMJ</th>
+                                    <th style="text-align: center;">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="athletic-tests-table-body">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 4: ANALISI PROGRESSI -->
+            <div id="subtab-athletic-analysis" class="athletic-subtab-content hidden">
+                <div class="glass-panel" style="padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                        <h3 style="color: var(--color-psic); display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1.5rem;height:1.5rem;">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                            Analisi Trend Prestazione Fisica
+                        </h3>
+                        
+                        <div class="form-group" style="margin: 0; min-width: 200px;">
+                            <select id="select-analysis-player" style="font-size: 0.85rem; padding: 0.45rem;">
+                                <option value="">-- Seleziona Giocatore --</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="analysis-empty-state" style="text-align: center; padding: 3rem 1.5rem; color: var(--text-muted);">
+                        Seleziona un giocatore per visualizzare i grafici dei progressi fisici e l'andamento nei test atletici.
+                    </div>
+                    
+                    <div id="analysis-charts-container" class="hidden">
+                        <div class="athletic-charts-grid">
+                            <!-- Yo-Yo Endurance Progress Chart -->
+                            <div class="glass-panel" style="padding: 1rem; background: hsla(224, 45%, 4%, 0.3);">
+                                <h4 style="color: var(--color-fisi); margin-bottom: 0.75rem; font-size: 0.9rem;">Evoluzione Resistenza (Yo-Yo IR1 - Metri)</h4>
+                                <div style="height: 220px; position: relative;">
+                                    <canvas id="chart-progress-yoyo"></canvas>
+                                </div>
+                            </div>
+                            <!-- Power & Jump Progress Chart -->
+                            <div class="glass-panel" style="padding: 1rem; background: hsla(224, 45%, 4%, 0.3);">
+                                <h4 style="color: var(--color-tecn); margin-bottom: 0.75rem; font-size: 0.9rem;">Evoluzione Elevazione (CMJ - Centimetri)</h4>
+                                <div style="height: 220px; position: relative;">
+                                    <canvas id="chart-progress-cmj"></canvas>
+                                </div>
+                            </div>
+                            <!-- Speed Progress Chart -->
+                            <div class="glass-panel" style="padding: 1rem; background: hsla(224, 45%, 4%, 0.3);">
+                                <h4 style="color: var(--color-psic); margin-bottom: 0.75rem; font-size: 0.9rem;">Evoluzione Velocità (30m Sprint - Secondi)</h4>
+                                <div style="height: 220px; position: relative;">
+                                    <canvas id="chart-progress-sprint"></canvas>
+                                </div>
+                            </div>
+                            <!-- Agility Progress Chart -->
+                            <div class="glass-panel" style="padding: 1rem; background: hsla(224, 45%, 4%, 0.3);">
+                                <h4 style="color: var(--color-tatt); margin-bottom: 0.75rem; font-size: 0.9rem;">Evoluzione Agilità (T-Test - Secondi)</h4>
+                                <div style="height: 220px; position: relative;">
+                                    <canvas id="chart-progress-agility"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 5: STATO SQUADRA -->
+            <div id="subtab-athletic-team-fitness" class="athletic-subtab-content hidden">
+                <div class="dashboard-grid">
+                    <!-- CHART -->
+                    <div class="glass-panel" style="grid-column: 1 / -1; padding: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3>Stato di Forma della Squadra</h3>
+                            <span class="badge" style="background: hsla(224, 20%, 90%, 0.1);">Basato sui Test Atletici</span>
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                            Confronto dell'Indice di Forma Atletica tra i giocatori della rosa. Valori medi calcolati sugli ultimi test effettuati per ciascuna categoria.
+                        </p>
+                        <div style="position: relative; height: 350px; width: 100%;">
+                            <canvas id="team-fitness-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- CARDS WITH INSIGHTS -->
+                    <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div class="glass-panel" style="padding: 1.5rem;">
+                            <h3 style="color: var(--color-fisi); margin-bottom: 1rem;">🔥 Top Performance</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">Giocatori attualmente nel picco della forma fisica.</p>
+                            <ul id="top-fit-players" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                                <!-- JS injected -->
+                            </ul>
+                        </div>
+                        
+                        <div class="glass-panel" style="padding: 1.5rem;">
+                            <h3 style="color: #ff4757; margin-bottom: 1rem;">⚠️ Lavoro Extra</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">Giocatori con un indice di forma fisica basso.</p>
+                            <ul id="low-fit-players" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                                <!-- JS injected -->
+                            </ul>
+                        </div>
+
+                        <div class="glass-panel" style="padding: 1.5rem;">
+                            <h3 style="color: var(--color-tatt); margin-bottom: 1rem;">📋 Test Mancanti</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">Giocatori che devono recuperare le valutazioni.</p>
+                            <ul id="missing-tests-players" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                                <!-- JS injected -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 5: PREPARAZIONE ATLETICA
+             ========================================== -->
+        <section id="tab-preparation" class="tab-panel">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem; padding: 0 1rem; max-width: 1200px; margin-left: auto; margin-right: auto;">
+                <button type="button" class="btn btn-primary" onclick="window.print()">Salva in PDF</button>
+            </div>
+            <div class="glass-panel" style="padding: 2rem; margin-top: 1rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.5rem; flex-wrap:wrap; gap:1rem;">
+                    <div style="display:flex; align-items:center; gap:1rem;">
+                        <div style="color: var(--color-tatt);">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px;">
+                              <path d="M6 12L10 16L18 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h2 style="margin:0;">Preparazione Atletica</h2>
+                    </div>
+                    <button class="btn btn-primary" onclick="savePreparationText()">Salva Modifiche</button>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 1rem;">
+                    Usa questo spazio per annotare e modificare liberamente i programmi di allenamento precampionato e le schede specifiche.
+                </p>
+                <div id="preparation-calendar-container" class="calendar-grid"></div>
+            </div>
+        </section>
+
+
+        <!-- ==========================================
+             TAB 7: RISULTATI
+             ========================================== -->
+        <section id="tab-results" class="tab-panel">
+            <div style="padding: 2rem;">
+
+
+                <div style="display:flex; justify-content:center; gap:1rem; margin-bottom: 2rem;">
+                    <button id="btn-2425" onclick="document.getElementById('season-2425').style.display='grid'; document.getElementById('season-2526').style.display='none'; document.getElementById('season-2627').style.display='none'; this.style.background='var(--primary)'; document.getElementById('btn-2526').style.background='rgba(255,255,255,0.1)'; document.getElementById('btn-2627').style.background='rgba(255,255,255,0.1)';" style="background: rgba(255,255,255,0.1); color: white; border: none; padding: 0.8rem 2rem; font-weight: bold; font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: 0.3s;">Stagione 2024-25</button>
+                    <button id="btn-2526" onclick="document.getElementById('season-2526').style.display='grid'; document.getElementById('season-2425').style.display='none'; document.getElementById('season-2627').style.display='none'; this.style.background='var(--primary)'; document.getElementById('btn-2425').style.background='rgba(255,255,255,0.1)'; document.getElementById('btn-2627').style.background='rgba(255,255,255,0.1)';" style="background: var(--primary); color: white; border: none; padding: 0.8rem 2rem; font-weight: bold; font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: 0.3s;">Stagione 2025-26</button>
+                    <button id="btn-2627" onclick="document.getElementById('season-2627').style.display='grid'; document.getElementById('season-2425').style.display='none'; document.getElementById('season-2526').style.display='none'; this.style.background='var(--primary)'; document.getElementById('btn-2425').style.background='rgba(255,255,255,0.1)'; document.getElementById('btn-2526').style.background='rgba(255,255,255,0.1)';" style="background: rgba(255,255,255,0.1); color: white; border: none; padding: 0.8rem 2rem; font-weight: bold; font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: 0.3s;">Stagione 2026-27</button>
+                </div>
+                
+                <!-- CONTENITORE STAGIONE 2024-25 -->
+                <div id="season-2425" style="display:none; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; width: 100%;">
+                    <!-- COLONNA 1: CLASSIFICA LIVE 24/25 -->
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+                        <div style="text-align:center; padding: 0.5rem; font-weight:700; color:var(--warning); background: rgba(0,0,0,0.3); font-size: 0.8rem; text-transform:uppercase;">
+                            Classifica 2024-25 (Tuttocampo)</div>
+                        <iframe src='https://www.tuttocampo.it/WidgetV2/Classifica/f61d6f62-9401-458b-9fba-e26b00daee62'
+                            width='100%' height='1500' scrolling='no' frameborder='0' loading='lazy'
+                            style="border:none; filter: invert(0.9) hue-rotate(180deg) brightness(1.2) contrast(1.1); mix-blend-mode: lighten; border-radius: 0 0 8px 8px; height: 1500px; min-height: 1500px;"></iframe>
+                    </div>
+
+                    <!-- COLONNA 2: RISULTATI LIVE 24/25 -->
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+                        <div style="text-align:center; padding: 0.5rem; font-weight:700; color:var(--primary); background: rgba(0,0,0,0.3); font-size: 0.8rem; text-transform:uppercase;">
+                            Risultati 2024-25 (Tuttocampo)</div>
+                        <iframe src='https://www.tuttocampo.it/WidgetV2/Risultati/f61d6f62-9401-458b-9fba-e26b00daee62'
+                            width='100%' height='1500' scrolling='no' frameborder='0' loading='lazy'
+                            style="border:none; filter: invert(0.9) hue-rotate(180deg) brightness(1.2) contrast(1.1); mix-blend-mode: lighten; border-radius: 0 0 8px 8px; height: 1500px; min-height: 1500px;"></iframe>
+                    </div>
+
+                    <!-- COLONNA 3: MARCATORI LIVE 24/25 -->
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+                        <div style="text-align:center; padding: 0.5rem; font-weight:700; color:var(--accent); background: rgba(0,0,0,0.3); font-size: 0.8rem; text-transform:uppercase;">
+                            Marcatori 2024-25 (Tuttocampo)</div>
+                        <iframe src='https://www.tuttocampo.it/WidgetV2/Marcatori/f61d6f62-9401-458b-9fba-e26b00daee62'
+                            width='100%' height='1500' scrolling='no' frameborder='0' loading='lazy'
+                            style="border:none; filter: invert(0.9) hue-rotate(180deg) brightness(1.2) contrast(1.1); mix-blend-mode: lighten; border-radius: 0 0 8px 8px; height: 1500px; min-height: 1500px;"></iframe>
+                    </div>
+                </div>
+
+                <!-- CONTENITORE STAGIONE 2025-26 -->
+                <div id="season-2526" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; width: 100%;">
+                    <!-- COLONNA 1: CLASSIFICA LIVE -->
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+                        <div style="text-align:center; padding: 0.5rem; font-weight:700; color:var(--warning); background: rgba(0,0,0,0.3); font-size: 0.8rem; text-transform:uppercase;">
+                            Classifica Live (Tuttocampo)</div>
+                        <iframe src='https://www.tuttocampo.it/WidgetV2/Classifica/49f2dfd3-83e9-472a-9f9b-cb5ab29b9922'
+                            width='100%' height='1500' scrolling='no' frameborder='0' loading='lazy'
+                            style="border:none; filter: invert(0.9) hue-rotate(180deg) brightness(1.2) contrast(1.1); mix-blend-mode: lighten; border-radius: 0 0 8px 8px; height: 1500px; min-height: 1500px;"></iframe>
+                    </div>
+
+                    <!-- COLONNA 2: RISULTATI LIVE -->
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+                        <div style="text-align:center; padding: 0.5rem; font-weight:700; color:var(--primary); background: rgba(0,0,0,0.3); font-size: 0.8rem; text-transform:uppercase;">
+                            Risultati Live (Tuttocampo)</div>
+                        <iframe src='https://www.tuttocampo.it/WidgetV2/Risultati/49f2dfd3-83e9-472a-9f9b-cb5ab29b9922'
+                            width='100%' height='1500' scrolling='no' frameborder='0' loading='lazy'
+                            style="border:none; filter: invert(0.9) hue-rotate(180deg) brightness(1.2) contrast(1.1); mix-blend-mode: lighten; border-radius: 0 0 8px 8px; height: 1500px; min-height: 1500px;"></iframe>
+                    </div>
+
+                    <!-- COLONNA 3: MARCATORI LIVE -->
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+                        <div style="text-align:center; padding: 0.5rem; font-weight:700; color:var(--accent); background: rgba(0,0,0,0.3); font-size: 0.8rem; text-transform:uppercase;">
+                            Marcatori Live (Tuttocampo)</div>
+                        <iframe src='https://www.tuttocampo.it/WidgetV2/Marcatori/49f2dfd3-83e9-472a-9f9b-cb5ab29b9922'
+                            width='100%' height='1500' scrolling='no' frameborder='0' loading='lazy'
+                            style="border:none; filter: invert(0.9) hue-rotate(180deg) brightness(1.2) contrast(1.1); mix-blend-mode: lighten; border-radius: 0 0 8px 8px; height: 1500px; min-height: 1500px;"></iframe>
+                    </div>
+                </div>
+
+                <!-- CONTENITORE STAGIONE 2026-27 -->
+                <div id="season-2627" style="display:none; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; width: 100%;">
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: rgba(255,255,255,0.02); border: 1px dashed var(--border); border-radius: 8px;">
+                        <h3 style="color: var(--text-secondary); font-size: 1.5rem; margin-bottom: 1rem;">Nessun dato per la Stagione 2026-27</h3>
+                        <p style="color: var(--text-secondary);">I widget di Tuttocampo per la prossima stagione non sono ancora disponibili. Verranno inseriti qui quando inizierà il nuovo campionato.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 8: MATCH ANALYST
+             ========================================== -->
+        <section id="tab-match-analyst" class="tab-panel">
+            <div class="glass-panel" style="padding: 3rem 2rem; margin-top: 2rem; text-align: center;">
+                <div style="display:flex; justify-content:center; align-items:center; gap:1rem; margin-bottom: 1.5rem;">
+                    <svg viewBox="0 0 24 24" fill="none" style="width: 48px; height: 48px; color: var(--color-tatt);">
+                        <rect x="2" y="4" width="20" height="16" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M10 9L15 12L10 15V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h2 style="color: var(--color-tatt); margin: 0; font-size: 2rem;">Match Analyst</h2>
+                </div>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 1.2rem;">Sezione in fase di sviluppo. Qui potrai caricare video, clip ed effettuare il tagging tattico delle azioni salienti.</p>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB SCHEMI: PLAYBOOK & LAVAGNA TATTICA
+             ========================================== -->
+        <section id="tab-schemi" class="tab-panel">
+            <div style="display: flex; gap: 1rem; align-items: stretch; min-height: 70vh;">
+                <!-- SIDEBAR CATEGORIE -->
+                <div class="glass-panel" style="width: 250px; flex-shrink: 0; display: flex; flex-direction: column;">
+                    <div style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <h3 style="margin: 0; color: var(--color-tecn); font-size: 1.1rem; display:flex; align-items:center; gap:0.5rem;">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+                            Categorie Schemi
+                        </h3>
+                    </div>
+                    <div class="schemi-categories-list" style="padding: 0.5rem; flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.25rem;">
+                        <button class="btn btn-secondary active category-btn" data-category="Tutti" style="justify-content: flex-start; border: none; background: rgba(255,255,255,0.1);">Tutti gli Schemi</button>
+                        <button class="btn btn-secondary category-btn" data-category="Calcio d'inizio" style="justify-content: flex-start; border: none;">Calcio d'inizio</button>
+                        <button class="btn btn-secondary category-btn" data-category="Rimesse Laterali" style="justify-content: flex-start; border: none;">Rimesse Laterali</button>
+                        <button class="btn btn-secondary category-btn" data-category="Calci d'Angolo" style="justify-content: flex-start; border: none;">Calci d'Angolo</button>
+                        <button class="btn btn-secondary category-btn" data-category="Punizioni" style="justify-content: flex-start; border: none;">Punizioni</button>
+                        <button class="btn btn-secondary category-btn" data-category="Uscite dal Pressing" style="justify-content: flex-start; border: none;">Uscite dal Pressing</button>
+                        <button class="btn btn-secondary category-btn" data-category="Portiere di Movimento" style="justify-content: flex-start; border: none;">Portiere di Movimento</button>
+                    </div>
+                    <div style="padding: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <button class="btn btn-primary" onclick="openNewSchemaEditor()" style="width: 100%; justify-content: center;">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Nuovo Schema
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ELENCO SCHEMI -->
+                <div id="schemi-list-view" class="glass-panel" style="flex: 1; padding: 1.5rem; display: flex; flex-direction: column;">
+                    <h2 id="schemi-list-title" style="margin-top: 0; color: var(--text-main);">Tutti gli Schemi</h2>
+                    <div id="schemi-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; overflow-y: auto;">
+                        <!-- Le card verranno generate via JS -->
+                    </div>
+                </div>
+
+                <!-- EDITOR SCHEMA & LAVAGNA TATTICA (MODAL POPUP) -->
+                <div id="schemi-editor-view" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; padding: 2rem;">
+                    <div class="modal-content glass-panel" style="width: 95vw; max-width: 1400px; height: 90vh; display: flex; flex-direction: column; padding: 1.5rem; overflow: hidden;">
+                        <div class="modal-header" style="margin-bottom: 1rem; padding-bottom: 0; border: none;">
+                            <h2 id="schema-editor-title" style="margin: 0; color: var(--color-tecn);">Nuovo Schema</h2>
+                            <button type="button" class="btn-close-modal" onclick="closeSchemaEditor()">&times;</button>
+                        </div>
+                    <div style="display: grid; grid-template-columns: auto 1fr; gap: 2rem; flex: 1; overflow: hidden;">
+                        <!-- Colonna Sinistra: Lavagna Tattica -->
+                        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                            <div class="form-group" style="margin:0; flex: 1; display: flex; align-items: center; justify-content: center;" id="tactical-board-wrapper">
+                                <div class="tactical-board-container" style="position: relative; height: 75vh; max-height: 800px; aspect-ratio: 3 / 4; width: auto; background: url('futsal_pitch.svg') center/100% 100% no-repeat; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden;" id="tactical-board">
+                                    <!-- Pedine generate via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Colonna Destra: Dettagli -->
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem; justify-content: flex-start; height: 100%;">
+                            
+                            <!-- Controlli Animazione (COMPATTI) -->
+                            <div class="animation-controls" style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                                    <span>Timeline: <span id="schema-timeline-status" style="color: #fff; font-weight: bold;">Step 1 / 1</span></span>
+                                    <button class="btn-sub" onclick="resetSchemaBoard()" title="Resetta la lavagna alla posizione iniziale" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Reset</button>
+                                </div>
+                                <div style="display: flex; gap: 0.4rem; justify-content: center;">
+                                    <button class="btn btn-secondary" onclick="addSchemaStep()" style="font-size: 0.8rem; padding: 0.4rem;">+ Step</button>
+                                    <button class="btn btn-secondary" onclick="removeLastSchemaStep()" style="font-size: 0.8rem; padding: 0.4rem;" title="Rimuovi ultimo step">- Step</button>
+                                    <button class="btn btn-primary" onclick="playSchemaAnimation()" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Play</button>
+                                    <button class="btn btn-secondary" onclick="stopSchemaAnimation()" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Pausa</button>
+                                </div>
+                            </div>
+                            
+                            <hr style="border: 0; height: 1px; background: rgba(255,255,255,0.1); margin: 0.25rem 0;">
+
+                            <input type="hidden" id="schema-id">
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                <div class="form-group" style="margin:0;">
+                                    <label for="schema-title" style="font-size:0.85rem; margin-bottom: 0.2rem;">Nome Schema</label>
+                                    <input type="text" id="schema-title" placeholder="Nome schema..." class="form-control" style="padding: 0.4rem; font-size:0.85rem;">
+                                </div>
+                                <div class="form-group" style="margin:0;">
+                                    <label for="schema-category" style="font-size:0.85rem; margin-bottom: 0.2rem;">Categoria</label>
+                                    <select id="schema-category" class="form-control" style="padding: 0.4rem; font-size:0.85rem;" onchange="updatePitchView()">
+                                        <option value="Calcio d'inizio">Calcio d'inizio</option>
+                                        <option value="Rimesse Laterali">Rimesse Laterali</option>
+                                        <option value="Calci d'Angolo">Calci d'Angolo</option>
+                                        <option value="Punizioni">Punizioni</option>
+                                        <option value="Uscite dal Pressing">Uscite dal Pressing</option>
+                                        <option value="Portiere di Movimento">Portiere di Movimento</option>
+                                        <option value="Altro">Altro</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" style="margin:0 0 0.5rem 0;">
+                                <label style="font-size:0.85rem; margin-bottom: 0.2rem; display:block;">Tipo Campo</label>
+                                <div style="display: flex; gap: 1rem; align-items: center;">
+                                    <label style="display:flex; align-items:center; gap:0.25rem; font-size:0.85rem; cursor:pointer;">
+                                        <input type="radio" name="schema-pitch-type" value="full" checked onchange="updatePitchView()">
+                                        Campo Intero
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:0.25rem; font-size:0.85rem; cursor:pointer;">
+                                        <input type="radio" name="schema-pitch-type" value="half" onchange="updatePitchView()">
+                                        Metà Campo
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" style="margin:0;">
+                                <label for="schema-notes" style="font-size:0.85rem; margin-bottom: 0.2rem;">Descrizione e Note</label>
+                                <textarea id="schema-notes" rows="2" placeholder="Note sui movimenti..." class="form-control" style="resize: none; padding: 0.4rem; font-size:0.85rem;"></textarea>
+                            </div>
+                            
+                            <div class="form-group" style="margin:0; flex: 1;">
+                                <label style="font-size:0.85rem; margin-bottom: 0.2rem;">Anteprima Generata</label>
+                                <div id="schema-media-preview" style="margin-top: 0.25rem; max-height: 120px; border-radius: 4px; overflow: hidden; display: none;"></div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <button class="btn btn-danger" id="btn-delete-schema" style="display: none; padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="deleteCurrentSchema()">Elimina</button>
+                                <button class="btn btn-secondary" id="btn-duplicate-schema" style="display: none; padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="duplicateCurrentSchema()">Duplica</button>
+                                <div style="flex:1;"></div>
+                                <button class="btn btn-primary" onclick="saveCurrentSchema()" style="padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: bold;">Salva Schema</button>
+                            </div>
+                        </div>
+                    </div>
+                    </div> <!-- Chiusura modal-content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 6: IMPOSTAZIONI
+             ========================================== -->
+        <section id="tab-settings" class="tab-panel">
+            <div class="panel-header">
+                <h2>Impostazioni App</h2>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="saveGlobalSettings()">Salva Impostazioni</button>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="padding: 2rem; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
+                <!-- Gestore Accessi (Admin Only) -->
+                <div class="admin-only" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2rem;">
+                    <h3 style="color: var(--color-player); margin-bottom: 1rem;">Gestione Accessi (Solo Admin)</h3>
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: flex-start;">
+                        <input type="text" id="new-user-name" placeholder="Nome Utente" class="form-control" style="flex:1;">
+                        <div style="flex:1; display: flex; flex-direction: column; gap: 0.5rem;">
+                            <input type="password" id="new-user-pass" placeholder="Password" class="form-control">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">
+                                <input type="checkbox" id="show-new-user-pass" onchange="document.getElementById('new-user-pass').type = this.checked ? 'text' : 'password'" style="margin: 0;">
+                                <label for="show-new-user-pass" style="cursor: pointer;">Mostra Password</label>
+                            </div>
+                        </div>
+                        <select id="new-user-role" class="form-control" style="width: auto; height: 38px;">
+                            <option value="Admin">Admin</option>
+                            <option value="Staff/Dir">Staff/Dir</option>
+                            <option value="Players">Players</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="createNewUser()">Aggiungi Utente</button>
+                    </div>
+                    <div id="users-list-container" style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 200px; overflow-y: auto; margin-bottom: 2rem;">
+                        <!-- Users will be listed here dynamically -->
+                    </div>
+                    
+                    <h3 style="color: var(--color-player); margin-bottom: 1rem;">Permessi per Ruolo</h3>
+                    <div id="roles-permissions-grid" style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; overflow-x: auto;">
+                        <!-- Permission matrix will be drawn here -->
+                    </div>
+                </div>
+
+                <!-- Anagrafica Squadra -->
+                <div>
+                    <h3 style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-top: 0;">Anagrafica Squadra</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="color: var(--text-muted); font-size: 0.9rem;">Nome Squadra</label>
+                            <input type="text" id="settings-team-name" style="background: #1e293b; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.6rem; color: #fff; width: 100%; outline: none;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="color: var(--text-muted); font-size: 0.9rem;">Stagione Sportiva</label>
+                            <input type="text" id="settings-team-season" placeholder="Es: 2025/2026" style="background: #1e293b; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.6rem; color: #fff; width: 100%; outline: none;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem; grid-column: 1 / -1;">
+                            <label style="color: var(--text-muted); font-size: 0.9rem;">Logo Squadra (clicca per cambiare)</label>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div id="settings-logo-preview-container" style="width: 80px; height: 80px; border-radius: 50%; background: rgba(0,0,0,0.3); border: 2px dashed var(--color-tecn); display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; flex-shrink: 0;" onclick="document.getElementById('settings-logo-input').click()">
+                                    <img id="settings-logo-preview" src="" alt="Team Logo" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                                    <span id="settings-logo-placeholder" style="color: var(--color-tecn); text-align: center; font-size: 0.8rem;">Carica<br>Logo</span>
+                                </div>
+                                <input type="file" id="settings-logo-input" accept="image/*" style="display: none;" onchange="window.handleSettingsLogoUpload(event)">
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">Raccomandato: immagine quadrata (PNG/JPG) con sfondo trasparente.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regolamenti Federazione -->
+                <div>
+                    <h3 style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-top: 0;">Regolamenti Federazione</h3>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1rem;">
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="color: var(--text-muted); font-size: 0.9rem;">Deroga Under 21 / Anno Limite Giovani</label>
+                            <select id="settings-under-derogation" style="background: #1e293b; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.6rem; color: #fff; width: 100%; outline: none; cursor: pointer;">
+                                <option value="2000" style="background: #0f172a;">Nati dal 2000 in poi</option>
+                                <option value="2001" style="background: #0f172a;">Nati dal 2001 in poi</option>
+                                <option value="2002" style="background: #0f172a;">Nati dal 2002 in poi</option>
+                                <option value="2003" style="background: #0f172a;">Nati dal 2003 in poi</option>
+                                <option value="2004" style="background: #0f172a;">Nati dal 2004 in poi</option>
+                                <option value="2005" style="background: #0f172a;">Nati dal 2005 in poi</option>
+                                <option value="2006" style="background: #0f172a;">Nati dal 2006 in poi</option>
+                                <option value="2007" style="background: #0f172a;">Nati dal 2007 in poi</option>
+                                <option value="2008" style="background: #0f172a;">Nati dal 2008 in poi</option>
+                            </select>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">
+                                I giocatori nati nell'anno selezionato (o successivi) riceveranno automaticamente la spunta "Under" (bordo verde nella Rosa).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Altre Impostazioni Future -->
+                <div>
+                    <h3 style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-top: 0; color: var(--text-muted);">Altre Impostazioni</h3>
+                    <div style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem; font-style: italic;">
+                        Spazio riservato per future configurazioni (es. calcoli statistiche avanzate...).
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; margin-top: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <button class="btn btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem; box-shadow: 0 4px 15px rgba(59,130,246,0.4);" onclick="saveGlobalSettings()">Salva Impostazioni</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast">
+        <span id="toast-message">Notifica</span>
+    </div>
+
+    <!-- APP FOOTER -->
+    <footer class="app-footer container">
+        <p>&copy; 2026 Futsal Performance Portal. Sviluppato per la gestione tecnica di squadre di Calcio a 5.</p>
+    </footer>
+
+    <!-- MODAL OVERLAY (GENERAL POPUPS) -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <!-- POPUP 1: PIANIFICA PARTITA -->
+        <div id="popup-add-match" class="modal-content glass-panel hidden">
+            <div class="modal-header">
+                <h3>Pianifica Nuova Partita</h3>
+                <button type="button" class="btn-close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="form-popup-add-match" style="margin-top: 1rem;">
+                <div class="form-group">
+                    <label for="popup-match-event-type">Tipo Evento</label>
+                    <select id="popup-match-event-type" required>
+                        <option value="training">Allenamento</option>
+                        <option value="match" selected>Gara (Ufficiale)</option>
+                        <option value="friendly">Amichevole</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="popup-match-date">Data Evento</label>
+                    <input type="date" id="popup-match-date" required>
+                </div>
+                
+                <!-- Gara Fields -->
+                <div id="popup-add-match-fields">
+                    <div class="form-group">
+                        <label for="popup-match-location">Luogo Gara</label>
+                        <select id="popup-match-location">
+                            <option value="C">In Casa (C)</option>
+                            <option value="T">In Trasferta (T)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="popup-match-opponent">Avversario / Titolo Gara</label>
+                        <input type="text" id="popup-match-opponent" placeholder="Es. Real Futsal">
+                    </div>
+                    <div class="form-group">
+                        <label for="popup-match-notes">Note / Ritrovo (Ora, Luogo)</label>
+                        <input type="text" id="popup-match-notes" placeholder="Es. Ore 19:30 al Palazzetto. Divisa Bianca.">
+                    </div>
+                </div>
+                
+                <!-- Allenamento Fields -->
+                <div id="popup-add-training-fields" class="hidden">
+                    <div class="form-group">
+                        <label for="popup-match-type">Tipo Sessione / Descrizione</label>
+                        <input type="text" id="popup-match-type" placeholder="Es. Tattica, Fisica, Tecnica">
+                    </div>
+                </div>
+                <div class="modal-actions" style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Annulla</button>
+                    <button type="submit" class="btn btn-primary">Aggiungi Gara</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- POPUP 2: MODIFICA COLONNA -->
+        <div id="popup-edit-column" class="modal-content glass-panel hidden">
+            <div class="modal-header">
+                <h3 id="edit-column-title">Modifica Colonna</h3>
+                <button type="button" class="btn-close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="form-popup-edit-column" style="margin-top: 1rem;">
+                <input type="hidden" id="edit-col-original-date">
+                
+                <div class="form-group">
+                    <label for="edit-col-event-type">Tipo Evento</label>
+                    <select id="edit-col-event-type" required>
+                        <option value="training">Allenamento</option>
+                        <option value="match">Gara (Ufficiale)</option>
+                        <option value="friendly">Amichevole</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-col-date">Data Evento</label>
+                    <input type="date" id="edit-col-date" required>
+                </div>
+                
+                <!-- Gara Fields -->
+                <div id="edit-col-match-fields" class="hidden">
+                    <div class="form-group">
+                        <label for="edit-col-location">Luogo Gara</label>
+                        <select id="edit-col-location">
+                            <option value="C">In Casa (C)</option>
+                            <option value="T">In Trasferta (T)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-col-opponent">Avversario / Titolo Gara</label>
+                        <input type="text" id="edit-col-opponent" placeholder="Es. Real Futsal">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-col-notes">Note / Ritrovo</label>
+                        <input type="text" id="edit-col-notes" placeholder="Es. Ore 19:30. Divisa Bianca.">
+                    </div>
+                </div>
+                
+                <!-- Allenamento Fields -->
+                <div id="edit-col-training-fields" class="hidden">
+                    <div class="form-group">
+                        <label for="edit-col-type">Tipo Sessione / Descrizione</label>
+                        <input type="text" id="edit-col-type" placeholder="Es. Tattica, Fisica, Tecnica">
+                    </div>
+                </div>
+                
+                <div class="modal-actions" style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <button type="button" id="btn-delete-column" class="btn btn-danger">Elimina</button>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Annulla</button>
+                        <button type="submit" class="btn btn-primary">Salva</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- POPUP 4: DOSSIER GIOCATORE (RIEPILOGO COMPLETO) -->
+        <div id="popup-player-summary" class="modal-content glass-panel hidden" style="max-width: 100vw; width: 100vw; max-height: 100vh; height: 100vh; margin: 0; border-radius: 0; border: none; overflow-y: auto; box-sizing: border-box; padding: 2rem;">
+            <div class="modal-header">
+                <h3>Dossier Giocatore</h3>
+                <button class="card-btn-icon" onclick="closePlayerSummaryModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;">
+                        <path d="M18 6L6 18M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="player-summary-body" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <!-- Populated dynamically via JS -->
+            </div>
+        </div>
+
+        <!-- POPUP 3: AGGIUNGI/MODIFICA GIOCATORE -->
+        <div id="popup-add-player" class="modal-content glass-panel hidden" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 id="form-player-title">Aggiungi Giocatore alla Rosa</h3>
+                <button type="button" class="btn-close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="form-add-player" style="margin-top: 1rem;">
+                <div class="form-group">
+                    <label for="new-player-name">Nome e Cognome</label>
+                    <input type="text" id="new-player-name" placeholder="Es. Marco Silva" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-player-role">Ruolo Principale</label>
+                        <select id="new-player-role">
+                            <option value="Universale">Universale</option>
+                            <option value="Laterale">Laterale</option>
+                            <option value="Pivot">Pivot</option>
+                            <option value="Back">Back</option>
+                            <option value="Portiere">Portiere</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-player-number">Numero Maglia</label>
+                        <input type="number" id="new-player-number" min="1" max="99" placeholder="Es. 10" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-player-foot">Piede Preferito</label>
+                        <select id="new-player-foot">
+                            <option value="Destro">Destro</option>
+                            <option value="Mancino">Mancino</option>
+                            <option value="Ambidestro">Ambidestro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-player-photo">Foto Profilo</label>
+                        <input type="file" id="new-player-photo" accept="image/*" class="file-input">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-player-birth-year">Anno di Nascita</label>
+                        <input type="number" id="new-player-birth-year" min="1950" max="2020" placeholder="Es. 1995">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-player-weight">Peso (Kg)</label>
+                        <input type="number" id="new-player-weight" min="30" max="150" placeholder="Es. 75">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-player-height">Altezza (cm)</label>
+                        <input type="number" id="new-player-height" min="100" max="250" placeholder="Es. 178">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="new-player-job">Attività Lavorativa</label>
+                    <input type="text" id="new-player-job" placeholder="Es. Impiegato, Studente, Libero Prof.">
+                </div>
+                <div class="form-group">
+                    <label for="new-player-experience">Precedenti Esperienze Futsal / Calcio</label>
+                    <textarea id="new-player-experience" rows="2" placeholder="Es. 3 stagioni in Serie C2, settore giovanile..."></textarea>
+                </div>
+                <div class="modal-actions" style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Annulla</button>
+                    <button type="submit" id="btn-submit-player" class="btn btn-primary"><span>Salva</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <style>
+        .rotated-board #piece-h1 {
+            display: none !important;
+        }
+    </style>
+    <script src="schemi_v5.js"></script>
+</body>
+</html>
+

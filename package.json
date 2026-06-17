@@ -1,0 +1,22 @@
+{
+  "name": "futsal-performance-tracker",
+  "version": "1.0.0",
+  "description": "Scheda di autovalutazione delle performance per giocatori di calcio a 5.",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "futsal",
+    "calcio-a-5",
+    "performance",
+    "assessment"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
