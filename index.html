@@ -1728,11 +1728,16 @@
                     </div>
                 </div>
 
-                <!-- Altre Impostazioni Future -->
-                <div>
-                    <h3 style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-top: 0; color: var(--text-muted);">Altre Impostazioni</h3>
-                    <div style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem; font-style: italic;">
-                        Spazio riservato per future configurazioni (es. calcoli statistiche avanzate...).
+                <!-- Backup e Ripristino -->
+                <div class="admin-only">
+                    <h3 style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-top: 0; color: var(--text-muted);">Backup e Ripristino Database</h3>
+                    <div style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                        Usa queste funzioni per esportare tutti i dati (giocatori, presenze, voti, impostazioni, utenti) in un file di backup, oppure per importarli da un file precedentemente salvato. Ideale per trasferire i dati tra dispositivi o su GitHub Pages.
+                    </div>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-secondary" onclick="exportDatabase()">Esporta intero Database</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('import-db-file').click()">Importa Database</button>
+                        <input type="file" id="import-db-file" accept=".json" style="display:none;" onchange="importDatabase(event)">
                     </div>
                 </div>
 

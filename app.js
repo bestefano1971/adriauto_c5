@@ -5711,3 +5711,60 @@ window.deleteUser = function(username) {
         if(typeof showToast === 'function') showToast("Utente rimosso.", "info");
     }
 };
+
+// --- BACKUP E RIPRISTINO DATABASE ---
+window.exportDatabase = function() {
+    const db = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('futsal_')) {
+            // Escludiamo la sessione corrente per non creare conflitti al login
+            if (key === 'futsal_current_user') continue;
+            db[key] = localStorage.getItem(key);
+        }
+    }
+    
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+    const dlAnchorElem = document.createElement('a');
+    dlAnchorElem.setAttribute("href", dataStr);
+    dlAnchorElem.setAttribute("download", "adriauto_c5_database_backup.json");
+    dlAnchorElem.click();
+};
+
+window.importDatabase = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const db = JSON.parse(e.target.result);
+            if (confirm("Attenzione: questa operazione sovrascriverà tutti i dati correnti (giocatori, voti, logo, ecc.). Vuoi procedere?")) {
+                // Rimuoviamo le vecchie chiavi futsal_ (tranne l'utente corrente)
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.startsWith('futsal_') && key !== 'futsal_current_user') {
+                        keysToRemove.push(key);
+                    }
+                }
+                keysToRemove.forEach(k => localStorage.removeItem(k));
+
+                // Inseriamo le nuove chiavi
+                for (const [key, value] of Object.entries(db)) {
+                    if (key.startsWith('futsal_') && key !== 'futsal_current_user') {
+                        localStorage.setItem(key, value);
+                    }
+                }
+                
+                alert("Database importato con successo! L'applicazione verrà ricaricata.");
+                window.location.reload();
+            }
+        } catch (err) {
+            alert("Errore durante l'importazione del file JSON. Assicurati che sia un backup valido creato da questa app.");
+            console.error(err);
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = ''; // Reset per permettere nuove selezioni
+};
