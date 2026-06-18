@@ -251,7 +251,6 @@ function openNewSchemaEditor() {
     }
     
     document.getElementById('schema-notes').value = '';
-    document.getElementById('schema-media-preview').style.display = 'none';
     currentMediaBase64 = null;
     
     document.getElementById('schema-editor-title').textContent = "Nuovo Schema";
@@ -296,19 +295,10 @@ function openSchemaEditor(id) {
     
     document.getElementById('schema-notes').value = schema.notes || '';
     
-    const preview = document.getElementById('schema-media-preview');
     if (schema.media) {
         currentMediaBase64 = schema.media;
-        preview.style.display = 'block';
-        if (schema.media.startsWith('data:video')) {
-            preview.innerHTML = `<video src="${schema.media}" controls style="width:100%; max-height:200px; border-radius:4px;"></video>`;
-        } else {
-            preview.innerHTML = `<img src="${schema.media}" style="width:100%; max-height:200px; object-fit:contain; border-radius:4px; background:white;">`;
-        }
     } else {
         currentMediaBase64 = null;
-        preview.style.display = 'none';
-        preview.innerHTML = '';
     }
 
     document.getElementById('schema-editor-title').textContent = "Modifica Schema";
@@ -439,19 +429,6 @@ async function saveCurrentSchema() {
     // Aggiorna il frame corrente con le posizioni attuali sulla board prima di salvare
     saveCurrentBoardStateToFrame();
 
-    // Genera l'anteprima SVG dal primo frame (sempre)
-    const previewImg = await generatePreviewSVG(currentFrames[0]);
-
-    // Opzione A: Usa SEMPRE l'SVG auto-generato come allegato media
-    currentMediaBase64 = previewImg; // Aggiorna in memoria
-    
-    // Aggiorna anche la preview UI subito
-    const previewEl = document.getElementById('schema-media-preview');
-    if (previewEl) {
-        previewEl.style.display = 'block';
-        previewEl.innerHTML = `<img src="${currentMediaBase64}" style="width:100%; max-height:200px; object-fit:contain; border-radius:4px; background:white;">`;
-    }
-
     let pitchType = 'full';
     const pitchTypeInputs = document.getElementsByName('schema-pitch-type');
     if (pitchTypeInputs) {
@@ -470,7 +447,7 @@ async function saveCurrentSchema() {
         pitchType: pitchType,
         notes: notes,
         media: currentMediaBase64,
-        previewImage: previewImg,
+        previewImage: null,
         frames: currentFrames
     };
 
