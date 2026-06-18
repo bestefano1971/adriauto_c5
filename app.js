@@ -12,10 +12,10 @@ const paramInfo = {
     'tecn-shot': { label: 'Tiro', cat: 'Tecnica Individuale' },
     'tecn-dribble': { label: 'Dribbling', cat: 'Tecnica Individuale' },
     
-    'fisi-speed': { label: 'Velocità', cat: 'Condizione Fisica' },
+    'fisi-speed': { label: 'VelocitÃ ', cat: 'Condizione Fisica' },
     'fisi-stamina': { label: 'Resistenza', cat: 'Condizione Fisica' },
     'fisi-strength': { label: 'Forza', cat: 'Condizione Fisica' },
-    'fisi-agility': { label: 'Agilità', cat: 'Condizione Fisica' },
+    'fisi-agility': { label: 'AgilitÃ ', cat: 'Condizione Fisica' },
     
     'tatt-movement': { label: 'Movimento', cat: 'Tattica' },
     'tatt-defense': { label: 'Difesa', cat: 'Tattica' },
@@ -32,17 +32,17 @@ const defaultPlans = {
     },
     'psic-stress': {
         strength: "Mantenere freddezza nei momenti di massima pressione difensiva avversaria.",
-        weaknessGoal: "Controllare l'emotivitÃƒÂ  ed evitare falli di frustrazione nei minuti finali.",
+        weaknessGoal: "Controllare l'emotivitÃƒÆ’Ã‚Â  ed evitare falli di frustrazione nei minuti finali.",
         action: "Simulazioni in allenamento di situazioni di svantaggio e raddoppi di marcatura aggressivi."
     },
     'psic-grinta': {
-        strength: "Sfruttare l'intensitÃƒÂ  agonistica per vincere i duelli individuali e guidare il pressing alto.",
+        strength: "Sfruttare l'intensitÃƒÆ’Ã‚Â  agonistica per vincere i duelli individuali e guidare il pressing alto.",
         weaknessGoal: "Canalizzare la grinta agonistica evitando sanzioni disciplinari o interventi irruenti.",
-        action: "Esercitazioni specifiche sull'intercettazione palla basate sul tempo di reazione anzichÃƒÂ© sul contrasto fisico."
+        action: "Esercitazioni specifiche sull'intercettazione palla basate sul tempo di reazione anzichÃƒÆ’Ã‚Â© sul contrasto fisico."
     },
     'psic-team': {
         strength: "Svolgere un ruolo di leader verbale in campo, ordinando le marcature e sostenendo i compagni.",
-        weaknessGoal: "Migliorare la comunicazione costruttiva nei momenti di difficoltÃƒÂ  collettiva.",
+        weaknessGoal: "Migliorare la comunicazione costruttiva nei momenti di difficoltÃƒÆ’Ã‚Â  collettiva.",
         action: "Prendere l'impegno di incitare i compagni e chiamare preventivamente i tagli degli avversari."
     },
     'tecn-control': {
@@ -52,26 +52,26 @@ const defaultPlans = {
     },
     'tecn-pass': {
         strength: "Cercare imbucate precise e tagli filtranti per innescare il pivot di ruolo.",
-        weaknessGoal: "Incrementare la velocitÃƒÂ  di trasmissione palla ed evitare passaggi intercettabili orizzontali.",
-        action: "Lavoro a coppie sui passaggi di prima intenzione a diverse intensitÃƒÂ  e distanze."
+        weaknessGoal: "Incrementare la velocitÃƒÆ’Ã‚Â  di trasmissione palla ed evitare passaggi intercettabili orizzontali.",
+        action: "Lavoro a coppie sui passaggi di prima intenzione a diverse intensitÃƒÆ’Ã‚Â  e distanze."
     },
     'tecn-shot': {
         strength: "Prendere l'iniziativa del tiro dal limite o inserimento dal secondo palo.",
-        weaknessGoal: "Migliorare la rapiditÃƒÂ  di caricamento del tiro e la precisione a rete con entrambi i piedi.",
+        weaknessGoal: "Migliorare la rapiditÃƒÆ’Ã‚Â  di caricamento del tiro e la precisione a rete con entrambi i piedi.",
         action: "15 tiri in porta di prima intenzione su scarico laterale o del pivot a fine allenamento."
     },
     'tecn-dribble': {
-        strength: "Isolare il marcatore sulle bande laterali per creare superioritÃƒÂ  numerica.",
+        strength: "Isolare il marcatore sulle bande laterali per creare superioritÃƒÆ’Ã‚Â  numerica.",
         weaknessGoal: "Evitare dribbling rischiosi in zona centrale (fase di impostazione dell'ultimo).",
         action: "Esercitazioni di 1vs1 in spazi molto stretti (es. corridoi di 3 metri) incentrati sulla finta di corpo."
     },
     'fisi-speed': {
         strength: "Sfruttare lo sprint breve per ribaltare l'azione in transizione attiva o recuperare l'uomo.",
-        weaknessGoal: "Migliorare la reattivitÃƒÂ  nei primi 3 metri per anticipare il movimento avversario.",
+        weaknessGoal: "Migliorare la reattivitÃƒÆ’Ã‚Â  nei primi 3 metri per anticipare il movimento avversario.",
         action: "Lavoro di scatti brevi con cambi di direzione e balzi esplosivi (3 serie da 6 ripetizioni)."
     },
     'fisi-stamina': {
-        strength: "Garantire un'intensitÃƒÂ  costante di pressing e ripiegamenti anche ad alto ritmo.",
+        strength: "Garantire un'intensitÃƒÆ’Ã‚Â  costante di pressing e ripiegamenti anche ad alto ritmo.",
         weaknessGoal: "Evitare cali atletici nella seconda parte di ciascun tempo di gioco.",
         action: "Programma HIIT specifico per il futsal: scatti sui 15 metri alternati a recuperi attivi."
     },
@@ -82,7 +82,7 @@ const defaultPlans = {
     },
     'fisi-agility': {
         strength: "Eseguire cambi di direzione rapidi per smarcarsi o chiudere le diagonali.",
-        weaknessGoal: "Migliorare la coordinazione e la rapiditÃƒÂ  motoria nei cambi di direzione repentini.",
+        weaknessGoal: "Migliorare la coordinazione e la rapiditÃƒÆ’Ã‚Â  motoria nei cambi di direzione repentini.",
         action: "Esercizi con scaletta coordinativa rapida seguiti da scatto con arresto e ripartenza."
     },
     'tatt-movement': {
@@ -97,7 +97,7 @@ const defaultPlans = {
     },
     'tatt-transition': {
         strength: "Aggredire immediatamente alla perdita della palla o scattare in ripartenza rapida.",
-        weaknessGoal: "Migliorare la velocitÃƒÂ  di ripiegamento difensivo sotto la linea della palla.",
+        weaknessGoal: "Migliorare la velocitÃƒÆ’Ã‚Â  di ripiegamento difensivo sotto la linea della palla.",
         action: "Partite condizionate: obbligo di posizionamento difensivo entro 4 secondi dalla perdita del possesso."
     },
     'tatt-reading': {
@@ -467,7 +467,7 @@ function initApp() {
             if (eventType === 'match' || eventType === 'friendly') {
                 const exists = convocations.some(c => c.date === date);
                 if (exists) {
-                    showToast("È già programmata una partita/amichevole per questa data!", "error");
+                    showToast("Ãˆ giÃ  programmata una partita/amichevole per questa data!", "error");
                     return;
                 }
                 
@@ -493,7 +493,7 @@ function initApp() {
             } else {
                 const exists = trainings.some(t => t.date === date);
                 if (exists) {
-                    showToast("È già programmato un allenamento per questa data!", "error");
+                    showToast("Ãˆ giÃ  programmato un allenamento per questa data!", "error");
                     return;
                 }
                 
@@ -575,13 +575,13 @@ function initApp() {
                 if (isNowMatch) {
                     const exists = convocations.some(c => c.date === newDate);
                     if (exists) {
-                        showToast("Esiste giÃƒÂ  una partita/amichevole pianificata in questa data!", "error");
+                        showToast("Esiste giÃƒÆ’Ã‚Â  una partita/amichevole pianificata in questa data!", "error");
                         return;
                     }
                 } else {
                     const exists = trainings.some(t => t.date === newDate);
                     if (exists) {
-                        showToast("Esiste giÃƒÂ  un allenamento registrato in questa data!", "error");
+                        showToast("Esiste giÃƒÆ’Ã‚Â  un allenamento registrato in questa data!", "error");
                         return;
                     }
                 }
@@ -881,7 +881,7 @@ function setupRosterForm() {
         // Check if player name or number already exists on another player
         const exists = players.some(p => p.id !== editingPlayerId && (p.name.toLowerCase() === name.toLowerCase() || p.number === number));
         if (exists) {
-            showToast("Giocatore o Numero di Maglia giÃƒÂ  presente in rosa!", "error");
+            showToast("Giocatore o Numero di Maglia giÃƒÆ’Ã‚Â  presente in rosa!", "error");
             return;
         }
 
@@ -1112,8 +1112,8 @@ function renderRoster() {
     const container = document.getElementById('roster-grid');
     if (!container) return;
     
-    // Se ÃƒÂ¨ stato cambiato in roster-container, lo recuperiamo cosÃƒÂ¬, altrimenti se ÃƒÂ¨ ancora roster-grid:
-    // UserÃƒÂ² il container originario che ÃƒÂ¨ id="roster-grid" ma ne cambierÃƒÂ² il display block.
+    // Se ÃƒÆ’Ã‚Â¨ stato cambiato in roster-container, lo recuperiamo cosÃƒÆ’Ã‚Â¬, altrimenti se ÃƒÆ’Ã‚Â¨ ancora roster-grid:
+    // UserÃƒÆ’Ã‚Â² il container originario che ÃƒÆ’Ã‚Â¨ id="roster-grid" ma ne cambierÃƒÆ’Ã‚Â² il display block.
     
     if (players.length === 0) {
         container.innerHTML = `
@@ -1254,7 +1254,7 @@ window.openPlayerSummaryModal = function(id) {
     if (!player) return;
     
     // Aggrega i dati
-    // 1. Dati anagrafici (giÃƒÂ  in player)
+    // 1. Dati anagrafici (giÃƒÆ’Ã‚Â  in player)
     
     // 2. Ultimi test fisici
     const pTests = typeof athleticTests !== 'undefined' ? athleticTests.filter(t => t.playerId === id).sort((a,b) => new Date(b.date) - new Date(a.date)) : [];
@@ -1418,7 +1418,7 @@ window.openPlayerSummaryModal = function(id) {
             </tbody>
         </table>`;
     } else {
-        recentPresenzeHTML = `<div style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:1rem;">Nessuna attività registrata</div>`;
+        recentPresenzeHTML = `<div style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:1rem;">Nessuna attivitÃ  registrata</div>`;
     }
 
     const modalBody = document.getElementById('player-summary-body');
@@ -1532,16 +1532,16 @@ window.openPlayerSummaryModal = function(id) {
                 </div>
             </div>
 
-            <!-- Ruoli & Adattabilità -->
+            <!-- Ruoli & AdattabilitÃ  -->
             <div class="glass-panel" style="padding:0.75rem; grid-column: 1 / -1; display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
                 <div style="flex:1; min-width:140px;">
-                    <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:0.2rem;">Adattabilità</div>
+                    <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:0.2rem;">AdattabilitÃ </div>
                     <select id="edit-dossier-sec-roles" style="background:#1e293b; border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.3rem; color:#fff; width:100%; font-size:0.8rem; cursor:pointer;">
                         <option value="" ${!player.secondaryRoles ? 'selected' : ''}>Nessuna</option>
                         <option value="Laterale Destro" ${player.secondaryRoles==='Laterale Destro'?'selected':''}>Laterale Destro</option>
                         <option value="Laterale Sinistro" ${player.secondaryRoles==='Laterale Sinistro'?'selected':''}>Laterale Sinistro</option>
                         <option value="Pivot di Manovra" ${player.secondaryRoles==='Pivot di Manovra'?'selected':''}>Pivot di Manovra</option>
-                        <option value="Pivot di Profondità" ${player.secondaryRoles==='Pivot di Profondità'?'selected':''}>Pivot di Profondità</option>
+                        <option value="Pivot di ProfonditÃ " ${player.secondaryRoles==='Pivot di ProfonditÃ '?'selected':''}>Pivot di ProfonditÃ </option>
                         <option value="Difensore d'Impostazione" ${player.secondaryRoles==="Difensore d'Impostazione"?'selected':''}>Difensore d'Impostazione</option>
                         <option value="Difensore Marcatore" ${player.secondaryRoles==='Difensore Marcatore'?'selected':''}>Difensore Marcatore</option>
                         <option value="Portiere Volante" ${player.secondaryRoles==='Portiere Volante'?'selected':''}>Portiere Volante</option>
@@ -1552,9 +1552,9 @@ window.openPlayerSummaryModal = function(id) {
                     <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:0.2rem;">Quartetto</div>
                     <select id="edit-dossier-quartets" style="background:#1e293b; border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.3rem; color:#fff; width:100%; font-size:0.8rem; cursor:pointer;">
                         <option value="" ${!player.quartets ? 'selected' : ''}>Nessuno</option>
-                        <option value="1° Quartetto (Titolari)" ${player.quartets==='1° Quartetto (Titolari)'?'selected':''}>1° Quartetto (Titolari)</option>
-                        <option value="2° Quartetto (Prime Rotazioni)" ${player.quartets==='2° Quartetto (Prime Rotazioni)'?'selected':''}>2° Quartetto (Prime Rotazioni)</option>
-                        <option value="3° Quartetto (Seconde Rotazioni)" ${player.quartets==='3° Quartetto (Seconde Rotazioni)'?'selected':''}>3° Quartetto (Seconde Rotazioni)</option>
+                        <option value="1Â° Quartetto (Titolari)" ${player.quartets==='1Â° Quartetto (Titolari)'?'selected':''}>1Â° Quartetto (Titolari)</option>
+                        <option value="2Â° Quartetto (Prime Rotazioni)" ${player.quartets==='2Â° Quartetto (Prime Rotazioni)'?'selected':''}>2Â° Quartetto (Prime Rotazioni)</option>
+                        <option value="3Â° Quartetto (Seconde Rotazioni)" ${player.quartets==='3Â° Quartetto (Seconde Rotazioni)'?'selected':''}>3Â° Quartetto (Seconde Rotazioni)</option>
                         <option value="Rotazione Libera" ${player.quartets==='Rotazione Libera'?'selected':''}>Rotazione Libera</option>
                     </select>
                 </div>
@@ -1662,7 +1662,7 @@ window.openPlayerSummaryModal = function(id) {
             const specificLabels = [
                 'Controllo', 'Passaggio', 'Tiro', 'Dribbling',
                 'Movimento', 'Difesa', 'Transizioni', 'Lettura',
-                'Velocità', 'Resistenza', 'Forza', 'Agilità',
+                'VelocitÃ ', 'Resistenza', 'Forza', 'AgilitÃ ',
                 'Focus', 'Stress', 'Grinta', 'Team'
             ];
             
@@ -1747,7 +1747,7 @@ window.openPlayerSummaryModal = function(id) {
 
 window.closePlayerSummaryModal = function() {
     document.getElementById('popup-player-summary').classList.add('hidden');
-    // Nascondi overlay solo se non ci sono altri modal aperti (in questo caso ÃƒÂ¨ semplice)
+    // Nascondi overlay solo se non ci sono altri modal aperti (in questo caso ÃƒÆ’Ã‚Â¨ semplice)
     document.getElementById('modal-overlay').classList.add('hidden');
 };
 
@@ -2028,10 +2028,10 @@ function updateCalculations() {
         gapAnalysisEl.textContent = "Allineamento Elevato (Mister e Giocatore concordano)";
         gapAnalysisEl.style.color = "var(--color-tatt)";
     } else if (overallPlayer > overallCoach) {
-        gapAnalysisEl.textContent = "Sopravvalutazione (Il giocatore si valuta piÃƒÂ¹ alto del Mister)";
+        gapAnalysisEl.textContent = "Sopravvalutazione (Il giocatore si valuta piÃƒÆ’Ã‚Â¹ alto del Mister)";
         gapAnalysisEl.style.color = "var(--color-fisi)";
     } else {
-        gapAnalysisEl.textContent = "Sottovalutazione (Il mister valuta il giocatore piÃƒÂ¹ alto)";
+        gapAnalysisEl.textContent = "Sottovalutazione (Il mister valuta il giocatore piÃƒÆ’Ã‚Â¹ alto)";
         gapAnalysisEl.style.color = "var(--color-player)";
     }
 
@@ -2246,7 +2246,7 @@ function saveAssessment() {
         // Check if there is already an evaluation on the same day for this player
         const duplicateIdx = assessments.findIndex(a => a.playerId === playerId && a.date === date);
         if (duplicateIdx !== -1) {
-            if (confirm("ÃƒÂˆ giÃƒÂ  presente una valutazione per questo giocatore in questa data. Vuoi sovrascriverla?")) {
+            if (confirm("ÃƒÆ’Ã‚Ë† giÃƒÆ’Ã‚Â  presente una valutazione per questo giocatore in questa data. Vuoi sovrascriverla?")) {
                 record.id = assessments[duplicateIdx].id; // Keep original ID
                 assessments[duplicateIdx] = record;
                 showToast("Valutazione sovrascritta correttamente!", "success");
@@ -2621,7 +2621,7 @@ window.editPlayer = function(id) {
     // Pulisci l'input file per evitare caricamenti indesiderati
     document.getElementById('new-player-photo').value = '';
 
-    // Cambia interfaccia in modalitÃƒÂ  modifica
+    // Cambia interfaccia in modalitÃƒÆ’Ã‚Â  modifica
     const formTitle = document.getElementById('form-player-title');
     const submitBtn = document.getElementById('btn-submit-player');
 
@@ -3058,7 +3058,7 @@ function renderConvocationsHistory() {
                     </svg>
                 </button>
             </div>
-            <div class="attendance-card-type" style="font-weight:700;color:var(--color-player);">${c.type === 'friendly' ? 'Ã°ÂŸÂ¤Â  Amichevole' : 'Ã¢ÂšÂ½ Gara'}: ${escapeHTML(c.opponent)}</div>
+            <div class="attendance-card-type" style="font-weight:700;color:var(--color-player);">${c.type === 'friendly' ? 'ÃƒÂ°Ã‚Å¸Ã‚Â¤Ã‚  Amichevole' : 'ÃƒÂ¢Ã‚Å¡Ã‚Â½ Gara'}: ${escapeHTML(c.opponent)}</div>
             <div class="attendance-card-stats" style="margin-bottom:0.25rem;">
                 <span>Convocati: <strong>${c.selectedIds.length}</strong></span>
             </div>
@@ -3185,7 +3185,7 @@ function generateSeasonDates() {
     const startDate = new Date(2026, 7, 17); // 17 Agosto 2026 (Month is 0-indexed, so 7 is August)
     const endDate = new Date(2027, 4, 31);   // 31 Maggio 2027 (Month 4 is May)
     
-    // Transizione a metÃƒÂ  settembre (15 Settembre 2026)
+    // Transizione a metÃƒÆ’Ã‚Â  settembre (15 Settembre 2026)
     const transitionDate = new Date(2026, 8, 15); // 15 Settembre 2026
     
     let current = new Date(startDate);
@@ -3193,12 +3193,12 @@ function generateSeasonDates() {
         const dayOfWeek = current.getDay(); // 0 = Dom, 1 = Lun, 2 = Mar, 3 = Mer, 4 = Gio, 5 = Ven, 6 = Sab
         
         if (current < transitionDate) {
-            // Fino al 14 Settembre inclusi: dal lunedÃƒÂ¬ al venerdÃƒÂ¬ (1-5)
+            // Fino al 14 Settembre inclusi: dal lunedÃƒÆ’Ã‚Â¬ al venerdÃƒÆ’Ã‚Â¬ (1-5)
             if (dayOfWeek >= 1 && dayOfWeek <= 5) {
                 dates.push(new Date(current));
             }
         } else {
-            // Dal 15 Settembre in poi: solo LunedÃƒÂ¬ (1), MercoledÃƒÂ¬ (3), VenerdÃƒÂ¬ (5)
+            // Dal 15 Settembre in poi: solo LunedÃƒÆ’Ã‚Â¬ (1), MercoledÃƒÆ’Ã‚Â¬ (3), VenerdÃƒÆ’Ã‚Â¬ (5)
             if (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5) {
                 dates.push(new Date(current));
             }
@@ -3325,7 +3325,7 @@ function renderAttendanceBoard() {
             th.className = 'match-col-header';
             const isFriendly = match.type === 'friendly';
             th.title = `${isFriendly ? 'Amichevole' : 'Gara'} contro: ${match.opponent}`;
-            textSpan.innerHTML = `${isFriendly ? '🤝 Amic.' : '⚽ Gara'}<br><strong>${day}/${month}</strong>`;
+            textSpan.innerHTML = `${isFriendly ? 'ðŸ¤� Amic.' : 'âš½ Gara'}<br><strong>${day}/${month}</strong>`;
         } else {
             const dayNames = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
             const dayName = dayNames[date.getDay()];
@@ -3902,7 +3902,7 @@ function getTestRating(testType, value) {
         if (d >= 2000) {
             rating = 'Eccellente';
             badgeClass = 'badge-success';
-            desc = `Ottimo livello cardiovascolare per il futsal (VO2max stimato: ${vo2} ml/kg/min). Adatto a ruoli ad alta intensitÃƒÂ  di transizioni (Laterali).`;
+            desc = `Ottimo livello cardiovascolare per il futsal (VO2max stimato: ${vo2} ml/kg/min). Adatto a ruoli ad alta intensitÃƒÆ’Ã‚Â  di transizioni (Laterali).`;
         } else if (d >= 1600) {
             rating = 'Buono';
             badgeClass = 'badge-info';
@@ -3910,7 +3910,7 @@ function getTestRating(testType, value) {
         } else if (d >= 1200) {
             rating = 'Medio';
             badgeClass = 'badge-warning';
-            desc = `Resistenza base discreta (VO2max stimato: ${vo2} ml/kg/min). Margini di miglioramento nella capacitÃƒÂ  di recupero intermittente.`;
+            desc = `Resistenza base discreta (VO2max stimato: ${vo2} ml/kg/min). Margini di miglioramento nella capacitÃƒÆ’Ã‚Â  di recupero intermittente.`;
         } else {
             rating = 'Insufficiente';
             badgeClass = 'badge-danger';
@@ -3921,15 +3921,15 @@ function getTestRating(testType, value) {
         if (t < 9.5) {
             rating = 'Eccellente';
             badgeClass = 'badge-success';
-            desc = 'RapiditÃƒÂ  e fluiditÃƒÂ  eccezionale nei cambi di direzione. Ottima coordinazione motoria e frenata.';
+            desc = 'RapiditÃƒÆ’Ã‚Â  e fluiditÃƒÆ’Ã‚Â  eccezionale nei cambi di direzione. Ottima coordinazione motoria e frenata.';
         } else if (t <= 10.5) {
             rating = 'Buono';
             badgeClass = 'badge-info';
-            desc = 'Ottimo controllo motorio e reattivitÃƒÂ . Agile nei cambi di orientamento tipici del futsal.';
+            desc = 'Ottimo controllo motorio e reattivitÃƒÆ’Ã‚Â . Agile nei cambi di orientamento tipici del futsal.';
         } else if (t <= 11.5) {
             rating = 'Medio';
             badgeClass = 'badge-warning';
-            desc = 'AgilitÃƒÂ  nella media. Margini di miglioramento nell\'esplosivitÃƒÂ  laterale e nella rapiditÃƒÂ  del passo.';
+            desc = 'AgilitÃƒÆ’Ã‚Â  nella media. Margini di miglioramento nell\'esplosivitÃƒÆ’Ã‚Â  laterale e nella rapiditÃƒÆ’Ã‚Â  del passo.';
         } else {
             rating = 'Insufficiente';
             badgeClass = 'badge-danger';
@@ -3940,15 +3940,15 @@ function getTestRating(testType, value) {
         if (t < 4.0) {
             rating = 'Eccellente';
             badgeClass = 'badge-success';
-            desc = 'VelocitÃƒÂ  pura eccezionale. Forte capacitÃƒÂ  di accelerazione e spunto sui 30 metri.';
+            desc = 'VelocitÃƒÆ’Ã‚Â  pura eccezionale. Forte capacitÃƒÆ’Ã‚Â  di accelerazione e spunto sui 30 metri.';
         } else if (t <= 4.3) {
             rating = 'Buono';
             badgeClass = 'badge-info';
-            desc = 'VelocitÃƒÂ  buona. Molto competitivo negli allunghi ed efficacia nelle ripartenze.';
+            desc = 'VelocitÃƒÆ’Ã‚Â  buona. Molto competitivo negli allunghi ed efficacia nelle ripartenze.';
         } else if (t <= 4.6) {
             rating = 'Medio';
             badgeClass = 'badge-warning';
-            desc = 'VelocitÃƒÂ  discreta. Lavoro consigliato sulle frequenze di passo e sulla spinta al suolo.';
+            desc = 'VelocitÃƒÆ’Ã‚Â  discreta. Lavoro consigliato sulle frequenze di passo e sulla spinta al suolo.';
         } else {
             rating = 'Insufficiente';
             badgeClass = 'badge-danger';
@@ -3992,7 +3992,7 @@ function setupAthleticCalculator() {
 }
 
 function updateAthleticCalculatorPreview() {
-    // FunzionalitÃ  di preview singola rimossa perchÃ© ora si inseriscono
+    // FunzionalitÃƒÂ  di preview singola rimossa perchÃƒÂ© ora si inseriscono
     // tutti i 4 test contemporaneamente nello stesso form.
 }
 
@@ -4941,6 +4941,13 @@ window.switchTabTo = function(tabName, subTabName = null) {
                 subBtnToClick.click();
             }
         }, 50);
+    } else {
+        switch(tabName) {
+            case 'tab-roster': if(typeof renderRoster === 'function') renderRoster(); break;
+            case 'tab-attendance': if(typeof renderAttendanceBoard === 'function') renderAttendanceBoard(); break;
+            case 'tab-athletic': if(typeof renderAthleticTestsTable === 'function') renderAthleticTestsTable(); break;
+            case 'tab-preparation': if(typeof renderTeamFitnessDashboard === 'function') renderTeamFitnessDashboard(); break;
+        }
     }
     
     // Trigger any resize events for charts
@@ -5331,7 +5338,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // Carica impostazioni all'avvio (da inserire dopo che il DOM è caricato)
+        // Carica impostazioni all'avvio (da inserire dopo che il DOM Ã¨ caricato)
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 loadGlobalSettings();
@@ -5343,9 +5350,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // ==========================================
         window.renderQuartets = function() {
             const quartets = {
-                '1° Quartetto (Titolari)': 'pitch-quartet-1',
-                '2° Quartetto (Prime Rotazioni)': 'pitch-quartet-2',
-                '3° Quartetto (Seconde Rotazioni)': 'pitch-quartet-3'
+                '1Â° Quartetto (Titolari)': 'pitch-quartet-1',
+                '2Â° Quartetto (Prime Rotazioni)': 'pitch-quartet-2',
+                '3Â° Quartetto (Seconde Rotazioni)': 'pitch-quartet-3'
             };
 
             for (const [qName, containerId] of Object.entries(quartets)) {
@@ -5688,7 +5695,7 @@ window.createNewUser = function() {
     }
     
     if(futsalUsers.find(u => u.username === name)) {
-        if(typeof showToast === 'function') showToast("Utente già esistente.", "error");
+        if(typeof showToast === 'function') showToast("Utente giÃ  esistente.", "error");
         return;
     }
     
@@ -5739,7 +5746,7 @@ window.importDatabase = function(event) {
     reader.onload = function(e) {
         try {
             const db = JSON.parse(e.target.result);
-            if (confirm("Attenzione: questa operazione sovrascriver� tutti i dati correnti (giocatori, voti, logo, ecc.). Vuoi procedere?")) {
+            if (confirm("Attenzione: questa operazione sovrascriverà tutti i dati correnti (giocatori, voti, logo, ecc.). Vuoi procedere?")) {
                 // Rimuoviamo le vecchie chiavi futsal_ (tranne l'utente corrente)
                 const keysToRemove = [];
                 for (let i = 0; i < localStorage.length; i++) {
@@ -5757,7 +5764,7 @@ window.importDatabase = function(event) {
                     }
                 }
                 
-                alert("Database importato con successo! L'applicazione verr� ricaricata.");
+                alert("Database importato con successo! L'applicazione verrà ricaricata.");
                 window.location.reload();
             }
         } catch (err) {
