@@ -361,6 +361,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initApp() {
+    if (!document.getElementById('tab-dashboard')) return; // Esce se siamo nella pagina di login
+
     // 1. Navigation setup
     setupTabs();
     setupDashboardCards();
@@ -1843,6 +1845,8 @@ function populatePlayerDropdowns() {
 // ==========================================================================
 function setupEvaluationForm() {
     const dateInput = document.getElementById('assessment-date');
+    if (!dateInput) return; // Siamo in login.html o l'elemento non esiste
+
     const selectPlayer = document.getElementById('select-player');
 
     // Set today
