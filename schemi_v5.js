@@ -144,19 +144,7 @@ function renderSchemiGrid() {
         card.addEventListener('dragenter', handleDragEnter);
         card.addEventListener('dragleave', handleDragLeave);
         card.addEventListener('dragend', handleDragEnd);
-        let mediaHtml = '';
-        const displayImg = schema.previewImage || (schema.media && !schema.media.startsWith('data:video') ? schema.media : null);
-        
-        if (displayImg) {
-            mediaHtml = `<img src="${displayImg}" style="width: 100%; height: 120px; object-fit: contain; border-radius: 4px; background: white;">`;
-        } else if (schema.media && schema.media.startsWith('data:video')) {
-            mediaHtml = `<div style="height: 120px; background: #000; border-radius: 4px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:0.8rem;">[Video Presente]</div>`;
-        } else {
-            mediaHtml = `<div style="height: 120px; background: rgba(0,0,0,0.2); border-radius: 4px; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:0.8rem;">[Nessun Media]</div>`;
-        }
-
         card.innerHTML = `
-            ${mediaHtml}
             <h3 style="margin: 0.5rem 0 0.25rem 0; font-size: 1.1rem; color: var(--color-tecn);">${escapeHTML(schema.title)}</h3>
             <span style="font-size: 0.8rem; color: var(--text-muted); background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; align-self: flex-start;">${escapeHTML(schema.category)}</span>
             <div style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-secondary); display:flex; gap:0.5rem; align-items:center;">
