@@ -29,9 +29,9 @@ function renderTrainingProgramList() {
         }
         
         let preview = '';
-        if (t.warmup && t.warmup.desc) preview += `<span style="margin-right:1rem;">ðŸ”¥ Risc: ${t.warmup.mins || '?'}m</span>`;
-        if (t.mainPhase && t.mainPhase.desc) preview += `<span style="margin-right:1rem;">âš½ Cent: ${t.mainPhase.mins || '?'}m</span>`;
-        if (t.finalPhase && t.finalPhase.desc) preview += `<span>ðŸƒ Defat: ${t.finalPhase.mins || '?'}m</span>`;
+        if (t.warmup && t.warmup.desc) preview += `<span style="margin-right:1rem;">🔥 Risc: ${t.warmup.mins || '?'} min</span>`;
+        if (t.mainPhase && t.mainPhase.desc) preview += `<span style="margin-right:1rem;">⚽ Cent: ${t.mainPhase.mins || '?'} min</span>`;
+        if (t.finalPhase && t.finalPhase.desc) preview += `<span>🏃 Defat: ${t.finalPhase.mins || '?'} min</span>`;
         
         html += `
             <div class="glass-panel" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s;" onmouseover="this.style.transform='translateX(5px)'" onmouseout="this.style.transform='translateX(0)'" onclick="openTrainingForm('${t.date}')">
@@ -39,7 +39,7 @@ function renderTrainingProgramList() {
                     <div style="font-size: 0.8rem; color: var(--color-coach); margin-bottom: 0.3rem; font-weight: bold;">${dateStr}</div>
                     <h4 style="margin: 0; font-size: 1.2rem; color: #fff;">${typeStr}</h4>
                     <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">${preview || 'Nessun dettaglio inserito'}</div>
-                    ${t.notes ? `<div style="font-size: 0.8rem; color: var(--color-tatt); margin-top: 0.3rem;">ðŸ“ Note: ${t.notes.substring(0, 40)}${t.notes.length > 40 ? '...' : ''}</div>` : ''}
+                    ${t.notes ? `<div style="font-size: 0.8rem; color: var(--color-tatt); margin-top: 0.3rem;">📝 Note: ${t.notes.substring(0, 40)}${t.notes.length > 40 ? '...' : ''}</div>` : ''}
                 </div>
                 <div style="display: flex; align-items: center; gap: 1.5rem;">
                     <button class="btn btn-secondary" onclick="event.stopPropagation(); openTrainingForm('${t.date}')">Apri Scheda</button>
