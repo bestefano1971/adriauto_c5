@@ -3,21 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Futsal Performance Portal</title>
+    <title>Login - Futsal Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=4">
 </head>
-<body style="background: var(--bg-dark); min-height: 100vh; margin: 0; display: flex; justify-content: center; align-items: center;">
+<body style="background: url('dashboard_bg - Copia.png') no-repeat center center fixed; background-size: 115%; background-color: #050814; min-height: 100vh; margin: 0; display: flex; justify-content: flex-end; align-items: flex-end; position: relative; padding: 2rem; box-sizing: border-box;">
+    <!-- Overlay scuro per migliorare la leggibilità del login box -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 15, 36, 0.6); z-index: 1;"></div>
     <div class="background-decorations">
         <div class="glow-sphere glow-1"></div>
         <div class="glow-sphere glow-2"></div>
         <div class="glow-sphere glow-3"></div>
     </div>
     
-    <div class="login-box" style="z-index: 10; position: relative;">
-        <h2>Futsal Performance Portal</h2>
+    <div class="login-box" style="z-index: 10; position: relative; margin: 2rem;">
+        <h2 style="display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
+            Futsal Dashboard
+        </h2>
         <form id="login-form">
             <select id="login-user" required style="width: 100%; margin-bottom: 1.5rem; padding: 0.8rem 1rem; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; font-size: 1rem;">
                 <option value="" disabled selected>Seleziona Utente</option>

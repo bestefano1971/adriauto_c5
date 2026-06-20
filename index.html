@@ -17,9 +17,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css?v=4">
 </head>
-<body>
+<body style="background: url('dashboard_bg - Copia.png') no-repeat center center fixed; background-size: 115%; background-color: #050814; position: relative;">
+    <!-- Overlay scuro fisso per la leggibilità del testo -->
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 15, 36, 0.7); z-index: -1;"></div>
     <!-- LOGIN IS NOW IN LOGIN.HTML -->
     <div class="background-decorations">
         <div class="glow-sphere glow-1"></div>
@@ -30,22 +33,27 @@
     <!-- APP HEADER -->
     <header class="app-header">
         <div class="header-content container" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 1rem 0;">
-            <div class="logo-area" onclick="switchTabTo('tab-dashboard')" style="display: flex; align-items: center; gap: 1rem; cursor: pointer;">
+            <!-- SINISTRA: Spazio Vuoto -->
+            <div style="flex: 1; display: flex; justify-content: flex-start;">
+            </div>
+
+            <!-- CENTRO: Logo e Nome Squadra alla stessa altezza -->
+            <div class="logo-area" onclick="switchTabTo('tab-dashboard')" style="flex: 2; display: flex; justify-content: center; align-items: center; gap: 1rem; cursor: pointer;">
                 <div class="team-logo-container" style="position: relative; width: 60px; height: 60px; border-radius: 50%; background: rgba(0,0,0,0.3); border: 2px dashed var(--color-tecn); display: flex; justify-content: center; align-items: center; overflow: hidden; flex-shrink: 0;" title="Torna alla Dashboard">
                     <img id="team-logo-img" src="" alt="Team Logo" style="width: 100%; height: 100%; object-fit: cover; display: none;">
                     <span id="team-logo-placeholder" style="color: var(--color-tecn); text-align: center; font-size: 0.6rem;">Nessun<br>Logo</span>
                 </div>
-                <div class="titles">
-                    <h1 id="team-name-display" style="margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;" title="Torna alla Dashboard">
+                <div class="titles" style="display: flex; align-items: center; gap: 0.8rem;">
+                    <h1 id="team-name-display" style="margin: 0; font-size: 1.6rem; display: flex; align-items: center;" title="Torna alla Dashboard">
                         Nome Squadra Futsal
                     </h1>
-                    
-                    <p id="team-season-display" style="margin: 0.2rem 0 0 0; color: #a0aec0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: rgba(255,255,255,0.2); font-size: 1.5rem; font-weight: 300;">|</span>
+                    <p id="team-season-display" style="margin: 0; color: #a0aec0; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center;">
                         Stagione Sportiva
                     </p>
                 </div>
             </div>
-            <div style="display: flex; gap: 1rem; align-items: center;">
+            <div style="flex: 1; display: flex; gap: 1rem; align-items: center; justify-content: flex-end;">
                 <span id="current-user-display" style="color: var(--color-tecn); font-weight: 600; font-size: 0.9rem;"></span>
                 <button class="btn-logout" onclick="performLogout()">Logout</button>
                 <button id="btn-fullscreen" onclick="toggleFullScreen()" title="Schermo Intero" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; flex-shrink: 0;" onmouseover="this.style.color='white'; this.style.background='rgba(255,255,255,0.15)';" onmouseout="this.style.color='var(--text-muted)'; this.style.background='rgba(255,255,255,0.05)';">
@@ -64,111 +72,150 @@
              ========================================== -->
         <section id="tab-dashboard" class="tab-panel active">
             <div class="dashboard-main-grid">
-                <!-- Card: Profilo Giocatori -->
-                <div class="main-dashboard-card glass-panel" data-tab="tab-profile" onclick="switchTabTo('tab-profile', 'subtab-roster-list')">
-                    <div class="dashboard-card-icon" style="color: var(--color-player);">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                          <path d="M6 21V19C6 16.7909 7.79086 15 10 15H14C16.2091 15 18 16.7909 18 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
+                <!-- COLONNA SINISTRA -->
+                <div id="dashboard-col-left" class="dashboard-col" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Card: Profilo Giocatori -->
+                    <div class="main-dashboard-card glass-panel" data-tab="tab-profile" onclick="switchTabTo('tab-profile', 'subtab-roster-list')">
+                        <div class="dashboard-card-icon" style="color: var(--color-player);">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                              <path d="M6 21V19C6 16.7909 7.79086 15 10 15H14C16.2091 15 18 16.7909 18 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="dashboard-card-text">
+                            <h3>Profilo Giocatori</h3>
+                            <p>Gestione rosa e anagrafica atleti</p>
+                        </div>
                     </div>
-                    <h3>Profilo Giocatori</h3>
-                    <p>Gestione rosa e anagrafica atleti</p>
+
+                    <!-- Card: Test -->
+                    <div class="main-dashboard-card glass-panel" data-tab="tab-athletic" onclick="switchTabTo('tab-athletic')">
+                        <div class="dashboard-card-icon" style="color: var(--color-fisi);">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M9 11L12 14L22 4M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="dashboard-card-text">
+                            <h3>Test</h3>
+                            <p>Storico e inserimento test fisici</p>
+                        </div>
+                    </div>
+
+                    <!-- Card: Presenze -->
+                    <div class="main-dashboard-card glass-panel" data-tab="tab-attendance" onclick="switchTabTo('tab-attendance')">
+                        <div class="dashboard-card-icon" style="color: var(--color-tecn);">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M8 7V3M16 7V3M3 11H21M5 5H19C20.1046 5 21 5.89543 21 7V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V7C3 5.89543 3.89543 5 5 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="dashboard-card-text">
+                            <h3>Presenze</h3>
+                            <p>Tabellone convocazioni e allenamenti</p>
+                        </div>
+                    </div>
+
+                    <!-- Card: Preparazione Atletica -->
+                    <div class="main-dashboard-card glass-panel" data-tab="tab-preparation" onclick="switchTabTo('tab-preparation')">
+                        <div class="dashboard-card-icon" style="color: var(--color-tatt);">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M6 12L10 16L18 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="dashboard-card-text">
+                            <h3>Preparazione Atletica</h3>
+                            <p>Programmi e piani di allenamento</p>
+                        </div>
+                    </div>
+
+                    <!-- Card: Classifica e Risultati -->
+                    <div class="main-dashboard-card glass-panel" data-tab="tab-results" onclick="switchTabTo('tab-results')">
+                        <div class="dashboard-card-icon" style="color: var(--color-player);">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 19V6.2C4 5.0799 4 4.51984 4.21799 4.09202C4.40973 3.71569 4.71569 3.40973 5.09202 3.21799C5.51984 3 6.0799 3 7.2 3H16.8C17.9201 3 18.4802 3 18.908 3.21799C19.2843 3.40973 19.5903 3.71569 19.782 4.09202C20 4.51984 20 5.0799 20 6.2V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M4 19L12 15L20 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="dashboard-card-text">
+                            <h3>Classifica e Risultati</h3>
+                            <p>Statistiche partite e andamento</p>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Card: Presenze -->
-                <div class="main-dashboard-card glass-panel" data-tab="tab-attendance" onclick="switchTabTo('tab-attendance')">
-                    <div class="dashboard-card-icon" style="color: var(--color-tecn);">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M8 7V3M16 7V3M3 11H21M5 5H19C20.1046 5 21 5.89543 21 7V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V7C3 5.89543 3.89543 5 5 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
+                <!-- COLONNA DESTRA -->
+                <div id="dashboard-col-right" class="dashboard-col" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Card: Programma di Allenamento -->
+                    <div class="main-dashboard-card glass-panel" data-tab="tab-training-program" onclick="switchTabTo('tab-training-program')">
+                        <div class="dashboard-card-icon" style="color: var(--color-coach);">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              <path d="M16 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              <path d="M8 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              <path d="M3 10H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="dashboard-card-text">
+                            <h3>Programma di Allenamento</h3>
+                            <p>Gestione sessioni e macrocicli</p>
+                        </div>
                     </div>
-                    <h3>Presenze</h3>
-                    <p>Tabellone convocazioni e allenamenti</p>
-                </div>
-                
-                <!-- Card: Performance -->
-                <div class="main-dashboard-card glass-panel" data-tab="tab-roster" onclick="switchTabTo('tab-roster')">
-                    <div class="dashboard-card-icon" style="color: var(--color-psic);">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M21 21H3V3M21 9L13 17L9 13L3 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                    <!-- Card: Impostazioni -->
+                    <div class="main-dashboard-card glass-panel" data-tab="tab-settings" onclick="switchTabTo('tab-settings')">
+                        <div class="dashboard-card-icon" style="color: #cbd5e1;">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="dashboard-card-text">
+                            <h3>Impostazioni</h3>
+                            <p>Setup squadra, loghi e regolamenti</p>
+                        </div>
                     </div>
-                    <h3>Performance</h3>
-                    <p>Valutazioni, schede giocatore e trend</p>
-                </div>
 
-                <!-- Card: Test -->
-                <div class="main-dashboard-card glass-panel" data-tab="tab-athletic" onclick="switchTabTo('tab-athletic')">
-                    <div class="dashboard-card-icon" style="color: var(--color-fisi);">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9 11L12 14L22 4M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
+                    <!-- Card: Schemi -->
+                    <div class="main-dashboard-card glass-panel" data-tab="tab-schemi" onclick="switchTabTo('tab-schemi')">
+                        <div class="dashboard-card-icon" style="color: var(--color-tecn);">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                              <path d="M3 9H21" stroke="currentColor" stroke-width="2"/>
+                              <path d="M9 21V9" stroke="currentColor" stroke-width="2"/>
+                              <circle cx="15" cy="15" r="2" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="dashboard-card-text">
+                            <h3>Schemi e Lavagna</h3>
+                            <p>Playbook tattico e animazioni</p>
+                        </div>
                     </div>
-                    <h3>Test</h3>
-                    <p>Storico e inserimento test fisici</p>
-                </div>
 
-                <!-- Card: Preparazione Atletica -->
-                <div class="main-dashboard-card glass-panel" data-tab="tab-preparation" onclick="switchTabTo('tab-preparation')">
-                    <div class="dashboard-card-icon" style="color: var(--color-tatt);">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M6 12L10 16L18 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                        </svg>
+                    <!-- Card: Match Analyst -->
+                    <div class="main-dashboard-card glass-panel" data-tab="tab-match-analyst" onclick="window.location.href='Match Analist/index.html'">
+                        <div class="dashboard-card-icon" style="color: var(--color-tatt);">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M15 10L20 5.5V18.5L15 14V18C15 19.1046 14.1046 20 13 20H5C3.89543 20 3 19.1046 3 18V6C3 4.89543 3.89543 4 5 4H13C14.1046 4 15 4.89543 15 6V10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              <path d="M10 9L15 12L10 15V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="dashboard-card-text">
+                            <h3>Match Analyst</h3>
+                            <p>Analisi video e tagging tattico</p>
+                        </div>
                     </div>
-                    <h3>Preparazione Atletica</h3>
-                    <p>Programmi e piani di allenamento</p>
-                </div>
 
-                <!-- Card: Classifica e Risultati -->
-                <div class="main-dashboard-card glass-panel" data-tab="tab-results" onclick="switchTabTo('tab-results')">
-                    <div class="dashboard-card-icon" style="color: var(--color-player);">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 19V6.2C4 5.0799 4 4.51984 4.21799 4.09202C4.40973 3.71569 4.71569 3.40973 5.09202 3.21799C5.51984 3 6.0799 3 7.2 3H16.8C17.9201 3 18.4802 3 18.908 3.21799C19.2843 3.40973 19.5903 3.71569 19.782 4.09202C20 4.51984 20 5.0799 20 6.2V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M4 19L12 15L20 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                    <!-- Card: Performance -->
+                    <div class="main-dashboard-card glass-panel" data-tab="tab-roster" onclick="switchTabTo('tab-roster')">
+                        <div class="dashboard-card-icon" style="color: var(--color-psic);">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M21 21H3V3M21 9L13 17L9 13L3 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="dashboard-card-text">
+                            <h3>Performance</h3>
+                            <p>Valutazioni, schede giocatore e trend</p>
+                        </div>
                     </div>
-                    <h3>Classifica e Risultati</h3>
-                    <p>Statistiche partite e andamento</p>
-                </div>
-
-                <!-- Card: Match Analyst -->
-                <div class="main-dashboard-card glass-panel" data-tab="tab-match-analyst" onclick="window.location.href='Match Analist/index.html'">
-                    <div class="dashboard-card-icon" style="color: var(--color-tatt);">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M15 10L20 5.5V18.5L15 14V18C15 19.1046 14.1046 20 13 20H5C3.89543 20 3 19.1046 3 18V6C3 4.89543 3.89543 4 5 4H13C14.1046 4 15 4.89543 15 6V10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                          <path d="M10 9L15 12L10 15V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h3>Match Analyst</h3>
-                    <p>Analisi video e tagging tattico</p>
-                </div>
-
-                <!-- Card: Schemi -->
-                <div class="main-dashboard-card glass-panel" data-tab="tab-schemi" onclick="switchTabTo('tab-schemi')">
-                    <div class="dashboard-card-icon" style="color: var(--color-tecn);">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-                          <path d="M3 9H21" stroke="currentColor" stroke-width="2"/>
-                          <path d="M9 21V9" stroke="currentColor" stroke-width="2"/>
-                          <circle cx="15" cy="15" r="2" fill="currentColor"/>
-                        </svg>
-                    </div>
-                    <h3>Schemi e Lavagna</h3>
-                    <p>Playbook tattico e animazioni</p>
-                </div>
-
-                <!-- Card: Impostazioni -->
-                <div class="main-dashboard-card glass-panel" data-tab="tab-settings" onclick="switchTabTo('tab-settings')">
-                    <div class="dashboard-card-icon" style="color: #cbd5e1;">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h3>Impostazioni</h3>
-                    <p>Setup squadra, loghi e regolamenti</p>
                 </div>
             </div>
         </section>
@@ -1746,6 +1793,119 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             PROGRAMMA DI ALLENAMENTO
+             ========================================== -->
+        <section id="tab-training-program" class="tab-panel">
+            <div class="section-title-bar">
+                <h2 style="margin: 0; color: var(--color-coach);">Programma di Allenamento</h2>
+                <button class="btn btn-primary" onclick="openTrainingForm()">+ Nuova Seduta</button>
+            </div>
+            
+            <!-- LISTA ALLENAMENTI -->
+            <div id="training-sessions-list" style="display: grid; gap: 1rem; margin-top: 2rem;">
+                <!-- Popolato via JS -->
+            </div>
+
+            <!-- FORM SCHEDA ALLENAMENTO -->
+            <div id="training-session-form-container" class="glass-panel" style="display: none; margin-top: 2rem; padding: 2rem; animation: slideInUp 0.3s ease;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3 id="training-form-title" style="margin: 0; color: var(--color-coach);">Nuova Scheda Allenamento</h3>
+                    <button type="button" class="btn btn-secondary" onclick="exportTrainingToPDF()" id="btn-export-pdf">📄 Stampa PDF</button>
+                </div>
+                
+                <input type="hidden" id="training-id">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="training-date">Data Seduta</label>
+                        <input type="date" id="training-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="training-type">Obiettivo Principale</label>
+                        <input type="text" id="training-type" placeholder="Es: Tattica offensiva, Scarico, ecc." required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 3;">
+                        <label for="training-warmup">Riscaldamento / Attivazione</label>
+                        <textarea id="training-warmup" rows="2" placeholder="Esercizi di attivazione, mobilità..."></textarea>
+                        
+                        <div style="display: flex; gap: 2rem; margin-top: 1rem; justify-content: center; align-items: center;">
+                            <!-- Lavagna Intera -->
+                            <div class="tactical-board-container inline-board" id="board-warmup-full" data-phase="warmup-full" style="flex: none; position: relative; height: 320px; width: 570px; background: url('futsal_pitch_horizontal.svg') center/100% 100% no-repeat; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
+                            <!-- Metà Campo -->
+                            <div class="tactical-board-container inline-board half-pitch" id="board-warmup-half" data-phase="warmup-half" style="flex: none; position: relative; height: 320px; width: 359px; background: url('futsal_pitch.svg') center/100% 100% no-repeat; background-size: 100% 200%; background-position: top center; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="training-warmup-mins">Minutaggio (min)</label>
+                        <input type="number" id="training-warmup-mins" placeholder="Es: 15" min="0">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 3;">
+                        <label for="training-main">Fase Centrale</label>
+                        <textarea id="training-main" rows="3" placeholder="Sviluppo tattico, partitelle a tema..."></textarea>
+                        
+                        <div style="display: flex; gap: 2rem; margin-top: 1rem; justify-content: center; align-items: center;">
+                            <div class="tactical-board-container inline-board" id="board-mainPhase-full" data-phase="mainPhase-full" style="flex: none; position: relative; height: 320px; width: 570px; background: url('futsal_pitch_horizontal.svg') center/100% 100% no-repeat; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
+                            <div class="tactical-board-container inline-board half-pitch" id="board-mainPhase-half" data-phase="mainPhase-half" style="flex: none; position: relative; height: 320px; width: 359px; background: url('futsal_pitch.svg') center/100% 100% no-repeat; background-size: 100% 200%; background-position: top center; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="training-main-mins">Minutaggio (min)</label>
+                        <input type="number" id="training-main-mins" placeholder="Es: 45" min="0">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 3;">
+                        <label for="training-final">Fase Finale / Defaticamento</label>
+                        <textarea id="training-final" rows="2" placeholder="Partita libera, scarico, stretching..."></textarea>
+
+                        <div style="display: flex; gap: 2rem; margin-top: 1rem; justify-content: center; align-items: center;">
+                            <div class="tactical-board-container inline-board" id="board-finalPhase-full" data-phase="finalPhase-full" style="flex: none; position: relative; height: 320px; width: 570px; background: url('futsal_pitch_horizontal.svg') center/100% 100% no-repeat; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
+                            <div class="tactical-board-container inline-board half-pitch" id="board-finalPhase-half" data-phase="finalPhase-half" style="flex: none; position: relative; height: 320px; width: 359px; background: url('futsal_pitch.svg') center/100% 100% no-repeat; background-size: 100% 200%; background-position: top center; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="training-final-mins">Minutaggio (min)</label>
+                        <input type="number" id="training-final-mins" placeholder="Es: 15" min="0">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="training-notes">Note Aggiuntive</label>
+                        <textarea id="training-notes" rows="2" placeholder="Materiale necessario, raccomandazioni speciali..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row" style="align-items: flex-start;">
+                    <div class="form-group">
+                        <label for="training-rpe">Carico di Lavoro Previsto (RPE 1-10)</label>
+                        <input type="number" id="training-rpe" min="1" max="10" placeholder="Es: 7">
+                    </div>
+                    <div class="form-group">
+                        <label>Immagine / Schema (Campo/Metà campo)</label>
+                        <input type="file" id="training-image-input" accept="image/*" class="file-input" onchange="previewTrainingImage(event)">
+                        <div id="training-image-preview-container" style="margin-top: 1rem; display: none; position: relative; max-width: 300px;">
+                            <img id="training-image-preview" src="" style="width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+                            <button type="button" onclick="clearTrainingImage()" style="position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-actions" style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeTrainingForm()">Annulla</button>
+                    <button type="button" class="btn btn-primary" onclick="saveTrainingSession()">Salva Scheda</button>
+                </div>
+            </div>
+        </section>
+
     </main>
     <!-- TOAST NOTIFICATION -->
     <div id="toast" class="toast">
@@ -1965,6 +2125,183 @@
         }
     </style>
     <script src="schemi_v5.js"></script>
+
+    <!-- DASHBOARD DRAG & DROP -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+    <style>
+        .sortable-ghost {
+            opacity: 0.4;
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed rgba(255,255,255,0.3) !important;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const colLeft = document.getElementById('dashboard-col-left');
+            const colRight = document.getElementById('dashboard-col-right');
+
+            const sortableOptions = {
+                group: 'dashboard-cards',
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                delay: 100, // Small delay prevents accidental drags when just clicking
+                delayOnTouchOnly: true,
+                onEnd: function() {
+                    const leftCards = Array.from(colLeft.children).map(el => el.getAttribute('data-tab'));
+                    const rightCards = Array.from(colRight.children).map(el => el.getAttribute('data-tab'));
+                    localStorage.setItem('futsal-dashboard-order', JSON.stringify({ left: leftCards, right: rightCards }));
+                }
+            };
+
+            if (colLeft && colRight) {
+                new Sortable(colLeft, sortableOptions);
+                new Sortable(colRight, sortableOptions);
+
+                // Load saved state
+                const savedOrderStr = localStorage.getItem('futsal-dashboard-order');
+                if (savedOrderStr) {
+                    try {
+                        const savedOrder = JSON.parse(savedOrderStr);
+                        const allCards = Array.from(colLeft.children).concat(Array.from(colRight.children));
+                        const cardMap = {};
+                        
+                        allCards.forEach(card => {
+                            const tabId = card.getAttribute('data-tab');
+                            if(tabId) cardMap[tabId] = card;
+                        });
+                        
+                        colLeft.innerHTML = '';
+                        colRight.innerHTML = '';
+
+                        (savedOrder.left || []).forEach(tabId => {
+                            if (cardMap[tabId]) colLeft.appendChild(cardMap[tabId]);
+                        });
+                        (savedOrder.right || []).forEach(tabId => {
+                            if (cardMap[tabId]) colRight.appendChild(cardMap[tabId]);
+                        });
+
+                        // Append any missing cards to left column
+                        Object.values(cardMap).forEach(card => {
+                            if (!colLeft.contains(card) && !colRight.contains(card)) {
+                                colLeft.appendChild(card);
+                            }
+                        });
+                    } catch(e) {
+                        console.error("Error restoring dashboard order", e);
+                    }
+                }
+            }
+        });
+    </script>
+    
+    <!-- MODAL EDITOR LAVAGNA ALLENAMENTO -->
+    <div id="training-board-editor-view" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 2rem;">
+        <div class="modal-content glass-panel" style="width: 95vw; max-width: 1400px; height: 90vh; display: flex; flex-direction: column; padding: 1.5rem; overflow: hidden;">
+            <div class="modal-header" style="margin-bottom: 1rem; padding-bottom: 0; border: none;">
+                <h2 id="training-board-title" style="margin: 0; color: var(--color-coach);">Disegna Esercitazione</h2>
+                <button type="button" class="btn-close-modal" onclick="closeTrainingBoardEditor()">&times;</button>
+            </div>
+            <div style="display: grid; grid-template-columns: auto 1fr; gap: 2rem; flex: 1; overflow: hidden;">
+                <!-- Colonna Sinistra: Lavagna -->
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <div class="form-group" style="margin:0; flex: 1; display: flex; align-items: center; justify-content: center;" id="training-board-wrapper">
+                        <div class="tactical-board-container" style="position: relative; height: 75vh; max-height: 800px; aspect-ratio: 3 / 4; width: auto; background: url('futsal_pitch.svg') center/100% 100% no-repeat; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden;" id="training-board-canvas">
+                            <!-- Pedine generate via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colonna Destra: Strumenti e Toolbox -->
+                <div style="display: flex; flex-direction: column; gap: 1rem; justify-content: flex-start; height: 100%;">
+                    
+                    <div class="glass-panel" style="padding: 1rem;">
+                        <h4 style="margin-top: 0; margin-bottom: 0.5rem; color: var(--color-tatt);">Giocatori & Pallone</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <button class="btn btn-secondary" onclick="addTrainingBoardPiece('blue')">Attaccante</button>
+                            <button class="btn btn-secondary" onclick="addTrainingBoardPiece('red')">Difensore</button>
+                            <button class="btn btn-secondary" onclick="addTrainingBoardPiece('blue-gk')">Portiere</button>
+                            <button class="btn btn-secondary" onclick="addTrainingBoardPiece('ball')">Pallone</button>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel" style="padding: 1rem;">
+                        <h4 style="margin-top: 0; margin-bottom: 0.5rem; color: var(--color-tecn);">Attrezzature</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <button class="btn btn-secondary" onclick="addTrainingBoardPiece('cone-red')">Cinesino Rosso</button>
+                            <button class="btn btn-secondary" onclick="addTrainingBoardPiece('cone-yellow')">Cinesino Giallo</button>
+                            <button class="btn btn-secondary" onclick="addTrainingBoardPiece('cone-blue')">Cinesino Blu</button>
+                            <button class="btn btn-secondary" onclick="addTrainingBoardPiece('obstacle')">Ostacolo</button>
+                            <button class="btn btn-secondary" onclick="addTrainingBoardPiece('pole')">Asta</button>
+                            <button class="btn btn-secondary" onclick="addTrainingBoardPiece('big-goal')">Porta Grande</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin:0 0 0.5rem 0;">
+                        <label style="font-size:0.85rem; margin-bottom: 0.2rem; display:block;">Vista Campo</label>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <label style="display:flex; align-items:center; gap:0.25rem; font-size:0.85rem; cursor:pointer;">
+                                <input type="radio" name="training-board-pitch-type" value="full" checked onchange="updateTrainingBoardPitchView()">
+                                Campo Intero
+                            </label>
+                            <label style="display:flex; align-items:center; gap:0.25rem; font-size:0.85rem; cursor:pointer;">
+                                <input type="radio" name="training-board-pitch-type" value="half" onchange="updateTrainingBoardPitchView()">
+                                Metà Campo
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 0.75rem; font-size: 0.8rem; color: var(--text-muted);">
+                        <strong>Istruzioni:</strong>
+                        <ul style="margin: 0.25rem 0 0 1rem; padding: 0;">
+                            <li>Trascina gli elementi per posizionarli.</li>
+                            <li>Doppio click su un elemento per ruotarlo.</li>
+                            <li>Tasto destro (o tap prolungato) su un elemento per eliminarlo.</li>
+                        </ul>
+                        <div style="margin-top: 0.5rem;">
+                            <button class="btn-sub" onclick="clearTrainingBoard()" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Svuota Lavagna</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 0.5rem;">
+                        <label for="training-board-notes" style="font-size:0.85rem; margin-bottom: 0.2rem; display:block;">Svolgimento / Regole</label>
+                        <textarea id="training-board-notes" rows="3" style="font-size:0.85rem;" placeholder="Descrivi l'esercitazione disegnata sulla lavagna..."></textarea>
+                    </div>
+                    
+                    <div style="display: flex; margin-top: auto; padding-top: 0.5rem;">
+                        <button class="btn btn-primary" onclick="saveTrainingBoard()" style="width: 100%; padding: 0.75rem; font-size: 1rem; font-weight: bold;">Conferma Esercitazione</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MENU ATTREZZI FISSO -->
+    <div id="board-tools-popup" style="position: fixed; top: 50%; transform: translateY(-50%); right: 20px; display: none; background: rgba(10, 15, 36, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; z-index: 10001; box-shadow: 0 4px 12px rgba(0,0,0,0.5); width: 220px; pointer-events: auto;">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--color-tatt); font-size: 0.9rem; text-align: center;">Giocatori</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;">
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('blue')">Attaccante</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('red')">Difensore</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('blue-gk')">Portiere</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('ball')">Pallone</button>
+        </div>
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--color-tecn); font-size: 0.9rem; text-align: center;">Attrezzi</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('cone-red')">🔴 Cin.</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('cone-yellow')">🟡 Cin.</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('cone-blue')">🔵 Cin.</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('obstacle')">Ostacolo</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('pole')">Asta</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('big-goal')">Porta</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('arrow-v')">⬆️ Fr. Vert.</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('arrow-h')">➡️ Fr. Orizz.</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('arrow-curve')">⤴️ Fr. Curva</button>
+            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('arrow-u')">↩️ Fr. 180°</button>
+        </div>
+        <button class="btn btn-danger btn-sm" style="width: 100%; margin-top: 1rem;" onclick="clearActiveBoard()">🗑️ Svuota Lavagna</button>
+    </div>
+
+    <script src="add_training_board_v3.js"></script>
+    <script src="add_training.js?v=3"></script>
 </body>
 </html>
 

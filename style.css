@@ -4,8 +4,8 @@
 :root {
     /* Color Palette */
     --bg-dark: hsl(224, 45%, 8%);
-    --bg-card: hsla(224, 45%, 12%, 0.65);
-    --bg-card-hover: hsla(224, 45%, 15%, 0.85);
+    --bg-card: hsla(224, 45%, 12%, 0.10);
+    --bg-card-hover: hsla(224, 45%, 15%, 0.20);
     --border-color: hsla(224, 20%, 90%, 0.08);
     --border-color-focus: hsla(224, 80%, 60%, 0.4);
     
@@ -66,6 +66,11 @@ body {
     line-height: 1.5;
     overflow-x: hidden;
     min-height: 100vh;
+}
+
+select option {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
 }
 
 .container {
@@ -144,10 +149,8 @@ body {
    HEADER & TAB NAVIGATION
    ========================================================================== */
 .app-header {
-    background: hsla(224, 45%, 5%, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-color);
+    background: transparent;
+    border-bottom: none;
     padding: 0.75rem 0;
     position: sticky;
     top: 0;
@@ -2394,18 +2397,31 @@ button[title="Elimina Seduta"]:hover {
 /* Dashboard Main Grid */
 .dashboard-main-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1rem;
-    padding: 1rem 0;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    padding: 1rem 2vw;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    box-sizing: border-box;
+}
+
+@media (min-width: 1024px) {
+    .dashboard-main-grid {
+        grid-template-columns: 320px 1fr 320px;
+    }
+    .dashboard-col:nth-child(2) {
+        grid-column-start: 3;
+    }
 }
 
 .main-dashboard-card {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 1.5rem 1rem;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 0.6rem 1rem;
+    gap: 1rem;
     cursor: pointer;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
     border: 1px solid hsla(224, 20%, 90%, 0.05);
@@ -2418,10 +2434,10 @@ button[title="Elimina Seduta"]:hover {
 }
 
 .dashboard-card-icon {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 0.5rem;
-    padding: 1.2rem;
+    width: 35px;
+    height: 35px;
+    margin-bottom: 0;
+    padding: 0.6rem;
     border-radius: 50%;
     background: hsla(224, 20%, 90%, 0.03);
     transition: transform 0.3s ease;
@@ -2433,14 +2449,14 @@ button[title="Elimina Seduta"]:hover {
 }
 
 .main-dashboard-card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.25rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.1rem;
     font-weight: 700;
 }
 
 .main-dashboard-card p {
     color: var(--text-secondary);
-    font-size: 0.8rem;
+    font-size: 0.65rem;
 }
 
 

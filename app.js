@@ -3392,10 +3392,31 @@ function renderAttendanceBoard() {
             }
         });
         
+        const formBtn = document.createElement('button');
+        formBtn.type = 'button';
+        formBtn.className = 'col-edit-btn';
+        formBtn.title = 'Vedi Scheda Allenamento';
+        formBtn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 2V6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 2V6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 10H21" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        `;
+        formBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if(window.switchTabTo) window.switchTabTo('tab-training-program');
+            if(window.openTrainingForm) {
+                setTimeout(() => window.openTrainingForm(dateStr), 50);
+            }
+        });
+        
         const btnContainer = document.createElement('div');
         btnContainer.style.display = 'flex';
         btnContainer.style.gap = '6px';
         btnContainer.style.marginTop = '4px';
+        if (!isMatchDate) btnContainer.appendChild(formBtn);
         btnContainer.appendChild(editBtn);
         btnContainer.appendChild(deleteBtn);
         
@@ -5460,6 +5481,12 @@ let futsalUsers = JSON.parse(localStorage.getItem('futsal_users')) || [
     { username: "admin", password: "password", role: "Admin" }
 ];
 
+const defaultRolesPermissions = {
+    "Admin": ["tab-dashboard", "tab-profile", "tab-attendance", "tab-roster", "tab-athletic", "tab-preparation", "tab-results", "tab-schemi", "tab-match-analyst", "tab-training-program", "tab-settings"],
+    "Staff/Dir": ["tab-dashboard", "tab-profile", "tab-attendance", "tab-roster", "tab-athletic", "tab-preparation", "tab-results", "tab-schemi", "tab-match-analyst", "tab-training-program"],
+    "Players": ["tab-dashboard", "tab-profile", "tab-results", "tab-schemi"]
+};
+
 // Ensure the specific staff account exists
 if (!futsalUsers.find(u => u.username === "staff")) {
     futsalUsers.push({ username: "staff", password: "adria", role: "Staff/Dir" });
@@ -5467,12 +5494,11 @@ if (!futsalUsers.find(u => u.username === "staff")) {
 }
 let currentUser = JSON.parse(localStorage.getItem('futsal_current_user')) || null;
 
-const defaultRolesPermissions = {
-    "Admin": ["tab-dashboard", "tab-profile", "tab-attendance", "tab-roster", "tab-athletic", "tab-preparation", "tab-results", "tab-schemi", "tab-match-analyst", "tab-settings"],
-    "Staff/Dir": ["tab-dashboard", "tab-profile", "tab-attendance", "tab-roster", "tab-athletic", "tab-preparation", "tab-results", "tab-schemi", "tab-match-analyst"],
-    "Players": ["tab-dashboard", "tab-profile", "tab-results", "tab-schemi"]
-};
+
 let futsalRolesPermissions = JSON.parse(localStorage.getItem('futsal_roles_permissions')) || defaultRolesPermissions;
+if (futsalRolesPermissions["Admin"] && !futsalRolesPermissions["Admin"].includes("tab-training-program")) futsalRolesPermissions["Admin"].push("tab-training-program");
+if (futsalRolesPermissions["Staff/Dir"] && !futsalRolesPermissions["Staff/Dir"].includes("tab-training-program")) futsalRolesPermissions["Staff/Dir"].push("tab-training-program");
+localStorage.setItem('futsal_roles_permissions', JSON.stringify(futsalRolesPermissions));
 
 // Migration: If old roles exist, map them to new ones
 if (futsalRolesPermissions["Staff Tecnico"] || futsalRolesPermissions["Giocatore"]) {
@@ -5481,6 +5507,8 @@ if (futsalRolesPermissions["Staff Tecnico"] || futsalRolesPermissions["Giocatore
     delete futsalRolesPermissions["Staff Tecnico"];
     delete futsalRolesPermissions["Dirigenti"];
     delete futsalRolesPermissions["Giocatore"];
+    if (futsalRolesPermissions["Admin"] && !futsalRolesPermissions["Admin"].includes("tab-training-program")) futsalRolesPermissions["Admin"].push("tab-training-program");
+    if (futsalRolesPermissions["Staff/Dir"] && !futsalRolesPermissions["Staff/Dir"].includes("tab-training-program")) futsalRolesPermissions["Staff/Dir"].push("tab-training-program");
     localStorage.setItem('futsal_roles_permissions', JSON.stringify(futsalRolesPermissions));
 }
 

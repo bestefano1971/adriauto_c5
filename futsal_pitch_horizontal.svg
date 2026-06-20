@@ -1,0 +1,29 @@
+<svg viewBox="0 0 410 230" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(410, 0) rotate(90)">
+    <rect width="230" height="410" fill="#1b5e20"/>
+    <rect x="5" y="5" width="220" height="400" fill="none" stroke="white" stroke-width="2"/>
+    
+    <line x1="5" y1="205" x2="225" y2="205" stroke="white" stroke-width="2"/>
+    
+    <circle cx="115" cy="205" r="30" fill="none" stroke="white" stroke-width="2"/>
+    <circle cx="115" cy="205" r="3" fill="white"/>
+
+    <!-- TOP PENALTY AREA -->
+    <path d="M 40 5 A 60 60 0 0 0 100 65 L 130 65 A 60 60 0 0 0 190 5" fill="none" stroke="white" stroke-width="2"/>
+    <circle cx="115" cy="65" r="3" fill="white"/>
+    <circle cx="115" cy="105" r="3" fill="white"/>
+    <rect x="100" y="1" width="30" height="4" fill="none" stroke="white" stroke-width="2"/>
+
+    <!-- BOTTOM PENALTY AREA -->
+    <path d="M 40 405 A 60 60 0 0 1 100 345 L 130 345 A 60 60 0 0 1 190 405" fill="none" stroke="white" stroke-width="2"/>
+    <circle cx="115" cy="345" r="3" fill="white"/>
+    <circle cx="115" cy="305" r="3" fill="white"/>
+    <rect x="100" y="405" width="30" height="4" fill="none" stroke="white" stroke-width="2"/>
+    
+    <!-- Corner arcs (r=5) -->
+    <path d="M 5 10 A 5 5 0 0 0 10 5" fill="none" stroke="white" stroke-width="2"/>
+    <path d="M 220 5 A 5 5 0 0 0 225 10" fill="none" stroke="white" stroke-width="2"/>
+    <path d="M 5 400 A 5 5 0 0 1 10 405" fill="none" stroke="white" stroke-width="2"/>
+    <path d="M 220 405 A 5 5 0 0 1 225 400" fill="none" stroke="white" stroke-width="2"/>
+  </g>
+</svg>
