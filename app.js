@@ -4975,6 +4975,16 @@ window.switchTabTo = function(tabName, subTabName = null) {
         }
     }
     
+    // Mostra/Nascondi popup attrezzi solo nella tab schemi
+    const boardToolsPopup = document.getElementById('board-tools-popup');
+    if (boardToolsPopup) {
+        if (tabName === 'tab-schemi') {
+            boardToolsPopup.style.display = 'block';
+        } else {
+            boardToolsPopup.style.display = 'none';
+        }
+    }
+    
     // Trigger any resize events for charts
     window.dispatchEvent(new Event('resize'));
     window.scrollTo({ top: 0, behavior: 'smooth' });
