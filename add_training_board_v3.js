@@ -177,7 +177,7 @@ window.renderInlineBoard = function(boardId) {
         
         piece.addEventListener('dblclick', (e) => {
             e.stopPropagation();
-            p.rotation = ((p.rotation || 0) + 45) % 360;
+            window.trainingBoardsState[boardId] = window.trainingBoardsState[boardId].filter(item => item.id !== p.id);
             renderInlineBoard(boardId);
         });
 
@@ -192,7 +192,7 @@ window.renderInlineBoard = function(boardId) {
         piece.addEventListener('contextmenu', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            window.trainingBoardsState[boardId] = window.trainingBoardsState[boardId].filter(item => item.id !== p.id);
+            p.rotation = ((p.rotation || 0) + 45) % 360;
             renderInlineBoard(boardId);
         });
 
