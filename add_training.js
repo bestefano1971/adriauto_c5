@@ -42,12 +42,6 @@ function renderTrainingProgramList() {
                     ${t.notes ? `<div style="font-size: 0.8rem; color: var(--color-tatt); margin-top: 0.3rem;">ðŸ“ Note: ${t.notes.substring(0, 40)}${t.notes.length > 40 ? '...' : ''}</div>` : ''}
                 </div>
                 <div style="display: flex; align-items: center; gap: 1.5rem;">
-                    ${t.rpe ? `
-                    <div style="text-align: center;">
-                        <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Carico RPE</div>
-                        <div style="font-size: 1.4rem; font-weight: bold; color: ${t.rpe >= 8 ? '#ef4444' : t.rpe >= 5 ? '#f59e0b' : '#10b981'};">${t.rpe}</div>
-                    </div>
-                    ` : ''}
                     <button class="btn btn-secondary" onclick="event.stopPropagation(); openTrainingForm('${t.date}')">Apri Scheda</button>
                 </div>
             </div>
@@ -85,14 +79,6 @@ function openTrainingForm(dateStr = '') {
             document.getElementById('training-final').value = (t.finalPhase && t.finalPhase.desc) || '';
             document.getElementById('training-final-mins').value = (t.finalPhase && t.finalPhase.mins) || '';
             document.getElementById('training-notes').value = t.notes || '';
-            document.getElementById('training-rpe').value = t.rpe || '';
-            
-            if (t.image) {
-                document.getElementById('training-image-preview').src = t.image;
-                document.getElementById('training-image-preview-container').style.display = 'block';
-            } else {
-                clearTrainingImage();
-            }
             
             if (!window.trainingBoardsState) window.trainingBoardsState = {};
             window.trainingBoardsState['board-warmup-full'] = t.warmup && t.warmup.boardFull ? JSON.parse(JSON.stringify(t.warmup.boardFull)) : [];
@@ -124,8 +110,6 @@ function openTrainingForm(dateStr = '') {
         document.getElementById('training-final').value = '';
         document.getElementById('training-final-mins').value = '';
         document.getElementById('training-notes').value = '';
-        document.getElementById('training-rpe').value = '';
-        clearTrainingImage();
         
         if (!window.trainingBoardsState) window.trainingBoardsState = {};
         window.trainingBoardsState['board-warmup-full'] = [];
@@ -153,29 +137,6 @@ function closeTrainingForm() {
     if (popup) popup.style.display = 'none';
 }
 
-function previewTrainingImage(event) {
-    const file = event.target.files[0];
-    if (file) {
-        if (file.size > 2 * 1024 * 1024) {
-            if(window.showToast) window.showToast("L'immagine Ã¨ troppo grande. Max 2MB.", "error");
-            event.target.value = '';
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('training-image-preview').src = e.target.result;
-            document.getElementById('training-image-preview-container').style.display = 'block';
-        }
-        reader.readAsDataURL(file);
-    }
-}
-
-function clearTrainingImage() {
-    document.getElementById('training-image-input').value = '';
-    document.getElementById('training-image-preview').src = '';
-    document.getElementById('training-image-preview-container').style.display = 'none';
-}
-
 function saveTrainingSession() {
     const dateStr = document.getElementById('training-date').value;
     if (!dateStr) {
@@ -190,10 +151,7 @@ function saveTrainingSession() {
     const mainMins = document.getElementById('training-main-mins').value;
     const finalDesc = document.getElementById('training-final').value.trim();
     const finalMins = document.getElementById('training-final-mins').value;
-    const rpe = document.getElementById('training-rpe').value;
     const notes = document.getElementById('training-notes').value.trim();
-    const imgPreviewContainer = document.getElementById('training-image-preview-container');
-    const image = imgPreviewContainer.style.display !== 'none' ? document.getElementById('training-image-preview').src : null;
     
     let tIndex = trainings.findIndex(tr => tr.date === dateStr);
     
@@ -213,8 +171,6 @@ function saveTrainingSession() {
         trainings[tIndex].mainPhase = { desc: mainDesc, mins: mainMins, boardFull: mainBoardFull, boardHalf: mainBoardHalf };
         trainings[tIndex].finalPhase = { desc: finalDesc, mins: finalMins, boardFull: finalBoardFull, boardHalf: finalBoardHalf };
         trainings[tIndex].notes = notes;
-        trainings[tIndex].rpe = rpe;
-        trainings[tIndex].image = image;
     } else {
         const newSession = {
             id: Date.now(),
@@ -224,9 +180,7 @@ function saveTrainingSession() {
             warmup: { desc: warmupDesc, mins: warmupMins, boardFull: warmupBoardFull, boardHalf: warmupBoardHalf },
             mainPhase: { desc: mainDesc, mins: mainMins, boardFull: mainBoardFull, boardHalf: mainBoardHalf },
             finalPhase: { desc: finalDesc, mins: finalMins, boardFull: finalBoardFull, boardHalf: finalBoardHalf },
-            notes: notes,
-            rpe: rpe,
-            image: image
+            notes: notes
         };
         trainings.push(newSession);
         trainings.sort((a, b) => new Date(b.date) - new Date(a.date));
