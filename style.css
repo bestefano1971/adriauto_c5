@@ -2762,3 +2762,49 @@ button[title="Elimina Seduta"]:hover {
     background: #ef4444;
     color: white;
 }
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #training-session-form-container, #training-session-form-container * {
+        visibility: visible;
+    }
+    #training-session-form-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: auto;
+        margin: 0;
+        padding: 0;
+        overflow: visible !important;
+        box-shadow: none !important;
+    }
+    .modal-actions, #btn-export-pdf, #board-tools-popup {
+        display: none !important;
+    }
+}
+
+/* LOGISTIC BADGES & SELECT SYSTEM */
+.logistic-select-hdr {
+    transition: all 0.2s ease-in-out;
+}
+.logistic-select-hdr:focus {
+    outline: none;
+    box-shadow: 0 0 5px currentColor;
+}
+.logistic-badge[data-logistic="spiaggia"] {
+    color: #ffca2c;
+    background: rgba(255, 193, 7, 0.15);
+    border-color: rgba(255, 193, 7, 0.3) !important;
+}
+.logistic-badge[data-logistic="casa"] {
+    color: #39ff14;
+    background: rgba(57, 255, 20, 0.15);
+    border-color: rgba(57, 255, 20, 0.3) !important;
+}
+.logistic-badge[data-logistic="trasferta"] {
+    color: #ff007f;
+    background: rgba(255, 0, 127, 0.15);
+    border-color: rgba(255, 0, 127, 0.3) !important;
+}

@@ -58,7 +58,7 @@ function openTrainingForm(dateStr = '') {
     formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     
     const popup = document.getElementById('board-tools-popup');
-    if (popup) popup.style.display = 'block';
+    if (popup) popup.style.display = 'none'; // Nascondiamo di default finché non si seleziona un campo
     
     const formTitle = document.getElementById('training-form-title');
     const dateInput = document.getElementById('training-date');
@@ -165,12 +165,14 @@ function saveTrainingSession() {
     const finalBoardFull = window.trainingBoardsState ? JSON.parse(JSON.stringify(window.trainingBoardsState['board-finalPhase-full'] || [])) : [];
     const finalBoardHalf = window.trainingBoardsState ? JSON.parse(JSON.stringify(window.trainingBoardsState['board-finalPhase-half'] || [])) : [];
 
+    let sessionToSave;
     if (tIndex !== -1) {
         trainings[tIndex].type = type;
         trainings[tIndex].warmup = { desc: warmupDesc, mins: warmupMins, boardFull: warmupBoardFull, boardHalf: warmupBoardHalf };
         trainings[tIndex].mainPhase = { desc: mainDesc, mins: mainMins, boardFull: mainBoardFull, boardHalf: mainBoardHalf };
         trainings[tIndex].finalPhase = { desc: finalDesc, mins: finalMins, boardFull: finalBoardFull, boardHalf: finalBoardHalf };
         trainings[tIndex].notes = notes;
+        sessionToSave = trainings[tIndex];
     } else {
         const newSession = {
             id: Date.now(),
@@ -184,9 +186,19 @@ function saveTrainingSession() {
         };
         trainings.push(newSession);
         trainings.sort((a, b) => new Date(b.date) - new Date(a.date));
+        sessionToSave = newSession;
     }
     
     localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
+    
+    // Trigger download of the JSON file
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(sessionToSave, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "scheda_allenamento_" + dateStr + ".json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
     
     if(window.showToast) window.showToast("Scheda allenamento salvata con successo!", "success");
     closeTrainingForm();
@@ -206,15 +218,44 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function exportTrainingToPDF() {
-    const element = document.getElementById('training-session-form-container');
-    const opt = {
-        margin:       10,
-        filename:     'Scheda_Allenamento.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    window.print();
+}
+
+window.importTrainingSession = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedSession = JSON.parse(e.target.result);
+            if (!importedSession.date || !importedSession.mainPhase) {
+                if(window.showToast) window.showToast("File non valido.", "error");
+                return;
+            }
+            
+            // Delete old session with same date if exists to replace
+            trainings = trainings.filter(t => t.date !== importedSession.date);
+            trainings.push(importedSession);
+            trainings.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
+            
+            if(window.showToast) window.showToast("Scheda importata con successo!", "success");
+            
+            renderTrainingProgramList();
+            if(window.renderTrainingHistory) renderTrainingHistory();
+            if(window.renderAttendanceBoard) renderAttendanceBoard(); 
+            
+            // Open the imported session
+            window.openTrainingForm(importedSession.date);
+        } catch (err) {
+            console.error(err);
+            if(window.showToast) window.showToast("Errore durante l'importazione del file.", "error");
+        }
+        event.target.value = ''; // Reset input
     };
-    html2pdf().set(opt).from(element).save();
+    reader.readAsText(file);
 }
 
 

@@ -36,6 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
             activeBoardId = board.id;
             board.style.borderColor = '#3b82f6';
             board.style.boxShadow = '0 0 10px rgba(59, 130, 246, 0.5)';
+            
+            // Mostra il popup degli attrezzi
+            const popup = document.getElementById('board-tools-popup');
+            if (popup) popup.style.display = 'block';
         });
 
 
@@ -108,7 +112,7 @@ window.renderInlineBoard = function(boardId) {
         piece.style.background = 'transparent';
 
         if (p.type === 'ball') {
-            piece.innerHTML = `âš½`;
+            piece.innerHTML = `⚽`;
             piece.style.fontSize = '18px';
             piece.style.filter = 'drop-shadow(2px 2px 2px rgba(0,0,0,0.5))';
             piece.style.transform = `translate(-50%, -50%) rotate(${p.rotation || 0}deg)`;
@@ -214,16 +218,18 @@ function startInlineBoardDrag(e) {
     
     // Gestione manuale del doppio click per eliminare
     const now = Date.now();
-    if (piece.dataset.lastClickTime && now - parseInt(piece.dataset.lastClickTime) < 300) {
+    const pIdStr = piece.dataset.id;
+    if (window.lastInlineBoardClickTime && (now - window.lastInlineBoardClickTime < 400) && window.lastInlineBoardClickPieceId === pIdStr) {
         const board = piece.closest('.inline-board');
         if (board) {
-            const pIdStr = piece.dataset.id;
             window.trainingBoardsState[board.id] = window.trainingBoardsState[board.id].filter(item => String(item.id) !== pIdStr);
             renderInlineBoard(board.id);
         }
+        window.lastInlineBoardClickTime = 0;
         return;
     }
-    piece.dataset.lastClickTime = now;
+    window.lastInlineBoardClickTime = now;
+    window.lastInlineBoardClickPieceId = pIdStr;
     
     e.preventDefault();
     const board = piece.closest('.inline-board');

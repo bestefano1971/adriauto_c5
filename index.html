@@ -1800,6 +1800,8 @@
             <div class="section-title-bar">
                 <h2 style="margin: 0; color: var(--color-coach);">Programma di Allenamento</h2>
                 <button class="btn btn-primary" onclick="openTrainingForm()">+ Nuova Seduta</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('import-training-file').click()">📥 Importa Scheda</button>
+                <input type="file" id="import-training-file" accept=".json" style="display:none;" onchange="importTrainingSession(event)">
             </div>
             
             <!-- LISTA ALLENAMENTI -->
@@ -1933,6 +1935,7 @@
                         <select id="popup-match-location">
                             <option value="C">In Casa (C)</option>
                             <option value="T">In Trasferta (T)</option>
+                            <option value="S">In Spiaggia (S)</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1989,6 +1992,7 @@
                         <select id="edit-col-location">
                             <option value="C">In Casa (C)</option>
                             <option value="T">In Trasferta (T)</option>
+                            <option value="S">In Spiaggia (S)</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -2263,28 +2267,29 @@
     </div>
 
     <!-- MENU ATTREZZI FISSO -->
-    <div id="board-tools-popup" style="position: fixed; top: 50%; transform: translateY(-50%); right: 20px; display: none; background: rgba(10, 15, 36, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; z-index: 10001; box-shadow: 0 4px 12px rgba(0,0,0,0.5); width: 220px; pointer-events: auto;">
-        <h4 style="margin: 0 0 0.5rem 0; color: var(--color-tatt); font-size: 0.9rem; text-align: center;">Giocatori</h4>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;">
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('blue')">Attaccante</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('red')">Difensore</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('blue-gk')">Portiere</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('ball')">Pallone</button>
+    <div id="board-tools-popup" style="position: fixed; top: 50%; transform: translateY(-50%); right: 20px; display: none; background: rgba(10, 15, 36, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem; z-index: 10001; box-shadow: 0 4px 12px rgba(0,0,0,0.5); width: 190px; pointer-events: auto;">
+        <button onclick="document.getElementById('board-tools-popup').style.display='none'" style="position: absolute; top: 0.25rem; right: 0.25rem; background: transparent; border: none; color: #aaa; cursor: pointer; font-size: 1.2rem; line-height: 1; padding: 0 4px;">&times;</button>
+        <h4 style="margin: 0 0 0.25rem 0; color: var(--color-tatt); font-size: 0.8rem; text-align: center;">Giocatori</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem; margin-bottom: 0.5rem;">
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('blue')">Attaccante</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('red')">Difensore</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('blue-gk')">Portiere</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('ball')">Pallone</button>
         </div>
-        <h4 style="margin: 0 0 0.5rem 0; color: var(--color-tecn); font-size: 0.9rem; text-align: center;">Attrezzi</h4>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('cone-red')">🔴 Cin.</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('cone-yellow')">🟡 Cin.</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('cone-blue')">🔵 Cin.</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('obstacle')">Ostacolo</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('pole')">Asta</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('big-goal')">Porta</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('arrow-v')">⬆️ Fr. Vert.</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('arrow-h')">➡️ Fr. Orizz.</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('arrow-curve')">⤴️ Fr. Curva</button>
-            <button class="btn btn-secondary btn-sm" onclick="addTrainingBoardPiece('arrow-u')">↩️ Fr. 180°</button>
+        <h4 style="margin: 0 0 0.25rem 0; color: var(--color-tecn); font-size: 0.8rem; text-align: center;">Attrezzi</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem;">
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('cone-red')">🔴 Cin.</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('cone-yellow')">🟡 Cin.</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('cone-blue')">🔵 Cin.</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('obstacle')">Ostacolo</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('pole')">Asta</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('big-goal')">Porta</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('arrow-v')">⬆️ Fr. Vert.</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('arrow-h')">➡️ Fr. Orizz.</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('arrow-curve')">⤴️ Fr. Curva</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 0.2rem; font-size: 0.7rem;" onclick="addTrainingBoardPiece('arrow-u')">↩️ Fr. 180°</button>
         </div>
-        <button class="btn btn-danger btn-sm" style="width: 100%; margin-top: 1rem;" onclick="clearActiveBoard()">🗑️ Svuota Lavagna</button>
+        <button class="btn btn-danger btn-sm" style="width: 100%; margin-top: 0.5rem; padding: 0.25rem; font-size: 0.75rem;" onclick="clearActiveBoard()">🗑️ Svuota Lavagna</button>
     </div>
 
     <script src="add_training_board_v4.js"></script>

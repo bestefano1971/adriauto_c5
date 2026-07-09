@@ -12,10 +12,10 @@ const paramInfo = {
     'tecn-shot': { label: 'Tiro', cat: 'Tecnica Individuale' },
     'tecn-dribble': { label: 'Dribbling', cat: 'Tecnica Individuale' },
     
-    'fisi-speed': { label: 'VelocitÃ ', cat: 'Condizione Fisica' },
+    'fisi-speed': { label: 'velocitÃ Â ', cat: 'Condizione Fisica' },
     'fisi-stamina': { label: 'Resistenza', cat: 'Condizione Fisica' },
     'fisi-strength': { label: 'Forza', cat: 'Condizione Fisica' },
-    'fisi-agility': { label: 'AgilitÃ ', cat: 'Condizione Fisica' },
+    'fisi-AgilitÃ ': { label: 'AgilitÃ Â ', cat: 'Condizione Fisica' },
     
     'tatt-movement': { label: 'Movimento', cat: 'Tattica' },
     'tatt-defense': { label: 'Difesa', cat: 'Tattica' },
@@ -32,17 +32,17 @@ const defaultPlans = {
     },
     'psic-stress': {
         strength: "Mantenere freddezza nei momenti di massima pressione difensiva avversaria.",
-        weaknessGoal: "Controllare l'emotivitÃƒÆ’Ã‚Â  ed evitare falli di frustrazione nei minuti finali.",
+        weaknessGoal: "Controllare l'emotivitÃ â€™Ãƒâ€šÃ‚Â  ed evitare falli di frustrazione nei minuti finali.",
         action: "Simulazioni in allenamento di situazioni di svantaggio e raddoppi di marcatura aggressivi."
     },
     'psic-grinta': {
-        strength: "Sfruttare l'intensitÃƒÆ’Ã‚Â  agonistica per vincere i duelli individuali e guidare il pressing alto.",
+        strength: "Sfruttare l'intensitÃ â€™Ãƒâ€šÃ‚Â  agonistica per vincere i duelli individuali e guidare il pressing alto.",
         weaknessGoal: "Canalizzare la grinta agonistica evitando sanzioni disciplinari o interventi irruenti.",
-        action: "Esercitazioni specifiche sull'intercettazione palla basate sul tempo di reazione anzichÃƒÆ’Ã‚Â© sul contrasto fisico."
+        action: "Esercitazioni specifiche sull'intercettazione palla basate sul tempo di reazione anzichÃ©â€™Ãƒâ€šÃ‚Â© sul contrasto fisico."
     },
     'psic-team': {
         strength: "Svolgere un ruolo di leader verbale in campo, ordinando le marcature e sostenendo i compagni.",
-        weaknessGoal: "Migliorare la comunicazione costruttiva nei momenti di difficoltÃƒÆ’Ã‚Â  collettiva.",
+        weaknessGoal: "Migliorare la comunicazione cosÃ¬ nei momenti di difficoltÃ â€™Ãƒâ€šÃ‚Â  collettiva.",
         action: "Prendere l'impegno di incitare i compagni e chiamare preventivamente i tagli degli avversari."
     },
     'tecn-control': {
@@ -52,27 +52,27 @@ const defaultPlans = {
     },
     'tecn-pass': {
         strength: "Cercare imbucate precise e tagli filtranti per innescare il pivot di ruolo.",
-        weaknessGoal: "Incrementare la velocitÃƒÆ’Ã‚Â  di trasmissione palla ed evitare passaggi intercettabili orizzontali.",
-        action: "Lavoro a coppie sui passaggi di prima intenzione a diverse intensitÃƒÆ’Ã‚Â  e distanze."
+        weaknessGoal: "Incrementare la velocitÃ â€™Ãƒâ€šÃ‚Â  di trasmissione palla ed evitare passaggi intercettabili orizzontali.",
+        action: "Lavoro a coppie sui passaggi di prima intenzione a diverse intensitÃ â€™Ãƒâ€šÃ‚Â  e distanze."
     },
     'tecn-shot': {
         strength: "Prendere l'iniziativa del tiro dal limite o inserimento dal secondo palo.",
-        weaknessGoal: "Migliorare la rapiditÃƒÆ’Ã‚Â  di caricamento del tiro e la precisione a rete con entrambi i piedi.",
+        weaknessGoal: "Migliorare la rapiditÃ â€™Ãƒâ€šÃ‚Â  di caricamento del tiro e la precisione a rete con entrambi i piedi.",
         action: "15 tiri in porta di prima intenzione su scarico laterale o del pivot a fine allenamento."
     },
     'tecn-dribble': {
-        strength: "Isolare il marcatore sulle bande laterali per creare superioritÃƒÆ’Ã‚Â  numerica.",
+        strength: "Isolare il marcatore sulle bande laterali per creare superioritÃ â€™Ãƒâ€šÃ‚Â  numerica.",
         weaknessGoal: "Evitare dribbling rischiosi in zona centrale (fase di impostazione dell'ultimo).",
         action: "Esercitazioni di 1vs1 in spazi molto stretti (es. corridoi di 3 metri) incentrati sulla finta di corpo."
     },
     'fisi-speed': {
         strength: "Sfruttare lo sprint breve per ribaltare l'azione in transizione attiva o recuperare l'uomo.",
-        weaknessGoal: "Migliorare la reattivitÃƒÆ’Ã‚Â  nei primi 3 metri per anticipare il movimento avversario.",
+        weaknessGoal: "Migliorare la reattivitÃ â€™Ãƒâ€šÃ‚Â  nei primi 3 metri per anticipare il movimento avversario.",
         action: "Lavoro di scatti brevi con cambi di direzione e balzi esplosivi (3 serie da 6 ripetizioni)."
     },
     'fisi-stamina': {
-        strength: "Garantire un'intensitÃƒÆ’Ã‚Â  costante di pressing e ripiegamenti anche ad alto ritmo.",
-        weaknessGoal: "Evitare cali atletici nella seconda parte di ciascun tempo di gioco.",
+        strength: "Garantire un'intensitÃ â€™Ãƒâ€šÃ‚Â  cosÃ¬ di pressing e ripiegamenti anche ad alto ritmo.",
+        weaknessGoal: "Evitare cali atletici nella seconda parte di ciascun tempo di giÃ .",
         action: "Programma HIIT specifico per il futsal: scatti sui 15 metri alternati a recuperi attivi."
     },
     'fisi-strength': {
@@ -80,9 +80,9 @@ const defaultPlans = {
         weaknessGoal: "Aumentare la forza negli scontri spalla a spalla e nella difesa della posizione.",
         action: "Lavoro di potenziamento muscolare della parte inferiore (squat/affondi) associato a core-stability."
     },
-    'fisi-agility': {
+    'fisi-AgilitÃ ': {
         strength: "Eseguire cambi di direzione rapidi per smarcarsi o chiudere le diagonali.",
-        weaknessGoal: "Migliorare la coordinazione e la rapiditÃƒÆ’Ã‚Â  motoria nei cambi di direzione repentini.",
+        weaknessGoal: "Migliorare la coordinazione e la rapiditÃ â€™Ãƒâ€šÃ‚Â  motoria nei cambi di direzione repentini.",
         action: "Esercizi con scaletta coordinativa rapida seguiti da scatto con arresto e ripartenza."
     },
     'tatt-movement': {
@@ -97,13 +97,13 @@ const defaultPlans = {
     },
     'tatt-transition': {
         strength: "Aggredire immediatamente alla perdita della palla o scattare in ripartenza rapida.",
-        weaknessGoal: "Migliorare la velocitÃƒÆ’Ã‚Â  di ripiegamento difensivo sotto la linea della palla.",
+        weaknessGoal: "Migliorare la velocitÃ â€™Ãƒâ€šÃ‚Â  di ripiegamento difensivo sotto la linea della palla.",
         action: "Partite condizionate: obbligo di posizionamento difensivo entro 4 secondi dalla perdita del possesso."
     },
     'tatt-reading': {
         strength: "Prendere scelte tattiche ottimali riducendo i tempi decisionali sotto pressione.",
         weaknessGoal: "Riconoscere rapidamente quando verticalizzare e quando mantenere il possesso palla.",
-        action: "Partite a tema a tocchi limitati (1 o 2 tocchi) per costringere a leggere il gioco in anticipo."
+        action: "Partite a tema a tocchi limitati (1 o 2 tocchi) per cosÃ¬ a leggere il giÃ ."
     }
 };
 
@@ -270,7 +270,7 @@ function renderAthleteAttendanceChart(present, absent, injured, justified, convo
                     'hsla(145, 80%, 45%, 0.85)', // Presente (Verde)
                     'hsla(355, 75%, 55%, 0.85)', // Assente (Rosso)
                     'hsla(35, 95%, 55%, 0.85)',  // Infortunato (Arancio)
-                    'hsla(210, 90%, 55%, 0.85)',  // Giustificato (Blu)
+                    'hsla(210, 90%, 55%, 0.85)',  // giÃ  (Blu)
                     'hsla(185, 90%, 50%, 0.85)',  // Convocato (Ciano)
                     'hsla(270, 85%, 65%, 0.85)'   // Test (Viola)
                 ],
@@ -351,16 +351,18 @@ let trainingsAttendanceChartInstance = null;
 let yoyoChartInstance = null;
 let cmjChartInstance = null;
 let sprintChartInstance = null;
-let agilityChartInstance = null;
+let AgilitÃ  = null;
 
 // ==========================================================================
 // DOM ELEMENTS & INITIALIZATION
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
     initApp();
 });
 
 function initApp() {
+    if (!currentUser && !window.location.pathname.endsWith('login.html')) return;
     if (!document.getElementById('tab-dashboard')) return; // Esce se siamo nella pagina di login
 
     // 1. Navigation setup
@@ -469,13 +471,13 @@ function initApp() {
             if (eventType === 'match' || eventType === 'friendly') {
                 const exists = convocations.some(c => c.date === date);
                 if (exists) {
-                    showToast("Ãˆ giÃ  programmata una partita/amichevole per questa data!", "error");
+                    showToast("ÃƒË† giÃ !", "error");
                     return;
                 }
                 
-                let locationPrefix = location === 'C' ? '(C)' : '(T)';
+                let locationPrefix = location === 'C' ? '(C)' : (location === 'T' ? '(T)' : '(S)');
                 let finalOpponent = opponent || (eventType === 'friendly' ? 'Amichevole' : 'Gara');
-                if (!finalOpponent.includes('(C)') && !finalOpponent.includes('(T)')) {
+                if (!finalOpponent.includes('(C)') && !finalOpponent.includes('(T)') && !finalOpponent.includes('(S)')) {
                     finalOpponent = `${finalOpponent} ${locationPrefix}`;
                 }
                 
@@ -495,7 +497,7 @@ function initApp() {
             } else {
                 const exists = trainings.some(t => t.date === date);
                 if (exists) {
-                    showToast("Ãˆ giÃ  programmato un allenamento per questa data!", "error");
+                    showToast("ÃƒË† giÃ !", "error");
                     return;
                 }
                 
@@ -577,13 +579,13 @@ function initApp() {
                 if (isNowMatch) {
                     const exists = convocations.some(c => c.date === newDate);
                     if (exists) {
-                        showToast("Esiste giÃƒÆ’Ã‚Â  una partita/amichevole pianificata in questa data!", "error");
+                        showToast("Esiste giÃ !", "error");
                         return;
                     }
                 } else {
                     const exists = trainings.some(t => t.date === newDate);
                     if (exists) {
-                        showToast("Esiste giÃƒÆ’Ã‚Â  un allenamento registrato in questa data!", "error");
+                        showToast("Esiste giÃ !", "error");
                         return;
                     }
                 }
@@ -599,11 +601,11 @@ function initApp() {
                         const notes = document.getElementById('edit-col-notes').value.trim();
                         const location = document.getElementById('edit-col-location').value;
                         
-                        let locationPrefix = location === 'C' ? '(C)' : '(T)';
+                        let locationPrefix = location === 'C' ? '(C)' : (location === 'T' ? '(T)' : '(S)');
                         let finalOpponent = opponent || (targetType === 'friendly' ? 'Amichevole' : 'Gara');
                         
-                        // Rimuovi eventuali (C) o (T) preesistenti alla fine
-                        finalOpponent = finalOpponent.replace(/\s*\([CT]\)$/, '');
+                        // Rimuovi eventuali (C), (T) o (S) preesistenti alla fine
+                        finalOpponent = finalOpponent.replace(/\s*\([CTS]\)$/, '');
                         finalOpponent = `${finalOpponent} ${locationPrefix}`;
                         
                         convocations[matchIndex].date = newDate;
@@ -651,10 +653,10 @@ function initApp() {
                     const notes = document.getElementById('edit-col-notes').value.trim();
                     const location = document.getElementById('edit-col-location').value;
                     
-                    let locationPrefix = location === 'C' ? '(C)' : '(T)';
+                    let locationPrefix = location === 'C' ? '(C)' : (location === 'T' ? '(T)' : '(S)');
                     let finalOpponent = opponent || (targetType === 'friendly' ? 'Amichevole' : 'Gara');
                     
-                    finalOpponent = finalOpponent.replace(/\s*\([CT]\)$/, '');
+                    finalOpponent = finalOpponent.replace(/\s*\([CTS]\)$/, '');
                     finalOpponent = `${finalOpponent} ${locationPrefix}`;
                     
                     const newMatch = {
@@ -883,7 +885,7 @@ function setupRosterForm() {
         // Check if player name or number already exists on another player
         const exists = players.some(p => p.id !== editingPlayerId && (p.name.toLowerCase() === name.toLowerCase() || p.number === number));
         if (exists) {
-            showToast("Giocatore o Numero di Maglia giÃƒÆ’Ã‚Â  presente in rosa!", "error");
+            showToast("Giocatore o Numero di Maglia giÃ !", "error");
             return;
         }
 
@@ -1074,7 +1076,7 @@ function initCardCharts(playerId, catAverages, attStats) {
                             'hsla(145, 80%, 45%, 0.85)', // Presente (Verde)
                             'hsla(355, 75%, 55%, 0.85)', // Assente (Rosso)
                             'hsla(35, 95%, 55%, 0.85)',  // Infortunato (Arancio)
-                            'hsla(210, 90%, 55%, 0.85)',  // Giustificato (Blu)
+                            'hsla(210, 90%, 55%, 0.85)',  // giÃ  (Blu)
                             'hsla(185, 90%, 50%, 0.85)',  // Convocato (Ciano)
                             'hsla(270, 85%, 65%, 0.85)'   // Test (Viola)
                         ],
@@ -1114,13 +1116,13 @@ function renderRoster() {
     const container = document.getElementById('roster-grid');
     if (!container) return;
     
-    // Se ÃƒÆ’Ã‚Â¨ stato cambiato in roster-container, lo recuperiamo cosÃƒÆ’Ã‚Â¬, altrimenti se ÃƒÆ’Ã‚Â¨ ancora roster-grid:
-    // UserÃƒÆ’Ã‚Â² il container originario che ÃƒÆ’Ã‚Â¨ id="roster-grid" ma ne cambierÃƒÆ’Ã‚Â² il display block.
+    // Se ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨ stato cambiato in roster-container, lo recuperiamo cosÃ¬â€™Ãƒâ€šÃ‚Â¬, altrimenti se ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨ ancora roster-grid:
+    // UserÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â² il container originario che ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨ id="roster-grid" ma ne cambierÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â² il display block.
     
     if (players.length === 0) {
         container.innerHTML = `
             <div class="empty-roster-msg">
-                <p>Nessun giocatore registrato.</p>
+                <p>Nessun giÃ .</p>
                 <span class="subtext">Compila il modulo a sinistra per inserire i tuoi atleti nella rosa.</span>
             </div>
         `;
@@ -1256,14 +1258,14 @@ window.openPlayerSummaryModal = function(id) {
     if (!player) return;
     
     // Aggrega i dati
-    // 1. Dati anagrafici (giÃƒÆ’Ã‚Â  in player)
+    // 1. Dati anagrafici (giÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â  in player)
     
     // 2. Ultimi test fisici
     const pTests = typeof athleticTests !== 'undefined' ? athleticTests.filter(t => t.playerId === id).sort((a,b) => new Date(b.date) - new Date(a.date)) : [];
     const latestYoyo = pTests.find(t => t.type === 'yoyo');
     const latestSprint = pTests.find(t => t.type === 'sprint');
     const latestCmj = pTests.find(t => t.type === 'cmj');
-    const latestAgility = pTests.find(t => t.type === 'agility');
+    const latestAgilitÃ  = pTests.find(t => t.type === 'AgilitÃ ');
     const validEvals = typeof assessments !== 'undefined' ? assessments.filter(e => e.playerId === id && (e.coachScores || e.playerScores)) : [];
     
     let coachAvgTech=0, coachAvgTac=0, coachAvgPhy=0, coachAvgPsy=0, coachAvgOverall=0;
@@ -1276,7 +1278,7 @@ window.openPlayerSummaryModal = function(id) {
     
     const keysPsy = ['psic-focus', 'psic-stress', 'psic-grinta', 'psic-team'];
     const keysTech = ['tecn-control', 'tecn-pass', 'tecn-shot', 'tecn-dribble'];
-    const keysPhy = ['fisi-speed', 'fisi-stamina', 'fisi-strength', 'fisi-agility'];
+    const keysPhy = ['fisi-speed', 'fisi-stamina', 'fisi-strength', 'fisi-AgilitÃ '];
     const keysTac = ['tatt-movement', 'tatt-defense', 'tatt-transition', 'tatt-reading'];
     const allSubKeys = [...keysTech, ...keysTac, ...keysPhy, ...keysPsy];
     
@@ -1420,7 +1422,7 @@ window.openPlayerSummaryModal = function(id) {
             </tbody>
         </table>`;
     } else {
-        recentPresenzeHTML = `<div style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:1rem;">Nessuna attivitÃ  registrata</div>`;
+        recentPresenzeHTML = `<div style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:1rem;">Nessuna attivitÃƒÂ  registrata</div>`;
     }
 
     const modalBody = document.getElementById('player-summary-body');
@@ -1445,7 +1447,7 @@ window.openPlayerSummaryModal = function(id) {
     const yoyoVal = latestYoyo ? latestYoyo.value : '-';
     const sprintVal = latestSprint ? latestSprint.value : '-';
     const cmjVal = latestCmj ? latestCmj.value : '-';
-    const ttestVal = latestAgility ? latestAgility.value : '-';
+    const ttestVal = latestAgilitÃ  ? latestAgilitÃ .value : '-';
 
     modalBody.innerHTML = `
         <!-- Header Info (EDITABLE) -->
@@ -1534,16 +1536,16 @@ window.openPlayerSummaryModal = function(id) {
                 </div>
             </div>
 
-            <!-- Ruoli & AdattabilitÃ  -->
+            <!-- Ruoli & AdattabilitÃƒÂ  -->
             <div class="glass-panel" style="padding:0.75rem; grid-column: 1 / -1; display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
                 <div style="flex:1; min-width:140px;">
-                    <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:0.2rem;">AdattabilitÃ </div>
+                    <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:0.2rem;">AdattabilitÃƒÂ </div>
                     <select id="edit-dossier-sec-roles" style="background:#1e293b; border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.3rem; color:#fff; width:100%; font-size:0.8rem; cursor:pointer;">
                         <option value="" ${!player.secondaryRoles ? 'selected' : ''}>Nessuna</option>
                         <option value="Laterale Destro" ${player.secondaryRoles==='Laterale Destro'?'selected':''}>Laterale Destro</option>
                         <option value="Laterale Sinistro" ${player.secondaryRoles==='Laterale Sinistro'?'selected':''}>Laterale Sinistro</option>
                         <option value="Pivot di Manovra" ${player.secondaryRoles==='Pivot di Manovra'?'selected':''}>Pivot di Manovra</option>
-                        <option value="Pivot di ProfonditÃ " ${player.secondaryRoles==='Pivot di ProfonditÃ '?'selected':''}>Pivot di ProfonditÃ </option>
+                        <option value="Pivot di ProfonditÃƒÂ " ${player.secondaryRoles==='Pivot di ProfonditÃƒÂ '?'selected':''}>Pivot di ProfonditÃƒÂ </option>
                         <option value="Difensore d'Impostazione" ${player.secondaryRoles==="Difensore d'Impostazione"?'selected':''}>Difensore d'Impostazione</option>
                         <option value="Difensore Marcatore" ${player.secondaryRoles==='Difensore Marcatore'?'selected':''}>Difensore Marcatore</option>
                         <option value="Portiere Volante" ${player.secondaryRoles==='Portiere Volante'?'selected':''}>Portiere Volante</option>
@@ -1554,9 +1556,9 @@ window.openPlayerSummaryModal = function(id) {
                     <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:0.2rem;">Quartetto</div>
                     <select id="edit-dossier-quartets" style="background:#1e293b; border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.3rem; color:#fff; width:100%; font-size:0.8rem; cursor:pointer;">
                         <option value="" ${!player.quartets ? 'selected' : ''}>Nessuno</option>
-                        <option value="1Â° Quartetto (Titolari)" ${player.quartets==='1Â° Quartetto (Titolari)'?'selected':''}>1Â° Quartetto (Titolari)</option>
-                        <option value="2Â° Quartetto (Prime Rotazioni)" ${player.quartets==='2Â° Quartetto (Prime Rotazioni)'?'selected':''}>2Â° Quartetto (Prime Rotazioni)</option>
-                        <option value="3Â° Quartetto (Seconde Rotazioni)" ${player.quartets==='3Â° Quartetto (Seconde Rotazioni)'?'selected':''}>3Â° Quartetto (Seconde Rotazioni)</option>
+                        <option value="1Ã‚Â° Quartetto (Titolari)" ${player.quartets==='1Ã‚Â° Quartetto (Titolari)'?'selected':''}>1Ã‚Â° Quartetto (Titolari)</option>
+                        <option value="2Ã‚Â° Quartetto (Prime Rotazioni)" ${player.quartets==='2Ã‚Â° Quartetto (Prime Rotazioni)'?'selected':''}>2Ã‚Â° Quartetto (Prime Rotazioni)</option>
+                        <option value="3Ã‚Â° Quartetto (Seconde Rotazioni)" ${player.quartets==='3Ã‚Â° Quartetto (Seconde Rotazioni)'?'selected':''}>3Ã‚Â° Quartetto (Seconde Rotazioni)</option>
                         <option value="Rotazione Libera" ${player.quartets==='Rotazione Libera'?'selected':''}>Rotazione Libera</option>
                     </select>
                 </div>
@@ -1574,12 +1576,12 @@ window.openPlayerSummaryModal = function(id) {
             </div>
             
             <div style="grid-column: 1 / -1; display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.25rem;">
-                <button class="btn btn-danger" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="if(confirm('Sei sicuro di voler eliminare questo giocatore?')) { deletePlayer('${player.id}'); closePlayerSummaryModal(); }">Cancella</button>
+                <button class="btn btn-danger" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="if(confirm('Sei sicuro di voler eliminare questo giÃ .id}'); closePlayerSummaryModal(); }">Cancella</button>
                 <button class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="savePlayerFromDossier('${player.id}')">Salva Modifiche</button>
             </div>
         </div>
     `;
-    // Assicuriamoci che tutti gli altri popup siano nascosti
+    // Assicuriamoci che tutti gli altri popup siano nascosÃ¬
     document.querySelectorAll('.modal-overlay .modal-content').forEach(m => m.classList.add('hidden'));
 
     document.getElementById('modal-overlay').classList.remove('hidden');
@@ -1664,7 +1666,7 @@ window.openPlayerSummaryModal = function(id) {
             const specificLabels = [
                 'Controllo', 'Passaggio', 'Tiro', 'Dribbling',
                 'Movimento', 'Difesa', 'Transizioni', 'Lettura',
-                'VelocitÃ ', 'Resistenza', 'Forza', 'AgilitÃ ',
+                'velocitÃ Â ', 'Resistenza', 'Forza', 'AgilitÃ Â ',
                 'Focus', 'Stress', 'Grinta', 'Team'
             ];
             
@@ -1679,14 +1681,14 @@ window.openPlayerSummaryModal = function(id) {
             const coachSpecificData = [
                 safeNum(sc['tecn-control']), safeNum(sc['tecn-pass']), safeNum(sc['tecn-shot']), safeNum(sc['tecn-dribble']),
                 safeNum(sc['tatt-movement']), safeNum(sc['tatt-defense']), safeNum(sc['tatt-transition']), safeNum(sc['tatt-reading']),
-                safeNum(sc['fisi-speed']), safeNum(sc['fisi-stamina']), safeNum(sc['fisi-strength']), safeNum(sc['fisi-agility']),
+                safeNum(sc['fisi-speed']), safeNum(sc['fisi-stamina']), safeNum(sc['fisi-strength']), safeNum(sc['fisi-AgilitÃ ']),
                 safeNum(sc['psic-focus']), safeNum(sc['psic-stress']), safeNum(sc['psic-grinta']), safeNum(sc['psic-team'])
             ];
 
             const playerSpecificData = [
                 safeNum(sp['tecn-control']), safeNum(sp['tecn-pass']), safeNum(sp['tecn-shot']), safeNum(sp['tecn-dribble']),
                 safeNum(sp['tatt-movement']), safeNum(sp['tatt-defense']), safeNum(sp['tatt-transition']), safeNum(sp['tatt-reading']),
-                safeNum(sp['fisi-speed']), safeNum(sp['fisi-stamina']), safeNum(sp['fisi-strength']), safeNum(sp['fisi-agility']),
+                safeNum(sp['fisi-speed']), safeNum(sp['fisi-stamina']), safeNum(sp['fisi-strength']), safeNum(sp['fisi-AgilitÃ ']),
                 safeNum(sp['psic-focus']), safeNum(sp['psic-stress']), safeNum(sp['psic-grinta']), safeNum(sp['psic-team'])
             ];
 
@@ -1749,7 +1751,7 @@ window.openPlayerSummaryModal = function(id) {
 
 window.closePlayerSummaryModal = function() {
     document.getElementById('popup-player-summary').classList.add('hidden');
-    // Nascondi overlay solo se non ci sono altri modal aperti (in questo caso ÃƒÆ’Ã‚Â¨ semplice)
+    // Nascondi overlay solo se non ci sono altri modal aperti (in questo caso ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨ semplice)
     document.getElementById('modal-overlay').classList.add('hidden');
 };
 
@@ -1828,7 +1830,7 @@ function populatePlayerDropdowns() {
     const prevTrendVal = selectTrendPlayer.value;
 
     const optionsHTML = `
-        <option value="">-- Seleziona Giocatore --</option>
+        <option value="">-- Seleziona giÃ  --</option>
         ${players.map(p => `<option value="${p.id}">${escapeHTML(p.name)} (#${p.number})</option>`).join('')}
     `;
 
@@ -1992,7 +1994,7 @@ function updateCalculations() {
     const catKeys = {
         psicologia: ['psic-focus', 'psic-stress', 'psic-grinta', 'psic-team'],
         tecnica: ['tecn-control', 'tecn-pass', 'tecn-shot', 'tecn-dribble'],
-        fisica: ['fisi-speed', 'fisi-stamina', 'fisi-strength', 'fisi-agility'],
+        fisica: ['fisi-speed', 'fisi-stamina', 'fisi-strength', 'fisi-AgilitÃ '],
         tattica: ['tatt-movement', 'tatt-defense', 'tatt-transition', 'tatt-reading']
     };
 
@@ -2029,13 +2031,13 @@ function updateCalculations() {
     // Set Perception gap textual assessment
     const gapAnalysisEl = document.getElementById('gap-analysis-text');
     if (absoluteGap <= 0.8) {
-        gapAnalysisEl.textContent = "Allineamento Elevato (Mister e Giocatore concordano)";
+        gapAnalysisEl.textContent = "Allineamento Elevato (Mister e giÃ  concordano)";
         gapAnalysisEl.style.color = "var(--color-tatt)";
     } else if (overallPlayer > overallCoach) {
-        gapAnalysisEl.textContent = "Sopravvalutazione (Il giocatore si valuta piÃƒÆ’Ã‚Â¹ alto del Mister)";
+        gapAnalysisEl.textContent = "Sopravvalutazione (Il giÃ  si valuta piÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¹ alto del Mister)";
         gapAnalysisEl.style.color = "var(--color-fisi)";
     } else {
-        gapAnalysisEl.textContent = "Sottovalutazione (Il mister valuta il giocatore piÃƒÆ’Ã‚Â¹ alto)";
+        gapAnalysisEl.textContent = "Sottovalutazione (Il mister valuta il giÃ  piÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¹ alto)";
         gapAnalysisEl.style.color = "var(--color-player)";
     }
 
@@ -2211,7 +2213,7 @@ function updateRadarChart(playerData, coachData) {
 function saveAssessment() {
     const playerId = parseInt(document.getElementById('select-player').value, 10);
     if (!playerId) {
-        showToast("Seleziona prima un giocatore da valutare!", "error");
+        showToast("Seleziona prima un giÃ !", "error");
         document.getElementById('select-player').focus();
         return;
     }
@@ -2250,7 +2252,7 @@ function saveAssessment() {
         // Check if there is already an evaluation on the same day for this player
         const duplicateIdx = assessments.findIndex(a => a.playerId === playerId && a.date === date);
         if (duplicateIdx !== -1) {
-            if (confirm("ÃƒÆ’Ã‚Ë† giÃƒÆ’Ã‚Â  presente una valutazione per questo giocatore in questa data. Vuoi sovrascriverla?")) {
+            if (confirm("ÃƒÆ’Ã†â€™Ãƒâ€šÃ‹â€  giÃ . Vuoi sovrascriverla?")) {
                 record.id = assessments[duplicateIdx].id; // Keep original ID
                 assessments[duplicateIdx] = record;
                 showToast("Valutazione sovrascritta correttamente!", "success");
@@ -2323,7 +2325,7 @@ function handleTrendPlayerChange() {
     if (historyDescSheets.length === 0) {
         listContainer.innerHTML = `
             <div style="text-align:center; padding: 2rem; color:var(--text-muted)">
-                Nessuna valutazione salvata per questo giocatore.
+                Nessuna valutazione salvata per questo giÃ .
             </div>
         `;
         return;
@@ -2503,7 +2505,7 @@ window.deleteAssessment = function(id) {
 function handlePrint() {
     const playerId = document.getElementById('select-player').value;
     if (!playerId) {
-        showToast("Seleziona il giocatore che vuoi stampare!", "error");
+        showToast("Seleziona il giÃ !", "error");
         return;
     }
     document.body.classList.add('print-evaluation');
@@ -2625,11 +2627,11 @@ window.editPlayer = function(id) {
     // Pulisci l'input file per evitare caricamenti indesiderati
     document.getElementById('new-player-photo').value = '';
 
-    // Cambia interfaccia in modalitÃƒÆ’Ã‚Â  modifica
+    // Cambia interfaccia in modalitÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â  modifica
     const formTitle = document.getElementById('form-player-title');
     const submitBtn = document.getElementById('btn-submit-player');
 
-    if (formTitle) formTitle.textContent = `Modifica Giocatore: ${player.name}`;
+    if (formTitle) formTitle.textContent = `Modifica giÃ .name}`;
     if (submitBtn) {
         submitBtn.querySelector('span').textContent = "Salva Modifiche";
     }
@@ -2657,7 +2659,7 @@ function cancelEdit() {
     const formTitle = document.getElementById('form-player-title');
     const submitBtn = document.getElementById('btn-submit-player');
 
-    if (formTitle) formTitle.textContent = "Aggiungi Giocatore alla Rosa";
+    if (formTitle) formTitle.textContent = "Aggiungi giÃ  alla Rosa";
     if (submitBtn) {
         submitBtn.querySelector('span').textContent = "Salva";
     }
@@ -2718,7 +2720,7 @@ function renderTrainingRosterList() {
     if (!list) return;
     
     if (players.length === 0) {
-        list.innerHTML = `<p style="text-align:center;color:var(--text-muted);font-size:0.85rem;padding:1rem;">Nessun giocatore registrato.</p>`;
+        list.innerHTML = `<p style="text-align:center;color:var(--text-muted);font-size:0.85rem;padding:1rem;">Nessun giÃ .</p>`;
         return;
     }
     
@@ -2761,7 +2763,7 @@ function renderConvocationRosterList() {
     if (!list) return;
     
     if (players.length === 0) {
-        list.innerHTML = `<p style="text-align:center;color:var(--text-muted);font-size:0.85rem;padding:1rem;">Nessun giocatore in rosa.</p>`;
+        list.innerHTML = `<p style="text-align:center;color:var(--text-muted);font-size:0.85rem;padding:1rem;">Nessun giÃ .</p>`;
         return;
     }
     
@@ -2891,7 +2893,7 @@ function renderTrainingHistory() {
         let injured = 0;
         let justified = 0;
         
-        Object.values(t.roster).forEach(status => {
+        Object.values(t.roster || {}).forEach(status => {
             if (status === 'P') present++;
             else if (status === 'A') absent++;
             else if (status === 'I') injured++;
@@ -2901,11 +2903,24 @@ function renderTrainingHistory() {
         const activeTotal = present + absent;
         const rate = activeTotal > 0 ? ((present / activeTotal) * 100).toFixed(0) : '0';
         
+        let logisticBadge = '';
+        if (t.logistic) {
+            let label = '';
+            let icon = '';
+            if (t.logistic === 'spiaggia') { label = 'Spiaggia'; icon = '🏖️'; }
+            else if (t.logistic === 'casa') { label = 'Casa'; icon = '🏠'; }
+            else if (t.logistic === 'trasferta') { label = 'Trasferta'; icon = '🚌'; }
+            
+            if (label) {
+                logisticBadge = `<span class="logistic-badge" style="margin-left: 0.5rem; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; border: 1px solid currentColor; display: inline-flex; align-items: center; gap: 3px;" data-logistic="${t.logistic}">${icon} ${label}</span>`;
+            }
+        }
+        
         const card = document.createElement('div');
         card.className = 'attendance-history-card glass-panel';
         card.innerHTML = `
             <div class="attendance-card-header">
-                <span class="attendance-card-date">${formatDate(t.date)}</span>
+                <span class="attendance-card-date">${formatDate(t.date)}${logisticBadge}</span>
                 <button class="card-btn-icon delete" onclick="deleteTraining(${t.id})" title="Elimina sessione" style="padding:0.2rem;">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:1rem;height:1rem;">
                         <path d="M19 7L18.1327 19.1422C18.051 20.1859 17.1882 21 16.1402 21H7.85978C6.81175 21 5.94899 20.1859 5.86732 19.1422L5 7M4 7H20" stroke="currentColor" stroke-width="2"/>
@@ -3021,7 +3036,7 @@ function renderTrainingsAttendanceChart() {
 }
 
 window.deleteTraining = function(id) {
-    if (confirm("Sei sicuro di voler eliminare questo allenamento? Le statistiche dei giocatori verranno aggiornate.")) {
+    if (confirm("Sei sicuro di voler eliminare questo allenamento? Le statistiche dei giÃ .")) {
         trainings = trainings.filter(t => t.id !== id);
         localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
         showToast("Allenamento rimosso dallo storico.", "info");
@@ -3051,18 +3066,35 @@ function renderConvocationsHistory() {
     
     grid.innerHTML = '';
     convocations.forEach(c => {
+        let locationVal = '';
+        if (c.opponent.endsWith('(C)')) locationVal = 'C';
+        else if (c.opponent.endsWith('(T)')) locationVal = 'T';
+        else if (c.opponent.endsWith('(S)')) locationVal = 'S';
+        
+        let logisticBadge = '';
+        if (locationVal) {
+            let label = '';
+            let icon = '';
+            let valClass = '';
+            if (locationVal === 'C') { label = 'Casa'; icon = '🏠'; valClass = 'casa'; }
+            else if (locationVal === 'T') { label = 'Trasferta'; icon = '🚌'; valClass = 'trasferta'; }
+            else if (locationVal === 'S') { label = 'Spiaggia'; icon = '🏖️'; valClass = 'spiaggia'; }
+            
+            logisticBadge = `<span class="logistic-badge" style="margin-left: 0.5rem; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; border: 1px solid currentColor; display: inline-flex; align-items: center; gap: 3px;" data-logistic="${valClass}">${icon} ${label}</span>`;
+        }
+        
         const card = document.createElement('div');
         card.className = 'attendance-history-card glass-panel';
         card.innerHTML = `
             <div class="attendance-card-header">
-                <span class="attendance-card-date">${formatDate(c.date)}</span>
+                <span class="attendance-card-date">${formatDate(c.date)}${logisticBadge}</span>
                 <button class="card-btn-icon delete" onclick="deleteConvocation(${c.id})" title="Elimina convocazione" style="padding:0.2rem;">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:1rem;height:1rem;">
                         <path d="M19 7L18.1327 19.1422C18.051 20.1859 17.1882 21 16.1402 21H7.85978C6.81175 21 5.94899 20.1859 5.86732 19.1422L5 7M4 7H20" stroke="currentColor" stroke-width="2"/>
                     </svg>
                 </button>
             </div>
-            <div class="attendance-card-type" style="font-weight:700;color:var(--color-player);">${c.type === 'friendly' ? 'ÃƒÂ°Ã‚Å¸Ã‚Â¤Ã‚  Amichevole' : 'ÃƒÂ¢Ã‚Å¡Ã‚Â½ Gara'}: ${escapeHTML(c.opponent)}</div>
+            <div class="attendance-card-type" style="font-weight:700;color:var(--color-player);">${c.type === 'friendly' ? 'ðŸ¤ Amichevole' : 'âš½ Gara'}: ${escapeHTML(c.opponent)}</div>
             <div class="attendance-card-stats" style="margin-bottom:0.25rem;">
                 <span>Convocati: <strong>${c.selectedIds.length}</strong></span>
             </div>
@@ -3189,20 +3221,20 @@ function generateSeasonDates() {
     const startDate = new Date(2026, 7, 17); // 17 Agosto 2026 (Month is 0-indexed, so 7 is August)
     const endDate = new Date(2027, 4, 31);   // 31 Maggio 2027 (Month 4 is May)
     
-    // Transizione a metÃƒÆ’Ã‚Â  settembre (15 Settembre 2026)
+    // Transizione a metÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â  settembre (15 Settembre 2026)
     const transitionDate = new Date(2026, 8, 15); // 15 Settembre 2026
     
     let current = new Date(startDate);
     while (current <= endDate) {
-        const dayOfWeek = current.getDay(); // 0 = Dom, 1 = Lun, 2 = Mar, 3 = Mer, 4 = Gio, 5 = Ven, 6 = Sab
+        const dayOfWeek = current.getDay(); // 0 = Dom, 1 = Lun, 2 = Mar, 3 = Mer, 4 = giÃ  5 = Ven, 6 = Sab
         
         if (current < transitionDate) {
-            // Fino al 14 Settembre inclusi: dal lunedÃƒÆ’Ã‚Â¬ al venerdÃƒÆ’Ã‚Â¬ (1-5)
+            // Fino al 14 Settembre inclusi: dal lunedÃ¬â€™Ãƒâ€šÃ‚Â¬ al venerdÃ¬â€™Ãƒâ€šÃ‚Â¬ (1-5)
             if (dayOfWeek >= 1 && dayOfWeek <= 5) {
                 dates.push(new Date(current));
             }
         } else {
-            // Dal 15 Settembre in poi: solo LunedÃƒÆ’Ã‚Â¬ (1), MercoledÃƒÆ’Ã‚Â¬ (3), VenerdÃƒÆ’Ã‚Â¬ (5)
+            // Dal 15 Settembre in poi: solo lunedÃ¬â€™Ãƒâ€šÃ‚Â¬ (1), mercoledÃ¬â€™Ãƒâ€šÃ‚Â¬ (3), venerdÃ¬â€™Ãƒâ€šÃ‚Â¬ (5)
             if (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5) {
                 dates.push(new Date(current));
             }
@@ -3286,12 +3318,12 @@ function renderAttendanceBoard() {
     table.innerHTML = '';
     
     if (players.length === 0) {
-        table.innerHTML = `<tr><td style="text-align:center;padding:2rem;color:var(--text-muted)">Nessun giocatore registrato in rosa.</td></tr>`;
+        table.innerHTML = `<tr><td style="text-align:center;padding:2rem;color:var(--text-muted)">Nessun giÃ .</td></tr>`;
         return;
     }
     
     if (filteredDates.length === 0) {
-        table.innerHTML = `<tr><td style="text-align:center;padding:2rem;color:var(--text-muted)">Nessun giorno di allenamento o partita previsto per questo mese.</td></tr>`;
+        table.innerHTML = `<tr><td style="text-align:center;padding:2rem;color:var(--text-muted)">Nessun giÃ .</td></tr>`;
         return;
     }
     
@@ -3324,18 +3356,16 @@ function renderAttendanceBoard() {
         wrapper.className = 'col-header-wrapper';
         
         const textSpan = document.createElement('span');
+        const dayNames = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
+        const dayName = dayNames[date.getDay()];
         
         if (isMatchDate) {
             th.className = 'match-col-header';
             const isFriendly = match.type === 'friendly';
             th.title = `${isFriendly ? 'Amichevole' : 'Gara'} contro: ${match.opponent}`;
-            textSpan.innerHTML = `${isFriendly ? 'ðŸ¤� Amic.' : 'âš½ Gara'}<br><strong>${day}/${month}</strong>`;
-        } else {
-            const dayNames = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
-            const dayName = dayNames[date.getDay()];
-            textSpan.innerHTML = `${dayName}<br><strong>${day}/${month}</strong>`;
         }
         
+        textSpan.innerHTML = `${dayName}<br><strong>${day}/${month}</strong>`;
         wrapper.appendChild(textSpan);
         
         // Col edit button
@@ -3422,6 +3452,200 @@ function renderAttendanceBoard() {
         
         wrapper.appendChild(btnContainer);
         th.appendChild(wrapper);
+        
+        // --- LOGISTICS DROPDOWN ---
+        if (!isMatchDate) {
+            const logisticContainer = document.createElement('div');
+            logisticContainer.style.marginTop = '0.5rem';
+            logisticContainer.style.display = 'flex';
+            logisticContainer.style.justifyContent = 'center';
+            
+            const logisticSelect = document.createElement('select');
+            logisticSelect.className = 'logistic-select-hdr';
+            logisticSelect.style.fontSize = '0.75rem';
+            logisticSelect.style.padding = '2px 4px';
+            logisticSelect.style.borderRadius = '4px';
+            logisticSelect.style.border = '1px solid var(--border-color)';
+            logisticSelect.style.background = 'hsla(224, 45%, 3%, 0.6)';
+            logisticSelect.style.color = 'var(--text-muted)';
+            logisticSelect.style.cursor = 'pointer';
+            logisticSelect.style.outline = 'none';
+            logisticSelect.style.width = '80px';
+            logisticSelect.style.textAlign = 'center';
+            
+            const optNone = document.createElement('option');
+            optNone.value = '';
+            optNone.textContent = '📍 -';
+            logisticSelect.appendChild(optNone);
+            
+            const optSpiaggia = document.createElement('option');
+            optSpiaggia.value = 'spiaggia';
+            optSpiaggia.textContent = '🏖️ Spiaggia';
+            logisticSelect.appendChild(optSpiaggia);
+            
+            const optCasa = document.createElement('option');
+            optCasa.value = 'casa';
+            optCasa.textContent = '🏠 Casa';
+            logisticSelect.appendChild(optCasa);
+            
+            const optTrasferta = document.createElement('option');
+            optTrasferta.value = 'trasferta';
+            optTrasferta.textContent = '🚌 Trasferta';
+            logisticSelect.appendChild(optTrasferta);
+            
+            const session = trainings.find(t => t.date === dateStr);
+            const currentLogistic = (session && session.logistic) || '';
+            logisticSelect.value = currentLogistic;
+            
+            const updateLocalStyle = (val) => {
+                if (val === 'spiaggia') {
+                    logisticSelect.style.borderColor = 'rgba(255, 193, 7, 0.6)';
+                    logisticSelect.style.background = 'rgba(255, 193, 7, 0.15)';
+                    logisticSelect.style.color = '#ffca2c';
+                } else if (val === 'casa') {
+                    logisticSelect.style.borderColor = 'rgba(57, 255, 20, 0.6)';
+                    logisticSelect.style.background = 'rgba(57, 255, 20, 0.15)';
+                    logisticSelect.style.color = '#39ff14';
+                } else if (val === 'trasferta') {
+                    logisticSelect.style.borderColor = 'rgba(255, 0, 127, 0.6)';
+                    logisticSelect.style.background = 'rgba(255, 0, 127, 0.15)';
+                    logisticSelect.style.color = '#ff007f';
+                } else {
+                    logisticSelect.style.borderColor = 'var(--border-color)';
+                    logisticSelect.style.background = 'hsla(224, 45%, 3%, 0.6)';
+                    logisticSelect.style.color = 'var(--text-muted)';
+                }
+            };
+            
+            updateLocalStyle(currentLogistic);
+            
+            logisticSelect.addEventListener('change', () => {
+                const val = logisticSelect.value;
+                updateLocalStyle(val);
+                
+                let s = trainings.find(t => t.date === dateStr);
+                if (s) {
+                    if (val === '') {
+                        delete s.logistic;
+                    } else {
+                        s.logistic = val;
+                    }
+                } else {
+                    if (val !== '') {
+                        const newSession = {
+                            id: Date.now(),
+                            date: dateStr,
+                            type: 'Allenamento Tabellone',
+                            roster: {},
+                            logistic: val
+                        };
+                        trainings.push(newSession);
+                        trainings.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    }
+                }
+                
+                trainings = trainings.filter(t => (t.roster && Object.keys(t.roster).length > 0) || (t.logistic && t.logistic !== ''));
+                localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
+                
+                if (window.renderTrainingHistory) window.renderTrainingHistory();
+                showToast("Logistica aggiornata con successo!", "success");
+            });
+            
+            logisticContainer.appendChild(logisticSelect);
+            th.appendChild(logisticContainer);
+        } else {
+            // Dropdown for matches/friendlies
+            const logisticContainer = document.createElement('div');
+            logisticContainer.style.marginTop = '0.5rem';
+            logisticContainer.style.display = 'flex';
+            logisticContainer.style.justifyContent = 'center';
+            
+            const logisticSelect = document.createElement('select');
+            logisticSelect.className = 'logistic-select-hdr';
+            logisticSelect.style.fontSize = '0.75rem';
+            logisticSelect.style.padding = '2px 4px';
+            logisticSelect.style.borderRadius = '4px';
+            logisticSelect.style.border = '1px solid var(--border-color)';
+            logisticSelect.style.background = 'hsla(224, 45%, 3%, 0.6)';
+            logisticSelect.style.color = 'var(--text-muted)';
+            logisticSelect.style.cursor = 'pointer';
+            logisticSelect.style.outline = 'none';
+            logisticSelect.style.width = '80px';
+            logisticSelect.style.textAlign = 'center';
+            
+            const optNone = document.createElement('option');
+            optNone.value = '';
+            optNone.textContent = '📍 -';
+            logisticSelect.appendChild(optNone);
+            
+            const optCasa = document.createElement('option');
+            optCasa.value = 'C';
+            optCasa.textContent = '🏠 Casa';
+            logisticSelect.appendChild(optCasa);
+            
+            const optTrasferta = document.createElement('option');
+            optTrasferta.value = 'T';
+            optTrasferta.textContent = '🚌 Trasferta';
+            logisticSelect.appendChild(optTrasferta);
+            
+            const optSpiaggia = document.createElement('option');
+            optSpiaggia.value = 'S';
+            optSpiaggia.textContent = '🏖️ Spiaggia';
+            logisticSelect.appendChild(optSpiaggia);
+            
+            let currentLogistic = '';
+            if (match.opponent.endsWith('(C)')) currentLogistic = 'C';
+            else if (match.opponent.endsWith('(T)')) currentLogistic = 'T';
+            else if (match.opponent.endsWith('(S)')) currentLogistic = 'S';
+            
+            logisticSelect.value = currentLogistic;
+            
+            const updateLocalStyle = (val) => {
+                if (val === 'S') {
+                    logisticSelect.style.borderColor = 'rgba(255, 193, 7, 0.6)';
+                    logisticSelect.style.background = 'rgba(255, 193, 7, 0.15)';
+                    logisticSelect.style.color = '#ffca2c';
+                } else if (val === 'C') {
+                    logisticSelect.style.borderColor = 'rgba(57, 255, 20, 0.6)';
+                    logisticSelect.style.background = 'rgba(57, 255, 20, 0.15)';
+                    logisticSelect.style.color = '#39ff14';
+                } else if (val === 'T') {
+                    logisticSelect.style.borderColor = 'rgba(255, 0, 127, 0.6)';
+                    logisticSelect.style.background = 'rgba(255, 0, 127, 0.15)';
+                    logisticSelect.style.color = '#ff007f';
+                } else {
+                    logisticSelect.style.borderColor = 'var(--border-color)';
+                    logisticSelect.style.background = 'hsla(224, 45%, 3%, 0.6)';
+                    logisticSelect.style.color = 'var(--text-muted)';
+                }
+            };
+            
+            updateLocalStyle(currentLogistic);
+            
+            logisticSelect.addEventListener('change', () => {
+                const val = logisticSelect.value;
+                updateLocalStyle(val);
+                
+                let cleanOpponent = match.opponent.replace(/\s*\([CTS]\)$/, '');
+                if (val === 'C') {
+                    match.opponent = `${cleanOpponent} (C)`;
+                } else if (val === 'T') {
+                    match.opponent = `${cleanOpponent} (T)`;
+                } else if (val === 'S') {
+                    match.opponent = `${cleanOpponent} (S)`;
+                } else {
+                    match.opponent = cleanOpponent;
+                }
+                
+                localStorage.setItem('futsal_portal_convocations', JSON.stringify(convocations));
+                
+                if (window.renderConvocationsHistory) window.renderConvocationsHistory();
+                showToast("Logistica gara aggiornata con successo!", "success");
+            });
+            
+            logisticContainer.appendChild(logisticSelect);
+            th.appendChild(logisticContainer);
+        }
         
         // --- NEW SELECT ALL CHECKBOX ---
         const selectAllContainer = document.createElement('div');
@@ -3649,7 +3873,7 @@ function updateBoardAttendance(dateStr, playerId, status) {
             }
         }
         
-        trainings = trainings.filter(t => t.roster && Object.keys(t.roster).length > 0);
+        trainings = trainings.filter(t => (t.roster && Object.keys(t.roster).length > 0) || (t.logistic && t.logistic !== ''));
         localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
         renderTrainingHistory();
     }
@@ -3833,10 +4057,13 @@ function openEditColumnModal(dateStr, isMatch) {
             
             if (opponentText.endsWith('(C)')) {
                 locationVal = 'C';
-                opponentText = opponentText.replace(/\s*\([CT]\)$/, '');
+                opponentText = opponentText.replace(/\s*\([CTS]\)$/, '');
             } else if (opponentText.endsWith('(T)')) {
                 locationVal = 'T';
-                opponentText = opponentText.replace(/\s*\([CT]\)$/, '');
+                opponentText = opponentText.replace(/\s*\([CTS]\)$/, '');
+            } else if (opponentText.endsWith('(S)')) {
+                locationVal = 'S';
+                opponentText = opponentText.replace(/\s*\([CTS]\)$/, '');
             }
             
             document.getElementById('edit-col-location').value = locationVal;
@@ -3927,34 +4154,34 @@ function getTestRating(testType, value) {
         if (d >= 2000) {
             rating = 'Eccellente';
             badgeClass = 'badge-success';
-            desc = `Ottimo livello cardiovascolare per il futsal (VO2max stimato: ${vo2} ml/kg/min). Adatto a ruoli ad alta intensitÃƒÆ’Ã‚Â  di transizioni (Laterali).`;
+            desc = `Ottimo livello cardiovascolare per il futsal (VO2max stimato: ${vo2} ml/kg/min). Adatto a ruoli ad alta intensitÃ â€™Ãƒâ€šÃ‚Â  di transizioni (Laterali).`;
         } else if (d >= 1600) {
             rating = 'Buono';
             badgeClass = 'badge-info';
-            desc = `Resistenza soddisfacente (VO2max stimato: ${vo2} ml/kg/min). Idoneo al ritmo di gioco agonistico regionale/nazionale.`;
+            desc = `Resistenza soddisfacente (VO2max stimato: ${vo2} ml/kg/min). Idoneo al ritmo di giÃ .`;
         } else if (d >= 1200) {
             rating = 'Medio';
             badgeClass = 'badge-warning';
-            desc = `Resistenza base discreta (VO2max stimato: ${vo2} ml/kg/min). Margini di miglioramento nella capacitÃƒÆ’Ã‚Â  di recupero intermittente.`;
+            desc = `Resistenza base discreta (VO2max stimato: ${vo2} ml/kg/min). Margini di miglioramento nella capacitÃ â€™Ãƒâ€šÃ‚Â  di recupero intermittente.`;
         } else {
             rating = 'Insufficiente';
             badgeClass = 'badge-danger';
             desc = `Cilindrata aerobica insufficiente (VO2max stimato: ${vo2} ml/kg/min). Richiede lavoro specifico di fondo e interval training.`;
         }
-    } else if (testType === 'agility') {
+    } else if (testType === 'AgilitÃ ') {
         const t = parseFloat(value) || 99;
         if (t < 9.5) {
             rating = 'Eccellente';
             badgeClass = 'badge-success';
-            desc = 'RapiditÃƒÆ’Ã‚Â  e fluiditÃƒÆ’Ã‚Â  eccezionale nei cambi di direzione. Ottima coordinazione motoria e frenata.';
+            desc = 'rapiditÃ â€™Ãƒâ€šÃ‚Â  e fluiditÃ â€™Ãƒâ€šÃ‚Â  eccezionale nei cambi di direzione. Ottima coordinazione motoria e frenata.';
         } else if (t <= 10.5) {
             rating = 'Buono';
             badgeClass = 'badge-info';
-            desc = 'Ottimo controllo motorio e reattivitÃƒÆ’Ã‚Â . Agile nei cambi di orientamento tipici del futsal.';
+            desc = 'Ottimo controllo motorio e reattivitÃ â€™Ãƒâ€šÃ‚Â . Agile nei cambi di orientamento tipici del futsal.';
         } else if (t <= 11.5) {
             rating = 'Medio';
             badgeClass = 'badge-warning';
-            desc = 'AgilitÃƒÆ’Ã‚Â  nella media. Margini di miglioramento nell\'esplosivitÃƒÆ’Ã‚Â  laterale e nella rapiditÃƒÆ’Ã‚Â  del passo.';
+            desc = 'AgilitÃ â€™Ãƒâ€šÃ‚Â  nella media. Margini di miglioramento nell\'esplosivitÃ â€™Ãƒâ€šÃ‚Â  laterale e nella rapiditÃ â€™Ãƒâ€šÃ‚Â  del passo.';
         } else {
             rating = 'Insufficiente';
             badgeClass = 'badge-danger';
@@ -3965,15 +4192,15 @@ function getTestRating(testType, value) {
         if (t < 4.0) {
             rating = 'Eccellente';
             badgeClass = 'badge-success';
-            desc = 'VelocitÃƒÆ’Ã‚Â  pura eccezionale. Forte capacitÃƒÆ’Ã‚Â  di accelerazione e spunto sui 30 metri.';
+            desc = 'velocitÃ â€™Ãƒâ€šÃ‚Â  pura eccezionale. Forte capacitÃ â€™Ãƒâ€šÃ‚Â  di accelerazione e spunto sui 30 metri.';
         } else if (t <= 4.3) {
             rating = 'Buono';
             badgeClass = 'badge-info';
-            desc = 'VelocitÃƒÆ’Ã‚Â  buona. Molto competitivo negli allunghi ed efficacia nelle ripartenze.';
+            desc = 'velocitÃ â€™Ãƒâ€šÃ‚Â  buona. Molto competitivo negli allunghi ed efficacia nelle ripartenze.';
         } else if (t <= 4.6) {
             rating = 'Medio';
             badgeClass = 'badge-warning';
-            desc = 'VelocitÃƒÆ’Ã‚Â  discreta. Lavoro consigliato sulle frequenze di passo e sulla spinta al suolo.';
+            desc = 'velocitÃ â€™Ãƒâ€šÃ‚Â  discreta. Lavoro consigliato sulle frequenze di passo e sulla spinta al suolo.';
         } else {
             rating = 'Insufficiente';
             badgeClass = 'badge-danger';
@@ -3996,7 +4223,7 @@ function getTestRating(testType, value) {
         } else {
             rating = 'Insufficiente';
             badgeClass = 'badge-danger';
-            desc = 'Spinta verticale debole. Richiede potenziamento muscolare della catena estensoria dell\'anca e ginocchio.';
+            desc = 'Spinta verticale debole. Richiede potenziamento muscolare della catena estensoria dell\'anca e giÃ .';
         }
     }
     
@@ -4017,7 +4244,7 @@ function setupAthleticCalculator() {
 }
 
 function updateAthleticCalculatorPreview() {
-    // FunzionalitÃƒÂ  di preview singola rimossa perchÃƒÂ© ora si inseriscono
+    // FunzionalitÃ  di preview singola rimossa perchÃ© ora si inseriscono
     // tutti i 4 test contemporaneamente nello stesso form.
 }
 
@@ -4028,16 +4255,16 @@ function saveAthleticTest(e) {
     const date = document.getElementById('athletic-test-date').value;
     
     if (!playerId || !date) {
-        showToast("Seleziona giocatore e data!", "error");
+        showToast("Seleziona giÃ !", "error");
         return;
     }
     
     const valYoyo = parseFloat(document.getElementById('input-yoyo-distance').value);
-    const valAgility = parseFloat(document.getElementById('input-agility-time').value);
+    const valAgilitÃ  = parseFloat(document.getElementById('input-AgilitÃ -time').value);
     const valSprint = parseFloat(document.getElementById('input-sprint-time').value);
     const valCmj = parseFloat(document.getElementById('input-cmj-height').value);
     
-    if (isNaN(valYoyo) && isNaN(valAgility) && isNaN(valSprint) && isNaN(valCmj)) {
+    if (isNaN(valYoyo) && isNaN(valAgilitÃ ) && isNaN(valSprint) && isNaN(valCmj)) {
         showToast("Inserisci almeno un valore per i test!", "error");
         return;
     }
@@ -4057,7 +4284,7 @@ function saveAthleticTest(e) {
     let offset = 0;
     
     if (!isNaN(valYoyo) && valYoyo > 0) athleticTests.push({ id: timestamp + (++offset), playerId, date, type: 'yoyo', value: valYoyo });
-    if (!isNaN(valAgility) && valAgility > 0) athleticTests.push({ id: timestamp + (++offset), playerId, date, type: 'agility', value: valAgility });
+    if (!isNaN(valAgilitÃ ) && valAgilitÃ  > 0) athleticTests.push({ id: timestamp + (++offset), playerId, date, type: 'AgilitÃ ', value: valAgilitÃ  });
     if (!isNaN(valSprint) && valSprint > 0) athleticTests.push({ id: timestamp + (++offset), playerId, date, type: 'sprint', value: valSprint });
     if (!isNaN(valCmj) && valCmj > 0) athleticTests.push({ id: timestamp + (++offset), playerId, date, type: 'cmj', value: valCmj });
     
@@ -4068,7 +4295,7 @@ function saveAthleticTest(e) {
     
     // Reset inputs
     document.getElementById('input-yoyo-distance').value = '';
-    document.getElementById('input-agility-time').value = '';
+    document.getElementById('input-AgilitÃ -time').value = '';
     document.getElementById('input-sprint-time').value = '';
     document.getElementById('input-cmj-height').value = '';
     
@@ -4095,9 +4322,9 @@ function populateAthleticDropdowns() {
     const selVal2 = filterPlayer.value;
     const selVal3 = analysisPlayer.value;
     
-    playerSelect.innerHTML = '<option value="">-- Seleziona Giocatore --</option>';
+    playerSelect.innerHTML = '<option value="">-- Seleziona giÃ  --</option>';
     filterPlayer.innerHTML = '<option value="all">Tutti i Giocatori</option>';
-    analysisPlayer.innerHTML = '<option value="">-- Seleziona Giocatore --</option>';
+    analysisPlayer.innerHTML = '<option value="">-- Seleziona giÃ  --</option>';
     
     // Sort players by name
     const sorted = [...players].sort((a, b) => a.name.localeCompare(b.name));
@@ -4177,7 +4404,7 @@ function renderAthleticTestsTable() {
     }
     
     if (targetPlayers.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted)">Nessun giocatore corrisponde ai filtri.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted)">Nessun giÃ .</td></tr>`;
         return;
     }
     
@@ -4199,7 +4426,7 @@ function renderAthleticTestsTable() {
         const pTests = filteredTests.filter(t => t.playerId === p.id);
         
         if (pTests.length === 0) {
-            if (filterDateVal) return; // Nascondi i giocatori vuoti se si sta cercando una data specifica (per pulizia visiva)
+            if (filterDateVal) return; // Nascondi i giÃ  vuoti se si sta cercando una data specifica (per pulizia visiva)
             
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -4240,7 +4467,7 @@ function renderAthleticTestsTable() {
         uniqueDates.forEach((date, index) => {
             const testsOnDate = pTests.filter(t => t.date === date);
             const testYoyo = testsOnDate.find(t => t.type === 'yoyo');
-            const testAgility = testsOnDate.find(t => t.type === 'agility');
+            const testAgilitÃ  = testsOnDate.find(t => t.type === 'AgilitÃ ');
             const testSprint = testsOnDate.find(t => t.type === 'sprint');
             const testCmj = testsOnDate.find(t => t.type === 'cmj');
             
@@ -4254,7 +4481,7 @@ function renderAthleticTestsTable() {
                 </td>
                 <td>${formatDate(date)}</td>
                 <td>${formatTestCell(testYoyo, 'm')}</td>
-                <td>${formatTestCell(testAgility, 's')}</td>
+                <td>${formatTestCell(testAgilitÃ , 's')}</td>
                 <td>${formatTestCell(testSprint, 's')}</td>
                 <td>${formatTestCell(testCmj, 'cm')}</td>
                 <td style="text-align: center; vertical-align: middle;">
@@ -4284,7 +4511,7 @@ window.openAthleticTestForPlayer = function(playerId) {
     // Invece di aprire il popup, passiamo al tab di inserimento
     window.switchTabTo('tab-athletic', 'subtab-athletic-insert');
     
-    // Diamo tempo al DOM di attivare il tab prima di impostare i valori se necessario (ma i valori possono essere impostati anche se nascosti)
+    // Diamo tempo al DOM di attivare il tab prima di impostare i valori se necessario (ma i valori possono essere impostati anche se nascosÃ¬)
     setTimeout(() => {
         const select = document.getElementById('athletic-player-select');
         if (select) {
@@ -4300,7 +4527,7 @@ window.openAthleticTestForPlayer = function(playerId) {
         
         // Svuotiamo i campi per sicurezza in caso di nuovo inserimento
         document.getElementById('input-yoyo-distance').value = '';
-        document.getElementById('input-agility-time').value = '';
+        document.getElementById('input-AgilitÃ -time').value = '';
         document.getElementById('input-sprint-time').value = '';
         document.getElementById('input-cmj-height').value = '';
 
@@ -4322,7 +4549,7 @@ window.deleteAthleticSession = function(playerId, date) {
 window.editAthleticSession = function(playerId, date) {
     const sessionTests = athleticTests.filter(t => t.playerId == playerId && t.date == date);
     if (sessionTests.length === 0) {
-        alert("Nessun test trovato per questo giocatore e data.");
+        alert("Nessun test trovato per questo giÃ .");
         return;
     }
     
@@ -4336,13 +4563,13 @@ window.editAthleticSession = function(playerId, date) {
         document.getElementById('athletic-test-date').value = date;
         
         document.getElementById('input-yoyo-distance').value = '';
-        document.getElementById('input-agility-time').value = '';
+        document.getElementById('input-AgilitÃ -time').value = '';
         document.getElementById('input-sprint-time').value = '';
         document.getElementById('input-cmj-height').value = '';
         
         sessionTests.forEach(test => {
             if (test.type === 'yoyo') document.getElementById('input-yoyo-distance').value = test.value;
-            if (test.type === 'agility') document.getElementById('input-agility-time').value = test.value;
+            if (test.type === 'AgilitÃ ') document.getElementById('input-AgilitÃ -time').value = test.value;
             if (test.type === 'sprint') document.getElementById('input-sprint-time').value = test.value;
             if (test.type === 'cmj') document.getElementById('input-cmj-height').value = test.value;
         });
@@ -4384,8 +4611,8 @@ function renderAthleticProgressCharts(playerId) {
     // Group and filter tests for the player
     const pTests = athleticTests.filter(t => t.playerId === playerId);
     
-    const testTypes = ['yoyo', 'cmj', 'sprint', 'agility'];
-    const dataGroups = { yoyo: [], cmj: [], sprint: [], agility: [] };
+    const testTypes = ['yoyo', 'cmj', 'sprint', 'AgilitÃ '];
+    const dataGroups = { yoyo: [], cmj: [], sprint: [], AgilitÃ : [] };
     
     pTests.forEach(t => {
         if (dataGroups[t.type]) {
@@ -4402,7 +4629,7 @@ function renderAthleticProgressCharts(playerId) {
     if (yoyoChartInstance) yoyoChartInstance.destroy();
     if (cmjChartInstance) cmjChartInstance.destroy();
     if (sprintChartInstance) sprintChartInstance.destroy();
-    if (agilityChartInstance) agilityChartInstance.destroy();
+    if (AgilitÃ ) AgilitÃ .destroy();
     
     // 1. Yo-Yo Chart
     yoyoChartInstance = drawProgressionLineChart(
@@ -4432,10 +4659,10 @@ function renderAthleticProgressCharts(playerId) {
         true // Invert Y scale since lower time is better
     );
     
-    // 4. Agility Chart
-    agilityChartInstance = drawProgressionLineChart(
-        'chart-progress-agility', 
-        dataGroups.agility, 
+    // 4. AgilitÃ  Chart
+    AgilitÃ  = drawProgressionLineChart(
+        'chart-progress-AgilitÃ ', 
+        dataGroups.AgilitÃ , 
         'Tempo (secondi)', 
         'hsla(145, 80%, 45%, 0.85)', 
         'hsla(145, 80%, 45%, 0.15)',
@@ -4539,14 +4766,14 @@ function renderTeamFitnessDashboard() {
     players.forEach(p => {
         const pTests = athleticTests.filter(t => t.playerId === p.id);
         const latestYoyo = pTests.filter(t => t.type === 'yoyo').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
-        const latestAgility = pTests.filter(t => t.type === 'agility').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
+        const latestAgilitÃ  = pTests.filter(t => t.type === 'AgilitÃ ').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
         const latestSprint = pTests.filter(t => t.type === 'sprint').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
         const latestCmj = pTests.filter(t => t.type === 'cmj').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
         
         let scoreSum = 0;
         let count = 0;
         
-        [latestYoyo, latestAgility, latestSprint, latestCmj].forEach(test => {
+        [latestYoyo, latestAgilitÃ , latestSprint, latestCmj].forEach(test => {
             if (test) {
                 const r = getTestRating(test.type, test.value).rating;
                 scoreSum += ratingValues[r] || 0;
@@ -4642,7 +4869,7 @@ function renderTeamFitnessDashboard() {
     const missingPlayers = playerScores.filter(ps => ps.missingTests > 0);
     
     if (topPlayers.length === 0) {
-        topFitList.innerHTML = '<li><span style="color:var(--text-muted)">Nessun giocatore in questa fascia.</span></li>';
+        topFitList.innerHTML = '<li><span style="color:var(--text-muted)">Nessun giÃ .</span></li>';
     } else {
         topPlayers.forEach(ps => {
             topFitList.innerHTML += `
@@ -4654,7 +4881,7 @@ function renderTeamFitnessDashboard() {
     }
     
     if (lowPlayers.length === 0) {
-        lowFitList.innerHTML = '<li><span style="color:var(--text-muted)">Nessun giocatore con indice critico.</span></li>';
+        lowFitList.innerHTML = '<li><span style="color:var(--text-muted)">Nessun giÃ .</span></li>';
     } else {
         lowPlayers.forEach(ps => {
             lowFitList.innerHTML += `
@@ -4692,41 +4919,41 @@ const DEFAULT_CALENDAR_DATA = [
     {
         weekName: "Settimana 1: Adattamento e Valutazione",
         days: [
-            { dayName: "Lunedi 17 Ago", type: "Campo", content: "Atletica: Seduta di Test (Yo-Yo IR1 / Test 10-20m / CMJ). Valutazione stato di forma base.\nPalla: Riconducimento tecnico a bassa intensita, mobilita articolare." },
+            { dayName: "lunedÃ¬ 17 Ago", type: "Campo", content: "Atletica: Seduta di Test (Yo-Yo IR1 / Test 10-20m / CMJ). Valutazione stato di forma base.\nPalla: Riconducimento tecnico a bassa intensitÃ , mobilita articolare." },
             { dayName: "Martedi 18 Ago", type: "Campo", content: "Atletica: Lavoro aerobico di base. Corsa continua e variazioni di ritmo blande.\nPalla: Esercitazioni tecniche a coppie, passaggi e controllo." },
             { dayName: "Giovedi 20 Ago", type: "Campo", content: "Atletica: Lavoro intermittente aerobico (15\"/15\"). Core stability.\nPalla: Possessi palla 4v4 in ampi spazi." },
-            { dayName: "Venerdi 21 Ago", type: "Campo", content: "Atletica: Richiamo di rapidita sui 5m.\nTattica: Introduzione ai principi di gioco difensivi (postura e distanze)." },
-            { dayName: "Sab/Dom 22-23 Ago", type: "Sabbia", content: "Atletica: Lavoro metabolico lattacido su sabbia. Circuiti ad alta intensita.\nPalla: Tornei di footvolley per favorire l'amalgama del gruppo in un contesto meno formale." }
+            { dayName: "venerdÃ¬ 21 Ago", type: "Campo", content: "Atletica: Richiamo di rapiditÃ  sui 5m.\nTattica: Introduzione ai principi di giÃ ." },
+            { dayName: "Sab/Dom 22-23 Ago", type: "Sabbia", content: "Atletica: Lavoro metabolico lattacido su sabbia. Circuiti ad alta intensitÃ .\nPalla: Tornei di footvolley per favorire l'amalgama del gruppo in un contesto meno formale." }
         ]
     },
     {
         weekName: "Settimana 2: Forza e Lavoro Specifico",
         days: [
-            { dayName: "Lunedi 24 Ago", type: "Campo", content: "Atletica: Forza resistente. Sprint con traino o elastici, cambi di direzione.\nPalla: Lavori di forza specifica, 1v1 fisici e protezione palla." },
-            { dayName: "Martedi 25 Ago", type: "Campo", content: "Atletica: Trasformazione della forza. Navette brevi con recupero al passo.\nPalla: Small-Sided Games (SSG) ad alta intensita 3v3." },
-            { dayName: "Mercoledi 26 Ago", type: "Campo", content: "Atletica: Lavoro aerobico frazionato. Prevenzione infortuni (propriocezione).\nTattica: Movimenti offensivi senza palla, tagli e parallele." },
+            { dayName: "lunedÃ¬ 24 Ago", type: "Campo", content: "Atletica: Forza resistente. Sprint con traino o elastici, cambi di direzione.\nPalla: Lavori di forza specifica, 1v1 fisici e protezione palla." },
+            { dayName: "Martedi 25 Ago", type: "Campo", content: "Atletica: Trasformazione della forza. Navette brevi con recupero al passo.\nPalla: Small-Sided Games (SSG) ad alta intensitÃ  3v3." },
+            { dayName: "mercoledÃ¬ 26 Ago", type: "Campo", content: "Atletica: Lavoro aerobico frazionato. Prevenzione infortuni (propriocezione).\nTattica: Movimenti offensivi senza palla, tagli e parallele." },
             { dayName: "Giovedi 27 Ago", type: "Campo", content: "Atletica: RSA (Repeated Sprint Ability) con cambi di direzione netti.\nPalla: Transizioni veloci 2v1, 3v2 a campo ridotto." },
-            { dayName: "Venerdi 28 Ago", type: "Campo", content: "Atletica: Rapidita di base pre-gara (scatti brevissimi).\nTattica: Palle inattive (calci d'angolo e punizioni)." }
+            { dayName: "venerdÃ¬ 28 Ago", type: "Campo", content: "Atletica: rapiditÃ  di base pre-gara (scatti brevissimi).\nTattica: Palle inattive (calci d'angolo e punizioni)." }
         ]
     },
     {
         weekName: "Settimana 3: Potenza e Tattica",
         days: [
-            { dayName: "Lunedi 31 Ago", type: "Campo", content: "Atletica: Forza esplosiva e pliometria. Balzi e ostacoli.\nPalla: Tiri in porta da fuori area dopo percorso coordinativo." },
+            { dayName: "lunedÃ¬ 31 Ago", type: "Campo", content: "Atletica: Forza esplosiva e pliometria. Balzi e ostacoli.\nPalla: Tiri in porta da fuori area dopo percorso coordinativo." },
             { dayName: "Martedi 1 Set", type: "Campo", content: "Atletica: Resistenza alla potenza. Navette lunghe.\nPalla: Possessi palla in regime di affaticamento." },
-            { dayName: "Mercoledi 2 Set", type: "Campo", content: "Atletica: Agility (ladder, cinesini, frenata/ripartenza).\nTattica: Lavoro specifico sulle rotazioni (3-1 o 4-0)." },
-            { dayName: "Giovedi 3 Set", type: "Campo", content: "Atletica: Lavori di accelerazione contrastata in campo.\nPalla: Partite a tema a tocchi limitati per velocita di pensiero." },
-            { dayName: "Venerdi 4 Set", type: "Campo", content: "Atletica: Attivazione neuromuscolare, reattivita.\nTattica: Situazioni di power play (portiere di movimento)." }
+            { dayName: "mercoledÃ¬ 2 Set", type: "Campo", content: "Atletica: AgilitÃ  (ladder, cinesini, frenata/ripartenza).\nTattica: Lavoro specifico sulle rotazioni (3-1 o 4-0)." },
+            { dayName: "Giovedi 3 Set", type: "Campo", content: "Atletica: Lavori di accelerazione contrastata in campo.\nPalla: Partite a tema a tocchi limitati per velocitÃ  di pensiero." },
+            { dayName: "venerdÃ¬ 4 Set", type: "Campo", content: "Atletica: Attivazione neuromuscolare, reattivitÃ .\nTattica: Situazioni di power play (portiere di movimento)." }
         ]
     },
     {
-        weekName: "Settimana 4: Rapidita e Brillantezza",
+        weekName: "Settimana 4: rapiditÃ  e Brillantezza",
         days: [
-            { dayName: "Lunedi 7 Set", type: "Campo", content: "Atletica: Rapidita pura. Volumi bassi, qualita altissima.\nPalla: Rondo intensi, 1v1 rapidissimi." },
-            { dayName: "Martedi 8 Set", type: "Campo", content: "Atletica: Rapidita cognitiva (esercizi sotto pressione temporale).\nTattica: Messa a punto sistemi di gioco difensivi." },
-            { dayName: "Mercoledi 9 Set", type: "Campo", content: "Atletica: Scarico atletico (Tapering).\nPalla: Partitella a tocchi liberi / scarico mentale." },
-            { dayName: "Giovedi 10 Set", type: "Campo", content: "Tattica: Ripasso finale palle inattive (rimesse laterali e angoli).\nPalla: Partita a tutto campo con focus sull'intensita di gara vera." },
-            { dayName: "Venerdi 11 Set", type: "Campo", content: "Atletica: Riscaldamento reattivo pre-partita.\nTattica: Rifinitura finale e schemi su palla inattiva. La squadra e pronta." }
+            { dayName: "lunedÃ¬ 7 Set", type: "Campo", content: "Atletica: rapiditÃ  pura. Volumi bassi, qualita altissima.\nPalla: Rondo intensi, 1v1 rapidissimi." },
+            { dayName: "Martedi 8 Set", type: "Campo", content: "Atletica: rapiditÃ  cognitiva (esercizi sotto pressione temporale).\nTattica: Messa a punto sistemi di giÃ ." },
+            { dayName: "mercoledÃ¬ 9 Set", type: "Campo", content: "Atletica: Scarico atletico (Tapering).\nPalla: Partitella a tocchi liberi / scarico mentale." },
+            { dayName: "Giovedi 10 Set", type: "Campo", content: "Tattica: Ripasso finale palle inattive (rimesse laterali e angoli).\nPalla: Partita a tutto campo con focus sull'intensitÃ  di gara vera." },
+            { dayName: "venerdÃ¬ 11 Set", type: "Campo", content: "Atletica: Riscaldamento reattivo pre-partita.\nTattica: Rifinitura finale e schemi su palla inattiva. La squadra e pronta." }
         ]
     }
 ];
@@ -5205,7 +5432,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = JSON.parse(e.target.result);
                     const all_players = data.players || data.homePlayers || [];
                     if (!Array.isArray(all_players) || all_players.length === 0) {
-                        showToast("Nessun giocatore trovato nel file.", "error");
+                        showToast("Nessun giÃ .", "error");
                         return;
                     }
 
@@ -5373,7 +5600,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // Carica impostazioni all'avvio (da inserire dopo che il DOM Ã¨ caricato)
+        // Carica impostazioni all'avvio (da inserire dopo che il DOM ÃƒÂ¨ caricato)
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 loadGlobalSettings();
@@ -5385,9 +5612,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // ==========================================
         window.renderQuartets = function() {
             const quartets = {
-                '1Â° Quartetto (Titolari)': 'pitch-quartet-1',
-                '2Â° Quartetto (Prime Rotazioni)': 'pitch-quartet-2',
-                '3Â° Quartetto (Seconde Rotazioni)': 'pitch-quartet-3'
+                '1Ã‚Â° Quartetto (Titolari)': 'pitch-quartet-1',
+                '2Ã‚Â° Quartetto (Prime Rotazioni)': 'pitch-quartet-2',
+                '3Ã‚Â° Quartetto (Seconde Rotazioni)': 'pitch-quartet-3'
             };
 
             for (const [qName, containerId] of Object.entries(quartets)) {
@@ -5459,7 +5686,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (player.quinto === 'Portiere di Movimento') {
-                customBorder = '3px solid #eab308'; // Giallo per Portiere di Movimento
+                customBorder = '3px solid #eab308'; // giÃ  per Portiere di Movimento
                 boxShadow = '0 0 12px rgba(234, 179, 8, 0.7)';
             }
                 
@@ -5522,14 +5749,13 @@ if (futsalRolesPermissions["Staff Tecnico"] || futsalRolesPermissions["Giocatore
     localStorage.setItem('futsal_roles_permissions', JSON.stringify(futsalRolesPermissions));
 }
 
-// Sicurezza aggiuntiva: rimuoviamo forzatamente "tab-settings" dal Giocatore se era stato salvato per sbaglio
+// Sicurezza aggiuntiva: rimuoviamo forzatamente "tab-settings" dal giÃ  se era stato salvato per sbaglio
 if (futsalRolesPermissions["Players"] && futsalRolesPermissions["Players"].includes("tab-settings")) {
     futsalRolesPermissions["Players"] = futsalRolesPermissions["Players"].filter(t => t !== "tab-settings");
     localStorage.setItem('futsal_roles_permissions', JSON.stringify(futsalRolesPermissions));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    checkAuth();
 
     // Popola tendina utenti
     const loginSelect = document.getElementById('login-user');
@@ -5737,7 +5963,7 @@ window.createNewUser = function() {
     }
     
     if(futsalUsers.find(u => u.username === name)) {
-        if(typeof showToast === 'function') showToast("Utente giÃ  esistente.", "error");
+        if(typeof showToast === 'function') showToast("Utente giÃ .", "error");
         return;
     }
     
@@ -5788,7 +6014,7 @@ window.importDatabase = function(event) {
     reader.onload = function(e) {
         try {
             const db = JSON.parse(e.target.result);
-            if (confirm("Attenzione: questa operazione sovrascriverà tutti i dati correnti (giocatori, voti, logo, ecc.). Vuoi procedere?")) {
+            if (confirm("Attenzione: questa operazione sovrascriverÃ  tutti i dati correnti (giocatori, voti, logo, ecc.). Vuoi procedere?")) {
                 // Rimuoviamo le vecchie chiavi futsal_ (tranne l'utente corrente)
                 const keysToRemove = [];
                 for (let i = 0; i < localStorage.length; i++) {
@@ -5806,7 +6032,7 @@ window.importDatabase = function(event) {
                     }
                 }
                 
-                alert("Database importato con successo! L'applicazione verrà ricaricata.");
+                alert("Database importato con successo! L'applicazione verrÃ  ricaricata.");
                 window.location.reload();
             }
         } catch (err) {
@@ -5817,3 +6043,4 @@ window.importDatabase = function(event) {
     reader.readAsText(file);
     event.target.value = ''; // Reset per permettere nuove selezioni
 };
+
