@@ -1,0 +1,629 @@
+{
+  "id": 1781933425866,
+  "date": "2026-08-17",
+  "type": "Test fisici",
+  "roster": {
+    "1780446140193": "P",
+    "1780448167941": "P",
+    "1780521662233": "P",
+    "1780521890597": "P",
+    "1780522424089": "P",
+    "1780598843301": "P",
+    "player_imported_0": "P",
+    "player_imported_1": "P",
+    "player_imported_2": "P",
+    "player_imported_5": "P",
+    "player_imported_7": "P",
+    "player_imported_9": "P",
+    "player_imported_12": "P",
+    "player_imported_13": "P",
+    "1781070317060": "P",
+    "1781071842070": "P",
+    "1781085254626": "P",
+    "1781085313522": "P"
+  },
+  "warmup": {
+    "desc": "Presentazione staff",
+    "mins": "10",
+    "link": "",
+    "boardFull": [],
+    "boardHalf": []
+  },
+  "mainPhase": {
+    "desc": "Zona rossa : Test dei 30 metri\nZona gialla : Agility Test\nZona blu : Beep Test su 20 m.\nZona fuori campo: Test di elevazione",
+    "mins": "60",
+    "link": "",
+    "boardFull": [
+      {
+        "id": "17819375538128mrog",
+        "type": "cone-red",
+        "x": 14.21052631578947,
+        "y": 1.5625,
+        "rotation": 0
+      },
+      {
+        "id": "178193756275679boh",
+        "type": "cone-red",
+        "x": 14.736842105263158,
+        "y": 20.3125,
+        "rotation": 0
+      },
+      {
+        "id": "17819375772397j5e7",
+        "type": "cone-red",
+        "x": 96.49122807017544,
+        "y": 1.875,
+        "rotation": 0
+      },
+      {
+        "id": "1781937582768sd2kv",
+        "type": "cone-red",
+        "x": 98.07017543859648,
+        "y": 20.000000000000004,
+        "rotation": 0
+      },
+      {
+        "id": "1781937648489dqy5r",
+        "type": "blue",
+        "x": 1.5789473684210567,
+        "y": 13.4375,
+        "rotation": 0
+      },
+      {
+        "id": "1781937727788dt3l2",
+        "type": "blue",
+        "x": 7.368421052631582,
+        "y": 13.125,
+        "rotation": 0
+      },
+      {
+        "id": "1781937733101bay1o",
+        "type": "blue",
+        "x": 14.385964912280699,
+        "y": 11.875,
+        "rotation": 0
+      },
+      {
+        "id": "178193782600566vzj",
+        "type": "cone-yellow",
+        "x": 15.087719298245613,
+        "y": 34.0625,
+        "rotation": 0
+      },
+      {
+        "id": "17819378365259hxyj",
+        "type": "cone-yellow",
+        "x": 6.315789473684214,
+        "y": 78.75,
+        "rotation": 0
+      },
+      {
+        "id": "1781937855306yohok",
+        "type": "cone-yellow",
+        "x": 25.087719298245617,
+        "y": 33.75,
+        "rotation": 0
+      },
+      {
+        "id": "1781937863845uu7s7",
+        "type": "cone-yellow",
+        "x": 6.140350877192981,
+        "y": 34.0625,
+        "rotation": 0
+      },
+      {
+        "id": "1781937927793io0ka",
+        "type": "cone-yellow",
+        "x": 25.438596491228072,
+        "y": 78.4375,
+        "rotation": 0
+      },
+      {
+        "id": "178193794662419k54",
+        "type": "cone-yellow",
+        "x": 15.438596491228068,
+        "y": 50.3125,
+        "rotation": 0
+      },
+      {
+        "id": "1781937952988xzvth",
+        "type": "cone-yellow",
+        "x": 15.438596491228076,
+        "y": 64.6875,
+        "rotation": 0
+      },
+      {
+        "id": "1781937958483mzms3",
+        "type": "cone-yellow",
+        "x": 15.964912280701753,
+        "y": 78.125,
+        "rotation": 0
+      },
+      {
+        "id": "178193798422467v8d",
+        "type": "red",
+        "x": 3.333333333333335,
+        "y": 88.125,
+        "rotation": 0
+      },
+      {
+        "id": "178193823876768t3q",
+        "type": "red",
+        "x": 3.859649122807019,
+        "y": 96.875,
+        "rotation": 0
+      },
+      {
+        "id": "17819382440030lig1",
+        "type": "red",
+        "x": 8.94736842105263,
+        "y": 96.875,
+        "rotation": 0
+      },
+      {
+        "id": "1781938436287h7wil",
+        "type": "cone-blue",
+        "x": 38.24561403508772,
+        "y": 2.1874999999999964,
+        "rotation": 0
+      },
+      {
+        "id": "1781938483448av7x3",
+        "type": "cone-blue",
+        "x": 38.59649122807018,
+        "y": 93.4375,
+        "rotation": 0
+      },
+      {
+        "id": "178193849656647gxh",
+        "type": "cone-blue",
+        "x": 98.42105263157895,
+        "y": 1.875,
+        "rotation": 0
+      },
+      {
+        "id": "1781938508811694o1",
+        "type": "cone-blue",
+        "x": 98.0701754385965,
+        "y": 93.75,
+        "rotation": 0
+      },
+      {
+        "id": "1781938516775pk23l",
+        "type": "cone-blue",
+        "x": 38.59649122807018,
+        "y": 49.375,
+        "rotation": 0
+      },
+      {
+        "id": "1781938523881ldh9d",
+        "type": "cone-blue",
+        "x": 98.24561403508773,
+        "y": 50,
+        "rotation": 0
+      },
+      {
+        "id": "1781938543438z0vh2",
+        "type": "cone-blue",
+        "x": 67.19298245614036,
+        "y": 1.8750000000000036,
+        "rotation": 0
+      },
+      {
+        "id": "1781938551686wshto",
+        "type": "cone-blue",
+        "x": 68.94736842105263,
+        "y": 93.4375,
+        "rotation": 0
+      },
+      {
+        "id": "17819387041287jbnc",
+        "type": "cone-red",
+        "x": 38.07017543859649,
+        "y": 19.687500000000004,
+        "rotation": 0
+      },
+      {
+        "id": "1781938712647sb1k3",
+        "type": "cone-red",
+        "x": 67.19298245614034,
+        "y": 19.687500000000004,
+        "rotation": 0
+      },
+      {
+        "id": "1781939708308nj6m4",
+        "type": "blue-gk",
+        "x": 98.42105263157895,
+        "y": 30,
+        "rotation": 0
+      },
+      {
+        "id": "1781939720034aojcl",
+        "type": "blue-gk",
+        "x": 98.24561403508773,
+        "y": 40.625,
+        "rotation": 0
+      },
+      {
+        "id": "1781939724743yfnop",
+        "type": "blue-gk",
+        "x": 98.42105263157895,
+        "y": 86.25,
+        "rotation": 0
+      },
+      {
+        "id": "1781939725122f8u3l",
+        "type": "blue-gk",
+        "x": 98.42105263157895,
+        "y": 77.5,
+        "rotation": 0
+      },
+      {
+        "id": "178193972541910sf2",
+        "type": "blue-gk",
+        "x": 98.42105263157895,
+        "y": 67.8125,
+        "rotation": 0
+      },
+      {
+        "id": "1781939725716ikcyk",
+        "type": "blue-gk",
+        "x": 98.0701754385965,
+        "y": 60.3125,
+        "rotation": 0
+      },
+      {
+        "id": "17819404044955in49",
+        "type": "arrow-v",
+        "x": 3.1578947368421026,
+        "y": 69.0625,
+        "rotation": 0
+      },
+      {
+        "id": "17819404286728phnv",
+        "type": "arrow-curve",
+        "x": 5.263157894736843,
+        "y": 31.875,
+        "rotation": 0
+      },
+      {
+        "id": "1781940441447buh0u",
+        "type": "arrow-u",
+        "x": 24.912280701754387,
+        "y": 30.625,
+        "rotation": 0
+      },
+      {
+        "id": "1781940463149grvuq",
+        "type": "arrow-h",
+        "x": 22.45614035087719,
+        "y": 11.875,
+        "rotation": 0
+      }
+    ],
+    "boardHalf": []
+  },
+  "finalPhase": {
+    "desc": "Per aumentare la difficoltà nella fase difensiva, giocare 5v3 e/o nella fase di possesso giocare 5v4\nPer aumentare la difficoltà nella seconda metà campo, si gioca un 3v1 con possesso ad un tocco\nAl termine esercizi di stretching e scarico colonna",
+    "mins": "5",
+    "link": "",
+    "boardFull": [
+      {
+        "id": "1784817027547cy406",
+        "type": "blue-gk",
+        "x": 4.7368421052631575,
+        "y": 51.25,
+        "rotation": 90
+      },
+      {
+        "id": "1784817033646o8kht",
+        "type": "blue-gk",
+        "x": 95.43859649122808,
+        "y": 50,
+        "rotation": 0
+      },
+      {
+        "id": "1784817040878irkaf",
+        "type": "red",
+        "x": 83.50877192982456,
+        "y": 28.75,
+        "rotation": 90
+      },
+      {
+        "id": "1784817048607p6w06",
+        "type": "red",
+        "x": 84.03508771929825,
+        "y": 70.3125,
+        "rotation": 90
+      },
+      {
+        "id": "17848170897999gtyf",
+        "type": "blue",
+        "x": 94.91228070175438,
+        "y": 8.4375,
+        "rotation": 225
+      },
+      {
+        "id": "17848170964074q2m9",
+        "type": "blue",
+        "x": 94.21052631578948,
+        "y": 92.5,
+        "rotation": 0
+      },
+      {
+        "id": "1784817100143hw50h",
+        "type": "blue",
+        "x": 53.1578947368421,
+        "y": 90.625,
+        "rotation": 0
+      },
+      {
+        "id": "1784817104514ysy1m",
+        "type": "blue",
+        "x": 54.3859649122807,
+        "y": 8.75,
+        "rotation": 0
+      },
+      {
+        "id": "1784817143832tikbp",
+        "type": "blue",
+        "x": 73.50877192982456,
+        "y": 51.25,
+        "rotation": 90
+      },
+      {
+        "id": "17848184023795kwtr",
+        "type": "red",
+        "x": 58.24561403508772,
+        "y": 50.3125,
+        "rotation": 90
+      },
+      {
+        "id": "17848184120667mivy",
+        "type": "ball",
+        "x": 95.78947368421052,
+        "y": 40,
+        "rotation": 0
+      },
+      {
+        "id": "1784818439170lqilp",
+        "type": "cone-yellow",
+        "x": 50.526315789473685,
+        "y": 41.25,
+        "rotation": 0
+      },
+      {
+        "id": "1784818443395wp3ms",
+        "type": "cone-yellow",
+        "x": 69.12280701754386,
+        "y": 0,
+        "rotation": 0
+      },
+      {
+        "id": "1784818449420rlfb4",
+        "type": "cone-yellow",
+        "x": 78.94736842105263,
+        "y": 0,
+        "rotation": 0
+      },
+      {
+        "id": "1784818455770k1ovl",
+        "type": "cone-yellow",
+        "x": 69.29824561403508,
+        "y": 96.875,
+        "rotation": 0
+      },
+      {
+        "id": "1784818462199st36a",
+        "type": "cone-yellow",
+        "x": 78.7719298245614,
+        "y": 96.875,
+        "rotation": 0
+      },
+      {
+        "id": "1784818469197u3ahh",
+        "type": "cone-yellow",
+        "x": 50.175438596491226,
+        "y": 53.125,
+        "rotation": 0
+      }
+    ],
+    "boardHalf": [
+      {
+        "id": "178481859142505ynx",
+        "type": "blue-gk",
+        "x": 49.16434540389972,
+        "y": 6.25,
+        "rotation": 180
+      },
+      {
+        "id": "17848186030877sz0e",
+        "type": "blue",
+        "x": 91.22562674094708,
+        "y": 80.9375,
+        "rotation": 0
+      },
+      {
+        "id": "1784818606526b3hx8",
+        "type": "blue",
+        "x": 9.888579387186631,
+        "y": 58.75,
+        "rotation": 0
+      },
+      {
+        "id": "1784818610412a6m15",
+        "type": "blue",
+        "x": 87.60445682451254,
+        "y": 15.3125,
+        "rotation": 0
+      }
+    ]
+  },
+  "notes": "",
+  "rpe": "",
+  "image": null,
+  "logistic": "casa",
+  "athleticPhase": {
+    "desc": "Riscaldamento prepartita vecchio per vedere se idoneo o apportare modifiche",
+    "mins": "20",
+    "link": "",
+    "boardFull": [],
+    "boardHalf": []
+  },
+  "main2Phase": {
+    "desc": "4v3 con obbiettivo della chiusura delle linee di passaggio ed evitare che i blu portino la palla nella metà campo avversaria. \nSe i rossi rubano palla, cercheranno di fare goal su una delle 3 porticine, mentre i blu cercheranno di rubare palla.\nSe i blu riescono ad uscire dalla propria metà campo, cercheranno di fare goal giocando solo ad un tocco.",
+    "mins": "25",
+    "link": "",
+    "boardFull": [
+      {
+        "id": "1784814844556kjpso",
+        "type": "blue-gk",
+        "x": 3.1578947368421026,
+        "y": 51.5625,
+        "rotation": 90
+      },
+      {
+        "id": "17848148521171yoyx",
+        "type": "red",
+        "x": 82.10526315789473,
+        "y": 67.8125,
+        "rotation": 90
+      },
+      {
+        "id": "1784814856737lpezk",
+        "type": "red",
+        "x": 64.21052631578948,
+        "y": 49.375,
+        "rotation": 90
+      },
+      {
+        "id": "1784814861223vvdoe",
+        "type": "red",
+        "x": 82.28070175438597,
+        "y": 28.4375,
+        "rotation": 90
+      },
+      {
+        "id": "17848166292150coah",
+        "type": "blue",
+        "x": 94.91228070175438,
+        "y": 10.625,
+        "rotation": 225
+      },
+      {
+        "id": "1784816633612wwq0z",
+        "type": "blue",
+        "x": 94.21052631578947,
+        "y": 90,
+        "rotation": 0
+      },
+      {
+        "id": "1784816638052b0oym",
+        "type": "blue",
+        "x": 54.3859649122807,
+        "y": 10.3125,
+        "rotation": 90
+      },
+      {
+        "id": "1784816641877bagvo",
+        "type": "blue",
+        "x": 54.56140350877193,
+        "y": 90.3125,
+        "rotation": 45
+      },
+      {
+        "id": "17848166634913n677",
+        "type": "ball",
+        "x": 94.91228070175438,
+        "y": 40.9375,
+        "rotation": 0
+      },
+      {
+        "id": "1784817682143erred",
+        "type": "cone-yellow",
+        "x": 70.70175438596492,
+        "y": 0.625,
+        "rotation": 0
+      },
+      {
+        "id": "1784817688794tv34b",
+        "type": "cone-yellow",
+        "x": 78.59649122807018,
+        "y": 1.25,
+        "rotation": 0
+      },
+      {
+        "id": "1784817703357ubxwj",
+        "type": "cone-yellow",
+        "x": 79.82456140350877,
+        "y": 98.75,
+        "rotation": 0
+      },
+      {
+        "id": "17848177098846d097",
+        "type": "cone-yellow",
+        "x": 71.75438596491227,
+        "y": 98.75,
+        "rotation": 0
+      },
+      {
+        "id": "17848177529787knd9",
+        "type": "blue-gk",
+        "x": 96.14035087719299,
+        "y": 50.9375,
+        "rotation": 0
+      },
+      {
+        "id": "17848179548241x9ih",
+        "type": "cone-yellow",
+        "x": 50,
+        "y": 43.75,
+        "rotation": 0
+      },
+      {
+        "id": "1784817959874h8icm",
+        "type": "cone-yellow",
+        "x": 50.175438596491226,
+        "y": 56.25,
+        "rotation": 0
+      }
+    ],
+    "boardHalf": [
+      {
+        "id": "1784816730922zn560",
+        "type": "blue-gk",
+        "x": 49.44289693593315,
+        "y": 7.8125,
+        "rotation": 180
+      },
+      {
+        "id": "1784816737905lkd45",
+        "type": "blue",
+        "x": 88.44011142061282,
+        "y": 85.3125,
+        "rotation": 315
+      },
+      {
+        "id": "178481674134671dcg",
+        "type": "blue",
+        "x": 8.774373259052922,
+        "y": 56.25,
+        "rotation": 45
+      },
+      {
+        "id": "1784816744274bekbd",
+        "type": "blue",
+        "x": 87.88300835654596,
+        "y": 21.5625,
+        "rotation": 315
+      },
+      {
+        "id": "1784816760153mnseh",
+        "type": "ball",
+        "x": 78.13370473537604,
+        "y": 78.75,
+        "rotation": 0
+      }
+    ]
+  }
+}

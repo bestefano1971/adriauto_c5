@@ -1,0 +1,734 @@
+{
+  "id": 1783610910359,
+  "date": "2026-08-18",
+  "type": "Allenamento",
+  "roster": {
+    "1780522424089": "A"
+  },
+  "logistic": "casa",
+  "warmup": {
+    "desc": "Luca",
+    "mins": "20",
+    "link": "",
+    "quartet": "",
+    "boardFull": [],
+    "boardHalf": []
+  },
+  "athleticPhase": {
+    "desc": "Luca",
+    "mins": "40",
+    "link": "",
+    "quartet": "",
+    "boardFull": [
+      {
+        "id": "1784691407214bezgw",
+        "type": "cone-red",
+        "x": 12.456140350877195,
+        "y": 11.25,
+        "rotation": 0
+      },
+      {
+        "id": "17846914079175zrup",
+        "type": "cone-red",
+        "x": 12.631578947368421,
+        "y": 2.1875000000000036,
+        "rotation": 0
+      },
+      {
+        "id": "1784691464998mtv31",
+        "type": "cone-red",
+        "x": 6.315789473684209,
+        "y": 25.625,
+        "rotation": 0
+      },
+      {
+        "id": "1784691465673447i9",
+        "type": "cone-red",
+        "x": 1.2280701754385994,
+        "y": 25.625,
+        "rotation": 0
+      },
+      {
+        "id": "1784691514182622fp",
+        "type": "blue",
+        "x": 2.8070175438596507,
+        "y": 4.6875,
+        "rotation": 135
+      },
+      {
+        "id": "1784691531585p5stz",
+        "type": "blue-gk",
+        "x": 17.192982456140356,
+        "y": 25,
+        "rotation": 315
+      },
+      {
+        "id": "1784691550824et2o4",
+        "type": "ball",
+        "x": 14.385964912280699,
+        "y": 21.5625,
+        "rotation": 315
+      },
+      {
+        "id": "1784691561110xym49",
+        "type": "blue-gk",
+        "x": 22.631578947368418,
+        "y": 30.9375,
+        "rotation": 315
+      },
+      {
+        "id": "1784691573521m97gn",
+        "type": "ball",
+        "x": 20,
+        "y": 28.4375,
+        "rotation": 315
+      },
+      {
+        "id": "1784691675131duil8",
+        "type": "obstacle",
+        "x": 2.4561403508771953,
+        "y": 63.125,
+        "rotation": 90
+      },
+      {
+        "id": "1784691776025ppzz1",
+        "type": "obstacle",
+        "x": 2.8070175438596516,
+        "y": 93.4375,
+        "rotation": 90
+      },
+      {
+        "id": "1784691870067245lj",
+        "type": "cone-yellow",
+        "x": 17.36842105263158,
+        "y": 81.25,
+        "rotation": 0
+      },
+      {
+        "id": "1784691870935z4tvs",
+        "type": "cone-yellow",
+        "x": 17.192982456140353,
+        "y": 70.3125,
+        "rotation": 0
+      },
+      {
+        "id": "1784691926138t5e8i",
+        "type": "red",
+        "x": 24.3859649122807,
+        "y": 76.5625,
+        "rotation": 270
+      },
+      {
+        "id": "178469199164335fe2",
+        "type": "blue",
+        "x": 8.421052631578952,
+        "y": 75.9375,
+        "rotation": 90
+      },
+      {
+        "id": "1784692045595r8slj",
+        "type": "ball",
+        "x": 11.052631578947363,
+        "y": 75,
+        "rotation": 90
+      },
+      {
+        "id": "1784692066650h4ng5",
+        "type": "arrow-h",
+        "x": 16.842105263157897,
+        "y": 75.9375,
+        "rotation": 0
+      },
+      {
+        "id": "1784692101337tzzdq",
+        "type": "arrow-curve",
+        "x": 10.877192982456137,
+        "y": 65.3125,
+        "rotation": 0
+      },
+      {
+        "id": "1784692122029uhblx",
+        "type": "arrow-curve",
+        "x": 20.35087719298246,
+        "y": 88.125,
+        "rotation": 180
+      },
+      {
+        "id": "1784692204585o6nno",
+        "type": "arrow-h",
+        "x": 10.701754385964918,
+        "y": 15.3125,
+        "rotation": 225
+      },
+      {
+        "id": "1784692220720yqvfr",
+        "type": "arrow-h",
+        "x": 8.421052631578945,
+        "y": 6.25,
+        "rotation": 0
+      },
+      {
+        "id": "17846922272305sffe",
+        "type": "arrow-h",
+        "x": 3.3333333333333357,
+        "y": 15.9375,
+        "rotation": 90
+      },
+      {
+        "id": "1784692316640vzqp2",
+        "type": "cone-blue",
+        "x": 35.263157894736835,
+        "y": 12.1875,
+        "rotation": 0
+      },
+      {
+        "id": "1784692336227d5e1j",
+        "type": "cone-blue",
+        "x": 41.05263157894736,
+        "y": 35.9375,
+        "rotation": 0
+      },
+      {
+        "id": "1784692344617lrmr2",
+        "type": "cone-blue",
+        "x": 35.438596491228076,
+        "y": 3.4375,
+        "rotation": 0
+      },
+      {
+        "id": "1784692411893wrq40",
+        "type": "red",
+        "x": 28.42105263157895,
+        "y": 76.5625,
+        "rotation": 270
+      },
+      {
+        "id": "1784692520073q8emm",
+        "type": "cone-blue",
+        "x": 45.96491228070175,
+        "y": 35.625,
+        "rotation": 0
+      },
+      {
+        "id": "1784692570910x056c",
+        "type": "blue-gk",
+        "x": 49.824561403508774,
+        "y": 36.875,
+        "rotation": 0
+      },
+      {
+        "id": "17846925799752uo79",
+        "type": "ball",
+        "x": 49.473684210526315,
+        "y": 31.5625,
+        "rotation": 0
+      },
+      {
+        "id": "1784692627054f6tod",
+        "type": "blue-gk",
+        "x": 49.122807017543856,
+        "y": 6.25,
+        "rotation": 225
+      },
+      {
+        "id": "1784692651448cv2lk",
+        "type": "red",
+        "x": 40,
+        "y": 16.5625,
+        "rotation": 45
+      },
+      {
+        "id": "1784692659123ybrlb",
+        "type": "arrow-h",
+        "x": 49.47368421052632,
+        "y": 20.3125,
+        "rotation": 270
+      },
+      {
+        "id": "17846926931417rbgh",
+        "type": "arrow-h",
+        "x": 42.98245614035089,
+        "y": 6.5625,
+        "rotation": 180
+      },
+      {
+        "id": "1784692735014vctk2",
+        "type": "arrow-h",
+        "x": 47.017543859649116,
+        "y": 15.3125,
+        "rotation": 135
+      },
+      {
+        "id": "1784693082968s9zsp",
+        "type": "blue-gk",
+        "x": 49.29824561403509,
+        "y": 93.75,
+        "rotation": 315
+      },
+      {
+        "id": "1784693085427jz10b",
+        "type": "ball",
+        "x": 50.17543859649123,
+        "y": 45,
+        "rotation": 45
+      },
+      {
+        "id": "178469311350367o1b",
+        "type": "obstacle",
+        "x": 49.298245614035075,
+        "y": 67.1875,
+        "rotation": 270
+      },
+      {
+        "id": "17846931332212hds6",
+        "type": "obstacle",
+        "x": 31.40350877192983,
+        "y": 93.4375,
+        "rotation": 90
+      },
+      {
+        "id": "1784693170414xsgwa",
+        "type": "cone-red",
+        "x": 38.94736842105264,
+        "y": 75.625,
+        "rotation": 0
+      },
+      {
+        "id": "1784693183215l1f4g",
+        "type": "cone-red",
+        "x": 38.771929824561404,
+        "y": 85.625,
+        "rotation": 0
+      },
+      {
+        "id": "17846931997911wwv2",
+        "type": "cone-red",
+        "x": 44.56140350877193,
+        "y": 75.3125,
+        "rotation": 0
+      },
+      {
+        "id": "1784693214102w4kpq",
+        "type": "cone-red",
+        "x": 44.56140350877193,
+        "y": 85.3125,
+        "rotation": 0
+      },
+      {
+        "id": "178469323663610thg",
+        "type": "blue-gk",
+        "x": 32.4561403508772,
+        "y": 64.6875,
+        "rotation": 135
+      },
+      {
+        "id": "1784693249986lumt6",
+        "type": "blue",
+        "x": 41.578947368421055,
+        "y": 80.625,
+        "rotation": 135
+      },
+      {
+        "id": "17846933323068bhg1",
+        "type": "blue-gk",
+        "x": 50,
+        "y": 50,
+        "rotation": 0
+      },
+      {
+        "id": "1784693336654pjqil",
+        "type": "ball",
+        "x": 47.01754385964912,
+        "y": 91.5625,
+        "rotation": 0
+      },
+      {
+        "id": "1784693364691am5ra",
+        "type": "arrow-h",
+        "x": 44.56140350877193,
+        "y": 86.25,
+        "rotation": 225
+      },
+      {
+        "id": "1784693384618ktap7",
+        "type": "arrow-curve",
+        "x": 43.50877192982456,
+        "y": 70.625,
+        "rotation": 0
+      },
+      {
+        "id": "1784693400970tgsut",
+        "type": "arrow-curve",
+        "x": 38.421052631578945,
+        "y": 91.25,
+        "rotation": 180
+      },
+      {
+        "id": "178469343754921w1q",
+        "type": "arrow-h",
+        "x": 35.96491228070175,
+        "y": 71.5625,
+        "rotation": 45
+      }
+    ],
+    "boardHalf": []
+  },
+  "mainPhase": {
+    "desc": "pòstazione di 1v1 in uscita da angòlò - postazione 1v1 con ricevente che legge la postura del corpo del portatore per scegliere il lato libero e fare goal - postazione 2v1 per uscire da pressione su lato ò centro - postazione 2v1 con pivot che riceve palla e deve fare goal subendo dòppia pressione",
+    "mins": "30",
+    "link": "",
+    "quartet": "",
+    "boardFull": [
+      {
+        "id": "1784712360568479ii",
+        "type": "blue-gk",
+        "x": 94.73684210526315,
+        "y": 50,
+        "rotation": 0
+      },
+      {
+        "id": "1784712368209qa6h1",
+        "type": "blue-gk",
+        "x": 4.7368421052631575,
+        "y": 49.375,
+        "rotation": 90
+      },
+      {
+        "id": "1784712374456krs46",
+        "type": "blue",
+        "x": 94.91228070175438,
+        "y": 9.6875,
+        "rotation": 225
+      },
+      {
+        "id": "1784712379358t1hgx",
+        "type": "blue",
+        "x": 94.91228070175438,
+        "y": 92.1875,
+        "rotation": 0
+      },
+      {
+        "id": "1784712385270yzusv",
+        "type": "blue",
+        "x": 54.03508771929825,
+        "y": 7.1875,
+        "rotation": 180
+      },
+      {
+        "id": "1784712391668i8e5z",
+        "type": "blue",
+        "x": 52.631578947368425,
+        "y": 91.875,
+        "rotation": 270
+      },
+      {
+        "id": "17847123987751utv2",
+        "type": "red",
+        "x": 82.63157894736842,
+        "y": 25.9375,
+        "rotation": 45
+      },
+      {
+        "id": "1784712405101rm7bt",
+        "type": "red",
+        "x": 83.68421052631578,
+        "y": 74.6875,
+        "rotation": 45
+      },
+      {
+        "id": "1784712411607tknyb",
+        "type": "red",
+        "x": 56.31578947368421,
+        "y": 46.25,
+        "rotation": 90
+      },
+      {
+        "id": "1784712426555hkq2f",
+        "type": "ball",
+        "x": 94.21052631578948,
+        "y": 42.8125,
+        "rotation": 0
+      },
+      {
+        "id": "1784712438329wo1av",
+        "type": "arrow-h",
+        "x": 94.38596491228068,
+        "y": 30,
+        "rotation": 270
+      },
+      {
+        "id": "1784712450881d3ssi",
+        "type": "arrow-h",
+        "x": 88.59649122807018,
+        "y": 10.3125,
+        "rotation": 180
+      },
+      {
+        "id": "1784712478151l1p9x",
+        "type": "arrow-h",
+        "x": 50.00000000000001,
+        "y": 19.375,
+        "rotation": 135
+      },
+      {
+        "id": "1784712496648w3td2",
+        "type": "arrow-h",
+        "x": 44.561403508771924,
+        "y": 90,
+        "rotation": 180
+      },
+      {
+        "id": "17848191474567briy",
+        "type": "cone-yellow",
+        "x": 70.87719298245614,
+        "y": 0,
+        "rotation": 0
+      },
+      {
+        "id": "1784819153144kf53j",
+        "type": "cone-yellow",
+        "x": 77.89473684210526,
+        "y": 0.625,
+        "rotation": 0
+      },
+      {
+        "id": "1784819162693fnvw7",
+        "type": "cone-yellow",
+        "x": 69.12280701754386,
+        "y": 97.8125,
+        "rotation": 0
+      },
+      {
+        "id": "1784819168049nm8x1",
+        "type": "cone-yellow",
+        "x": 77.36842105263159,
+        "y": 98.125,
+        "rotation": 0
+      },
+      {
+        "id": "1784819180288k5khy",
+        "type": "cone-yellow",
+        "x": 50.70175438596491,
+        "y": 41.25,
+        "rotation": 0
+      },
+      {
+        "id": "1784819185934ytphs",
+        "type": "cone-yellow",
+        "x": 50.175438596491226,
+        "y": 53.75,
+        "rotation": 0
+      }
+    ],
+    "boardHalf": [
+      {
+        "id": "1784712509412hrfi4",
+        "type": "blue-gk",
+        "x": 50.83565459610028,
+        "y": 9.375,
+        "rotation": 180
+      },
+      {
+        "id": "1784712516187p9uqg",
+        "type": "blue",
+        "x": 14.62395543175488,
+        "y": 20.625,
+        "rotation": 135
+      },
+      {
+        "id": "1784712526811ib7wc",
+        "type": "blue",
+        "x": 80.08356545961003,
+        "y": 31.5625,
+        "rotation": 315
+      },
+      {
+        "id": "1784712536858c8cij",
+        "type": "blue",
+        "x": 14.345403899721447,
+        "y": 75.3125,
+        "rotation": 45
+      },
+      {
+        "id": "17847125458773si0l",
+        "type": "ball",
+        "x": 21.58774373259053,
+        "y": 29.375,
+        "rotation": 315
+      },
+      {
+        "id": "17847125567536l3ia",
+        "type": "arrow-h",
+        "x": 14.623955431754872,
+        "y": 34.375,
+        "rotation": 90
+      },
+      {
+        "id": "1784712567118528hf",
+        "type": "arrow-h",
+        "x": 26.880222841225628,
+        "y": 70.9375,
+        "rotation": 315
+      },
+      {
+        "id": "17847125785929vy2e",
+        "type": "arrow-h",
+        "x": 73.11977715877437,
+        "y": 25,
+        "rotation": 225
+      },
+      {
+        "id": "1784712589695xsuam",
+        "type": "ball",
+        "x": 66.71309192200557,
+        "y": 19.0625,
+        "rotation": 315
+      },
+      {
+        "id": "17847125996554c1xz",
+        "type": "arrow-h",
+        "x": 70.05571030640668,
+        "y": 80,
+        "rotation": 225
+      }
+    ]
+  },
+  "main2Phase": {
+    "desc": "4v3 su una metà campo e 3<0 ad un tocco sull'altra metà campo. Se la difesa recupera palla può fare goal nelle porticine.\nL'obbiettivo del 4v3 è la chiusura delle linee di passaggio della difesa.\nL'obbiettivo del 3>0 di prima è la corretta postura per dare profondità all'azione ad un tocco.\nAumentare difficoltà della difesa con 5v3 o del possesso palla con 5v4 e 3v1 di prima nella metà campo opposta",
+    "mins": "25",
+    "link": "",
+    "quartet": "",
+    "boardFull": [
+      {
+        "id": "17847131386327nq3m",
+        "type": "blue-gk",
+        "x": 4.9122807017543835,
+        "y": 50,
+        "rotation": 90
+      },
+      {
+        "id": "178471315026638u46",
+        "type": "blue",
+        "x": 84.73684210526316,
+        "y": 90.625,
+        "rotation": 45
+      },
+      {
+        "id": "17847131584007ixrz",
+        "type": "blue",
+        "x": 72.10526315789474,
+        "y": 50,
+        "rotation": 0
+      },
+      {
+        "id": "17847131624442qtbv",
+        "type": "blue",
+        "x": 86.31578947368422,
+        "y": 8.4375,
+        "rotation": 135
+      },
+      {
+        "id": "17847131707291x7tf",
+        "type": "blue",
+        "x": 55.78947368421053,
+        "y": 8.4375,
+        "rotation": 135
+      },
+      {
+        "id": "1784713175682r1vjp",
+        "type": "blue",
+        "x": 54.21052631578947,
+        "y": 90.3125,
+        "rotation": 45
+      },
+      {
+        "id": "1784713186562e2xc0",
+        "type": "red",
+        "x": 80.35087719298245,
+        "y": 26.25,
+        "rotation": 45
+      },
+      {
+        "id": "1784713191243k2tx6",
+        "type": "red",
+        "x": 80.70175438596492,
+        "y": 69.0625,
+        "rotation": 135
+      },
+      {
+        "id": "1784713198094c7ujs",
+        "type": "red",
+        "x": 56.31578947368421,
+        "y": 50.3125,
+        "rotation": 90
+      },
+      {
+        "id": "1784713326449e5zgx",
+        "type": "ball",
+        "x": 92.28070175438597,
+        "y": 43.125,
+        "rotation": 0
+      },
+      {
+        "id": "17848189536396ht2o",
+        "type": "blue-gk",
+        "x": 95.61403508771929,
+        "y": 49.375,
+        "rotation": 0
+      }
+    ],
+    "boardHalf": [
+      {
+        "id": "1784713235240reaf5",
+        "type": "blue",
+        "x": 88.71866295264624,
+        "y": 86.5625,
+        "rotation": 315
+      },
+      {
+        "id": "1784713238241pmg84",
+        "type": "blue",
+        "x": 10.445682451253482,
+        "y": 46.875,
+        "rotation": 90
+      },
+      {
+        "id": "1784713242394ba7ay",
+        "type": "blue",
+        "x": 74.5125348189415,
+        "y": 24.062499999999996,
+        "rotation": 315
+      },
+      {
+        "id": "1784713257033ccfpx",
+        "type": "red",
+        "x": 70.61281337047353,
+        "y": 57.5,
+        "rotation": 135
+      },
+      {
+        "id": "17847132693952mgrr",
+        "type": "ball",
+        "x": 82.8690807799443,
+        "y": 82.1875,
+        "rotation": 315
+      },
+      {
+        "id": "178471328281963xgn",
+        "type": "blue-gk",
+        "x": 51.1142061281337,
+        "y": 7.5,
+        "rotation": 180
+      }
+    ]
+  },
+  "finalPhase": {
+    "desc": "Scaricò",
+    "mins": "5",
+    "link": "",
+    "quartet": "",
+    "boardFull": [],
+    "boardHalf": []
+  },
+  "notes": ""
+}
