@@ -7810,6 +7810,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         };
         window.exportPlayers = async function() {
+            const storedEvals = JSON.parse(localStorage.getItem('futsal_portal_evaluations') || '[]');
+            const storedTrainings = JSON.parse(localStorage.getItem('futsal_portal_trainings') || '[]');
+            const storedConvocations = JSON.parse(localStorage.getItem('futsal_portal_convocations') || '[]');
+
             const mappedPlayers = players.map(p => {
                 let mappedRole = "LT";
                 if (p.role === "Portiere" || p.role === "GK") mappedRole = "GK";
@@ -7817,29 +7821,71 @@ document.addEventListener('DOMContentLoaded', () => {
                 else if (p.role === "Pivot" || p.role === "PV") mappedRole = "PV";
                 else if (p.role === "Laterale" || p.role === "LT" || p.role === "Universale") mappedRole = "LT";
                 else if (p.role) mappedRole = p.role;
+
+                const playerEvals = storedEvals.filter(ev => String(ev.playerId) === String(p.id));
+                
+                let presences = 0;
+                storedTrainings.forEach(t => {
+                    if (t.roster && t.roster[p.id] === 'P') presences++;
+                });
+
+                let matchConvocations = 0;
+                storedConvocations.forEach(c => {
+                    if (c.roster && c.roster[p.id] === 'C') matchConvocations++;
+                });
                 
                 return {
                     ...p,
                     id: p.id,
                     num: String(p.number || p.num || ""),
+                    number: String(p.number || p.num || ""),
                     name: p.name || "",
                     team: p.team || "home",
                     role: mappedRole,
                     isGk: mappedRole === 'GK',
                     status: p.status || "bench",
                     activeSeconds: p.activeSeconds || 0,
+                    photo: p.photo || p.photoUrl || null,
                     photoUrl: p.photo || p.photoUrl || null,
                     height: String(p.height || ""),
                     weight: String(p.weight || ""),
                     foot: String(p.foot || ""),
-                    birthYear: String(p.birthYear || p.year || "")
+                    birthDate: String(p.birthDate || ""),
+                    birthYear: String(p.birthYear || p.year || (p.birthDate ? p.birthDate.split('-')[0] : "")),
+                    notes: p.notes || "",
+                    strengthGoal: p.strengthGoal || "",
+                    weaknessGoal: p.weaknessGoal || "",
+                    actionPlan: p.actionPlan || "",
+                    evaluations: playerEvals,
+                    stats: {
+                        presences: presences,
+                        convocations: matchConvocations
+                    }
                 };
             });
-            const dataStr = JSON.stringify({ players: mappedPlayers }, null, 2);
+
+            const exportPayload = {
+                exportDate: new Date().toISOString(),
+                totalPlayers: mappedPlayers.length,
+                players: mappedPlayers
+            };
+
+            const dataStr = JSON.stringify(exportPayload, null, 2);
+
+            // Copia direttamente negli appunti (Clipboard)
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
+                    await navigator.clipboard.writeText(dataStr);
+                } catch (clipErr) {
+                    console.log("Impossibile copiare negli appunti via API Clipboard:", clipErr);
+                }
+            }
+
+            // Salvataggio file JSON / Download Fallback
             try {
                 if (window.showSaveFilePicker) {
                     const handle = await window.showSaveFilePicker({
-                        suggestedName: "rosa_squadra_" + new Date().toISOString().slice(0,10) + ".json",
+                        suggestedName: "rosa_completa_" + new Date().toISOString().slice(0,10) + ".json",
                         types: [{
                             description: 'JSON Files',
                             accept: {'application/json': ['.json']}
@@ -7848,23 +7894,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     const writable = await handle.createWritable();
                     await writable.write(dataStr);
                     await writable.close();
-                    showToast("Esportazione completata!", "success");
+                    showToast("Tutti i dati dei giocatori esportati e copiati negli appunti!", "success");
                 } else {
                     throw new Error("File System Access API non supportata");
                 }
             } catch (err) {
                 if (err.name !== 'AbortError') {
-                    // Fallback
                     const blob = new Blob([dataStr], {type: "application/json;charset=utf-8"});
                     const url = URL.createObjectURL(blob);
                     const downloadAnchorNode = document.createElement('a');
                     downloadAnchorNode.setAttribute("href", url);
-                    downloadAnchorNode.setAttribute("download", "rosa_squadra_" + new Date().toISOString().slice(0,10) + ".json");
+                    downloadAnchorNode.setAttribute("download", "rosa_completa_" + new Date().toISOString().slice(0,10) + ".json");
                     document.body.appendChild(downloadAnchorNode);
                     downloadAnchorNode.click();
                     downloadAnchorNode.remove();
                     URL.revokeObjectURL(url);
-                    showToast("Esportazione scaricata.", "info");
+                    showToast("Tutti i dati dei giocatori scaricati e copiati negli appunti!", "success");
+                } else {
+                    showToast("Dati rosa copiati negli appunti!", "info");
                 }
             }
         };
