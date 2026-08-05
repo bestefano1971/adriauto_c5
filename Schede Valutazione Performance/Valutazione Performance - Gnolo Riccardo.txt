@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Gnolo Riccardo
+Numero Maglia: #5 | Ruolo: Laterale
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 8.5/10
+- Tecnica Individuale: 7.3/10
+- Condizione Fisica: 7.0/10
+- Tattica: 8.3/10
+- MEDIA GENERALE GIOCATORE: 7.9/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 8/10
+  - Stress: 8/10
+  - Grinta: 8/10
+  - Team: 10/10
+[Tecnica Individuale]
+  - Controllo: 8/10
+  - Passaggio: 8/10
+  - Tiro: 7/10
+  - Dribbling: 6/10
+[Condizione Fisica]
+  - Velocità: 8/10
+  - Resistenza: 8/10
+  - Forza: 7/10
+  - Agilità: 8/10
+[Tattica]
+  - Movimento: 8/10
+  - Difesa: 8/10
+  - Transizioni: 9/10
+  - Lettura: 8/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Team (10/10)
+  - Obiettivo e Piano di Valorizzazione:
+    Secòndò palò, Tenacia, pressiòne, Tecnica
+
+Punto Debole Rilevato: fisi-AgilitÃ  (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    piede DX e 1v1 òffensivò
+  - Piano d'Azione (Action Plan):
+    Esercizi con scaletta coordinativa rapida seguiti da scatto con arresto e ripartenza.
+
+==================================================

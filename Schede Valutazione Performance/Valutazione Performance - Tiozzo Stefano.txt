@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Tiozzo Stefano
+Numero Maglia: #1 | Ruolo: Portiere
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 8.3/10
+- Tecnica Individuale: 7.3/10
+- Condizione Fisica: 7.0/10
+- Tattica: 7.5/10
+- MEDIA GENERALE GIOCATORE: 7.6/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 8/10
+  - Stress: 7/10
+  - Grinta: 10/10
+  - Team: 8/10
+[Tecnica Individuale]
+  - Controllo: 7/10
+  - Passaggio: 7/10
+  - Tiro: 8/10
+  - Dribbling: 7/10
+[Condizione Fisica]
+  - Velocità: 7/10
+  - Resistenza: 8/10
+  - Forza: 8/10
+  - Agilità: 7/10
+[Tattica]
+  - Movimento: 7/10
+  - Difesa: 7/10
+  - Transizioni: 8/10
+  - Lettura: 8/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Leadership & Coraggio (10/10)
+  - Obiettivo e Piano di Valorizzazione:
+    grinta, determinazione, forza fisica
+
+Punto Debole Rilevato: fisi-AgilitÃ  (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    lato destro
+  - Piano d'Azione (Action Plan):
+    Nessuna nota inserita
+
+==================================================

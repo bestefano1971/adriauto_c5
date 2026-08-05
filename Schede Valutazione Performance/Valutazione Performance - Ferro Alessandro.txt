@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Ferro Alessandro
+Numero Maglia: #21 | Ruolo: Pivot
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 7.8/10
+- Tecnica Individuale: 7.5/10
+- Condizione Fisica: 7.0/10
+- Tattica: 7.0/10
+- MEDIA GENERALE GIOCATORE: 7.5/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 8/10
+  - Stress: 8/10
+  - Grinta: 8/10
+  - Team: 7/10
+[Tecnica Individuale]
+  - Controllo: 7/10
+  - Passaggio: 8/10
+  - Tiro: 8/10
+  - Dribbling: 7/10
+[Condizione Fisica]
+  - Velocità: 8/10
+  - Resistenza: 7/10
+  - Forza: 8/10
+  - Agilità: 8/10
+[Tattica]
+  - Movimento: 7/10
+  - Difesa: 7/10
+  - Transizioni: 7/10
+  - Lettura: 7/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Focus (8/10)
+  - Obiettivo e Piano di Valorizzazione:
+    Tiro e velocità
+
+Punto Debole Rilevato: fisi-AgilitÃ  (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    Fase difensiva e ritmo partita
+  - Piano d'Azione (Action Plan):
+    .
+
+==================================================

@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Porzionato Manuel
+Numero Maglia: #10 | Ruolo: Universale
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 9.5/10
+- Tecnica Individuale: 8.8/10
+- Condizione Fisica: 6.8/10
+- Tattica: 8.5/10
+- MEDIA GENERALE GIOCATORE: 8.5/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 10/10
+  - Stress: 9/10
+  - Grinta: 10/10
+  - Team: 9/10
+[Tecnica Individuale]
+  - Controllo: 10/10
+  - Passaggio: 10/10
+  - Tiro: 8/10
+  - Dribbling: 7/10
+[Condizione Fisica]
+  - Velocità: 6/10
+  - Resistenza: 7/10
+  - Forza: 9/10
+  - Agilità: 7/10
+[Tattica]
+  - Movimento: 8/10
+  - Difesa: 8/10
+  - Transizioni: 8/10
+  - Lettura: 10/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Focus (10/10)
+  - Obiettivo e Piano di Valorizzazione:
+    lettura situaziòni di giòcò
+
+Punto Debole Rilevato: Velocità (6/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    velòcità di còrsa
+  - Piano d'Azione (Action Plan):
+    Lavoro di scatti brevi con cambi di direzione e balzi esplosivi (3 serie da 6 ripetizioni).
+
+==================================================

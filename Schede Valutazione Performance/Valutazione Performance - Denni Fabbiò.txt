@@ -1,0 +1,48 @@
+==================================================
+FUTSAL DASHBOARD - VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Denni Fabbiò
+Data Valutazione: 05-08-2026
+--------------------------------------------------
+
+1. MEDIE PER CATEGORIA (GIOCATORE)
+- Stato Psicologico: 7.3/10
+- Tecnica Individuale: 7.0/10
+- Condizione Fisica: 7.8/10
+- Tattica: 7.5/10
+- MEDIA GENERALE GIOCATORE: 7.6/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (GIOCATORE)
+[Stato Psicologico]
+  - Focus: 7/10
+  - Stress: 7/10
+  - Grinta: 9/10
+  - Team: 6/10
+[Tecnica Individuale]
+  - Controllo: 7/10
+  - Passaggio: 7/10
+  - Tiro: 7/10
+  - Dribbling: 7/10
+[Condizione Fisica]
+  - Velocità: 9/10
+  - Resistenza: 9/10
+  - Forza: 8/10
+  - Agilità: 9/10
+[Tattica]
+  - Movimento: 7/10
+  - Difesa: 8/10
+  - Transizioni: 8/10
+  - Lettura: 7/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Grinta (9/10)
+  - Obiettivo e Piano di Valorizzazione:
+    velocità, rapiditá intercetti, pressing e grinta
+
+Punto Debole Rilevato: fisi-AgilitÃ  (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    mentalità a volte verso di me a livello personale
+  - Piano d'Azione (Action Plan):
+    Esercizi con scaletta coordinativa rapida seguiti da scatto con arresto e ripartenza.
+
+==================================================

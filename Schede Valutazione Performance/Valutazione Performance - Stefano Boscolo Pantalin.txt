@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Stefano Boscolo Pantalin
+Numero Maglia: #5 | Ruolo: Back
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 7.3/10
+- Tecnica Individuale: 6.5/10
+- Condizione Fisica: 6.8/10
+- Tattica: 8.0/10
+- MEDIA GENERALE GIOCATORE: 7.3/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 7/10
+  - Stress: 7/10
+  - Grinta: 8/10
+  - Team: 7/10
+[Tecnica Individuale]
+  - Controllo: 6/10
+  - Passaggio: 7/10
+  - Tiro: 6/10
+  - Dribbling: 7/10
+[Condizione Fisica]
+  - Velocità: 7/10
+  - Resistenza: 7/10
+  - Forza: 8/10
+  - Agilità: 7/10
+[Tattica]
+  - Movimento: 8/10
+  - Difesa: 8/10
+  - Transizioni: 8/10
+  - Lettura: 8/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Grinta (8/10)
+  - Obiettivo e Piano di Valorizzazione:
+    Caparbio e grintoso, legge le situazioni, non molla mai oltre al proprio limite.
+
+Punto Debole Rilevato: fisi-AgilitÃ  (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    Migliorare la coordinazione e la rapidità cambi di direzione
+  - Piano d'Azione (Action Plan):
+    la tecnica è buona per la categoria ma vorrei essere in grado di utilizzare il mio piede debole meglio con il controllo di suola, da migliorare generalmente anche la tecnica.
+
+==================================================

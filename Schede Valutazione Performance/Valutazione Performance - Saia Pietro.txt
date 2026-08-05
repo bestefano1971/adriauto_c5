@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Saia Pietro
+Numero Maglia: #8 | Ruolo: Pivot
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 9.0/10
+- Tecnica Individuale: 8.8/10
+- Condizione Fisica: 8.5/10
+- Tattica: 8.5/10
+- MEDIA GENERALE GIOCATORE: 8.9/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 9/10
+  - Stress: 9/10
+  - Grinta: 9/10
+  - Team: 9/10
+[Tecnica Individuale]
+  - Controllo: 9/10
+  - Passaggio: 9/10
+  - Tiro: 9/10
+  - Dribbling: 8/10
+[Condizione Fisica]
+  - Velocità: 10/10
+  - Resistenza: 9/10
+  - Forza: 10/10
+  - Agilità: 8/10
+[Tattica]
+  - Movimento: 8/10
+  - Difesa: 8/10
+  - Transizioni: 9/10
+  - Lettura: 9/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Velocità (10/10)
+  - Obiettivo e Piano di Valorizzazione:
+    lucidià menTale, ambidestro, comunicazione con i compagni
+
+Punto Debole Rilevato: Dribbling (8/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    migliorare 1>1 difensiva e offensiva
+  - Piano d'Azione (Action Plan):
+    Esercitazioni di 1vs1 in spazi molto stretti (es. corridoi di 3 metri) incentrati sulla finta di corpo.
+
+==================================================

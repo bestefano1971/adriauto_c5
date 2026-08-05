@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Zanirato Luca
+Numero Maglia: #12 | Ruolo: Portiere
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 7.0/10
+- Tecnica Individuale: 7.3/10
+- Condizione Fisica: 6.3/10
+- Tattica: 6.0/10
+- MEDIA GENERALE GIOCATORE: 6.7/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 7/10
+  - Stress: 8/10
+  - Grinta: 6/10
+  - Team: 7/10
+[Tecnica Individuale]
+  - Controllo: 8/10
+  - Passaggio: 8/10
+  - Tiro: 7/10
+  - Dribbling: 6/10
+[Condizione Fisica]
+  - Velocità: 6/10
+  - Resistenza: 7/10
+  - Forza: 7/10
+  - Agilità: 6/10
+[Tattica]
+  - Movimento: 6/10
+  - Difesa: 7/10
+  - Transizioni: 5/10
+  - Lettura: 6/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Pressione 1vs1 (8/10)
+  - Obiettivo e Piano di Valorizzazione:
+    mantenere costante concentrazione nella fasi di pressione prolungate o basso ritmo
+
+Punto Debole Rilevato: fisi-Agilità (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    disattenzioni su retropassaggi o deviazioni improvvise
+  - Piano d'Azione (Action Plan):
+    Sessioni di mobilità articolare e stretching dinamico specifico per portieri.
+
+==================================================

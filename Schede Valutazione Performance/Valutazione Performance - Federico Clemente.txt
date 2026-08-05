@@ -1,0 +1,48 @@
+==================================================
+FUTSAL DASHBOARD - VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Federico Clemente
+Data Valutazione: 05-08-2026
+--------------------------------------------------
+
+1. MEDIE PER CATEGORIA (GIOCATORE)
+- Stato Psicologico: 6.8/10
+- Tecnica Individuale: 7.0/10
+- Condizione Fisica: 6.0/10
+- Tattica: 5.8/10
+- MEDIA GENERALE GIOCATORE: 6.5/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (GIOCATORE)
+[Stato Psicologico]
+  - Focus: 7/10
+  - Stress: 6/10
+  - Grinta: 7/10
+  - Team: 7/10
+[Tecnica Individuale]
+  - Controllo: 7/10
+  - Passaggio: 7/10
+  - Tiro: 8/10
+  - Dribbling: 6/10
+[Condizione Fisica]
+  - Velocità: 8/10
+  - Resistenza: 5/10
+  - Forza: 6/10
+  - Agilità: 7/10
+[Tattica]
+  - Movimento: 6/10
+  - Difesa: 5/10
+  - Transizioni: 6/10
+  - Lettura: 6/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Tiro (8/10)
+  - Obiettivo e Piano di Valorizzazione:
+    Rapidità
+
+Punto Debole Rilevato: Resistenza (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    attacco/difesa col quinto
+  - Piano d'Azione (Action Plan):
+    Programma HIIT specifico per il futsal: scatti sui 15 metri alternati a recuperi attivi.
+
+==================================================

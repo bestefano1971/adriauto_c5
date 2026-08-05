@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Ismael Gallardo
+Numero Maglia: #8 | Ruolo: Laterale
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 8.5/10
+- Tecnica Individuale: 8.3/10
+- Condizione Fisica: 7.3/10
+- Tattica: 8.5/10
+- MEDIA GENERALE GIOCATORE: 8.4/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 8/10
+  - Stress: 9/10
+  - Grinta: 8/10
+  - Team: 9/10
+[Tecnica Individuale]
+  - Controllo: 9/10
+  - Passaggio: 8/10
+  - Tiro: 8/10
+  - Dribbling: 8/10
+[Condizione Fisica]
+  - Velocità: 8/10
+  - Resistenza: 9/10
+  - Forza: 7/10
+  - Agilità: 9/10
+[Tattica]
+  - Movimento: 9/10
+  - Difesa: 7/10
+  - Transizioni: 9/10
+  - Lettura: 9/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Stress (9/10)
+  - Obiettivo e Piano di Valorizzazione:
+    Intelligenza posizionale e fasi di gioco. La velocità e il dribbling, ambidestro. giocare di squadra.
+
+Punto Debole Rilevato: Forza (7/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    diffesa, non credo in quello che posso fare forse per paura di sbagliare. capacità di far autocritica. poca Fisicità in confronto a altri giocatori
+  - Piano d'Azione (Action Plan):
+    Lavoro di potenziamento muscolare della parte inferiore (squat/affondi) associato a core-stability.
+
+==================================================

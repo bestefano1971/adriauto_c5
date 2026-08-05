@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Longhin Pietro
+Numero Maglia: #17 | Ruolo: Laterale
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 8.3/10
+- Tecnica Individuale: 8.0/10
+- Condizione Fisica: 7.0/10
+- Tattica: 6.8/10
+- MEDIA GENERALE GIOCATORE: 7.6/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 9/10
+  - Stress: 8/10
+  - Grinta: 8/10
+  - Team: 8/10
+[Tecnica Individuale]
+  - Controllo: 8/10
+  - Passaggio: 8/10
+  - Tiro: 8/10
+  - Dribbling: 8/10
+[Condizione Fisica]
+  - Velocità: 8/10
+  - Resistenza: 7/10
+  - Forza: 8/10
+  - Agilità: 7/10
+[Tattica]
+  - Movimento: 7/10
+  - Difesa: 6/10
+  - Transizioni: 7/10
+  - Lettura: 7/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Focus (9/10)
+  - Obiettivo e Piano di Valorizzazione:
+    1v1 offensivo, tiro
+
+Punto Debole Rilevato: fisi-AgilitÃ  (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    cerca il dribbling sempre, movimento senza palla, nessuna esperienza di categoria
+  - Piano d'Azione (Action Plan):
+    Esercizi con scaletta coordinativa rapida seguiti da scatto con arresto e ripartenza.
+
+==================================================

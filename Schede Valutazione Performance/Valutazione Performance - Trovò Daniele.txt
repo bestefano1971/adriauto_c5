@@ -1,0 +1,48 @@
+==================================================
+FUTSAL DASHBOARD - VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Trovò Daniele
+Data Valutazione: 05-08-2026
+--------------------------------------------------
+
+1. MEDIE PER CATEGORIA (GIOCATORE)
+- Stato Psicologico: 8.3/10
+- Tecnica Individuale: 7.5/10
+- Condizione Fisica: 7.0/10
+- Tattica: 7.8/10
+- MEDIA GENERALE GIOCATORE: 7.8/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (GIOCATORE)
+[Stato Psicologico]
+  - Focus: 9/10
+  - Stress: 8/10
+  - Grinta: 9/10
+  - Team: 7/10
+[Tecnica Individuale]
+  - Controllo: 8/10
+  - Passaggio: 7/10
+  - Tiro: 7/10
+  - Dribbling: 8/10
+[Condizione Fisica]
+  - Velocità: 8/10
+  - Resistenza: 8/10
+  - Forza: 7/10
+  - Agilità: 8/10
+[Tattica]
+  - Movimento: 7/10
+  - Difesa: 8/10
+  - Transizioni: 9/10
+  - Lettura: 7/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Focus (9/10)
+  - Obiettivo e Piano di Valorizzazione:
+    team building, spirito di sacrificio, creare superiorità numerica
+
+Punto Debole Rilevato: fisi-AgilitÃ  (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    difesa del pallone spalle alla porta,  visione di gioco, rapidità di pensiero e qualità dei gesti tecnici in generale
+  - Piano d'Azione (Action Plan):
+    Esercizi con scaletta coordinativa rapida seguiti da scatto con arresto e ripartenza.
+
+==================================================

@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Nicola Tiozzo Pagio
+Numero Maglia: #2 | Ruolo: Universale
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 8.0/10
+- Tecnica Individuale: 6.3/10
+- Condizione Fisica: 6.5/10
+- Tattica: 7.5/10
+- MEDIA GENERALE GIOCATORE: 7.2/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 8/10
+  - Stress: 8/10
+  - Grinta: 8/10
+  - Team: 8/10
+[Tecnica Individuale]
+  - Controllo: 8/10
+  - Passaggio: 8/10
+  - Tiro: 5/10
+  - Dribbling: 4/10
+[Condizione Fisica]
+  - Velocità: 7/10
+  - Resistenza: 6/10
+  - Forza: 8/10
+  - Agilità: 7/10
+[Tattica]
+  - Movimento: 7/10
+  - Difesa: 8/10
+  - Transizioni: 7/10
+  - Lettura: 8/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Focus (8/10)
+  - Obiettivo e Piano di Valorizzazione:
+    Pòsiziòne, visiòne di giòcò, caraTTere
+
+Punto Debole Rilevato: Dribbling (4/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    Tirò, dribbling, pòca resisTenza
+  - Piano d'Azione (Action Plan):
+    Esercitazioni di 1vs1 in spazi molto stretti (es. corridoi di 3 metri) incentrati sulla finta di corpo.
+
+==================================================

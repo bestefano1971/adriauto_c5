@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Iapicone Giovanni
+Numero Maglia: #11 | Ruolo: Pivot
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 8.0/10
+- Tecnica Individuale: 7.0/10
+- Condizione Fisica: 7.0/10
+- Tattica: 7.5/10
+- MEDIA GENERALE GIOCATORE: 7.5/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 8/10
+  - Stress: 6/10
+  - Grinta: 10/10
+  - Team: 8/10
+[Tecnica Individuale]
+  - Controllo: 7/10
+  - Passaggio: 7/10
+  - Tiro: 7/10
+  - Dribbling: 7/10
+[Condizione Fisica]
+  - Velocità: 7/10
+  - Resistenza: 8/10
+  - Forza: 8/10
+  - Agilità: 7/10
+[Tattica]
+  - Movimento: 8/10
+  - Difesa: 8/10
+  - Transizioni: 7/10
+  - Lettura: 7/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Grinta (10/10)
+  - Obiettivo e Piano di Valorizzazione:
+    Cuore e gambe, fase difensiva, fare gruppo, mi piace anche dietro
+
+Punto Debole Rilevato: fisi-AgilitÃ  (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    sinistro, ansia, permalòso, mi chiudò su me stesso se preso di mira  o se in forma
+  - Piano d'Azione (Action Plan):
+    Esercizi con scaletta coordinativa rapida seguiti da scatto con arresto e ripartenza.
+
+==================================================

@@ -1,0 +1,48 @@
+==================================================
+FUTSAL DASHBOARD - VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Dino Coviello
+Data Valutazione: 05-08-2026
+--------------------------------------------------
+
+1. MEDIE PER CATEGORIA (GIOCATORE)
+- Stato Psicologico: 8.3/10
+- Tecnica Individuale: 7.3/10
+- Condizione Fisica: 6.5/10
+- Tattica: 7.0/10
+- MEDIA GENERALE GIOCATORE: 7.4/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (GIOCATORE)
+[Stato Psicologico]
+  - Focus: 8/10
+  - Stress: 8/10
+  - Grinta: 9/10
+  - Team: 8/10
+[Tecnica Individuale]
+  - Controllo: 8/10
+  - Passaggio: 8/10
+  - Tiro: 7/10
+  - Dribbling: 6/10
+[Condizione Fisica]
+  - Velocità: 7/10
+  - Resistenza: 7/10
+  - Forza: 7/10
+  - Agilità: 8/10
+[Tattica]
+  - Movimento: 7/10
+  - Difesa: 6/10
+  - Transizioni: 7/10
+  - Lettura: 8/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Grinta (9/10)
+  - Obiettivo e Piano di Valorizzazione:
+    lettura di gioco, grinta e cooperare con la Squadra
+
+Punto Debole Rilevato: Dribbling (6/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    velocità e un po il peso
+  - Piano d'Azione (Action Plan):
+    Esercitazioni di 1vs1 in spazi molto stretti (es. corridoi di 3 metri) incentrati sulla finta di corpo.
+
+==================================================

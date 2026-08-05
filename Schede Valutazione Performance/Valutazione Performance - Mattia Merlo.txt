@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Mattia Merlo
+Numero Maglia: #22 | Ruolo: Portiere
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 7.3/10
+- Tecnica Individuale: 7.3/10
+- Condizione Fisica: 6.8/10
+- Tattica: 6.8/10
+- MEDIA GENERALE GIOCATORE: 7.1/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 7/10
+  - Stress: 7/10
+  - Grinta: 8/10
+  - Team: 7/10
+[Tecnica Individuale]
+  - Controllo: 7/10
+  - Passaggio: 9/10
+  - Tiro: 7/10
+  - Dribbling: 6/10
+[Condizione Fisica]
+  - Velocità: 8/10
+  - Resistenza: 7/10
+  - Forza: 7/10
+  - Agilità: 7/10
+[Tattica]
+  - Movimento: 7/10
+  - Difesa: 7/10
+  - Transizioni: 6/10
+  - Lettura: 7/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Rinvio & Rilancio (9/10)
+  - Obiettivo e Piano di Valorizzazione:
+    Mantenere costante la concentrazione anche nelle fasi di pressione prolungata o basso ritmo.
+
+Punto Debole Rilevato: fisi-AgilitÃ  (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    Eliminare le disattenzioni sui retropassaggi e sui rimbalzi improvvisi.
+  - Piano d'Azione (Action Plan):
+    Nessuna nota inserita
+
+==================================================

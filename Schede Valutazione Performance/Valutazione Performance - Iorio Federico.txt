@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Iorio Federico
+Numero Maglia: #9 | Ruolo: Laterale
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 7.8/10
+- Tecnica Individuale: 7.3/10
+- Condizione Fisica: 6.8/10
+- Tattica: 9.0/10
+- MEDIA GENERALE GIOCATORE: 7.9/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 9/10
+  - Stress: 7/10
+  - Grinta: 8/10
+  - Team: 7/10
+[Tecnica Individuale]
+  - Controllo: 8/10
+  - Passaggio: 8/10
+  - Tiro: 7/10
+  - Dribbling: 6/10
+[Condizione Fisica]
+  - Velocità: 9/10
+  - Resistenza: 7/10
+  - Forza: 6/10
+  - Agilità: 8/10
+[Tattica]
+  - Movimento: 9/10
+  - Difesa: 8/10
+  - Transizioni: 10/10
+  - Lettura: 9/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Transizioni (10/10)
+  - Obiettivo e Piano di Valorizzazione:
+    transizioni, posizionamento, movimento senza palla, difesa, comprensione gioco
+
+Punto Debole Rilevato: fisi-Agilità (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    dribbling, forza, personalita, tiro, resistenza
+  - Piano d'Azione (Action Plan):
+    Nessuna nota inserita
+
+==================================================

@@ -1,0 +1,49 @@
+==================================================
+FUTSAL DASHBOARD - SCHEDA VALUTAZIONE PERFORMANCE
+==================================================
+Giocatore: Sòufiane Kechab
+Numero Maglia: #9 | Ruolo: Laterale
+Data Ultimo Aggiornamento: 05-08-2026
+==================================================
+
+1. MEDIE PER CATEGORIA (ATTUALI)
+- Stato Psicologico: 8.3/10
+- Tecnica Individuale: 8.3/10
+- Condizione Fisica: 7.3/10
+- Tattica: 7.5/10
+- MEDIA GENERALE GIOCATORE: 8.1/10
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (ATTUALI)
+[Stato Psicologico]
+  - Focus: 8/10
+  - Stress: 7/10
+  - Grinta: 9/10
+  - Team: 9/10
+[Tecnica Individuale]
+  - Controllo: 8/10
+  - Passaggio: 8/10
+  - Tiro: 8/10
+  - Dribbling: 9/10
+[Condizione Fisica]
+  - Velocità: 9/10
+  - Resistenza: 7/10
+  - Forza: 8/10
+  - Agilità: 9/10
+[Tattica]
+  - Movimento: 8/10
+  - Difesa: 6/10
+  - Transizioni: 8/10
+  - Lettura: 8/10
+
+3. PIANO DI CRESCITA INDIVIDUALE
+Punto di Forza Rilevato: Grinta (9/10)
+  - Obiettivo e Piano di Valorizzazione:
+    Velocità, Dribbling 1v1, Penetrazione, Sfruttare gli spazi, Ottenere falli vicino all'area
+
+Punto Debole Rilevato: fisi-Agilità (5/10)
+  - Obiettivo Specifico di Miglioramento (Goal):
+    Fase difensiva, Migliorare la concentrazione in difesa
+  - Piano d'Azione (Action Plan):
+    Nessuna nota inserita
+
+==================================================
