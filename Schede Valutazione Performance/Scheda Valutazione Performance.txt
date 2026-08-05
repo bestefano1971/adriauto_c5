@@ -1,0 +1,43 @@
+==================================================
+AUTO VALUTAZIONE PERFORMANCE
+==================================================
+1. SCHEDA GIOCATORE
+  - Data Valutazione:  
+  - Nominativo:
+  - Data di nascita:
+  - Altezza:
+  - Peso:
+  - Precedenti esperienze di C5:
+  - Professione:
+  - Piede dominante: (Dx - SX - Ambi)
+  - Ruolo: (Portiere - Back - Lat. off. - Lat. Dif. - Pivot - Universale)
+
+2. DETTAGLIO PUNTEGGI INDIVIDUALI (da 1 a 10)
+[Stato Psicologico]
+  - Focus (Concentrazione mentale e costanza dell'attenzione): 
+  - Stress (Gestione della pressione emotiva e delle situazioni critiche): 
+  - Grinta (Spirito combattivo, determinazione e sacrificio): 
+  - Team (Spirito cooperativo, comunicazione e supporto reciproco):
+ 
+[Tecnica Individuale]
+  - Controllo (Qualità e orientamento della ricezione della palla): 
+  - Passaggio (Precisione, forza e scelta del tempo nel servire i compagni): 
+  - Tiro (Precisione e potenza nella conclusione in porta): 
+  - Dribbling (Uno contro uno e capacità di superare l'avversario): 
+
+[Condizione Fisica]
+  - velocità (Accelerazione, progressione e velocità di punta): 
+  - Resistenza (Capacità di mantenere un'intensità elevata nel tempo): 
+  - Forza (Tenuta nei contrasti fisici e difesa della palla col corpo): 
+  - Agilità (Velocità nei cambi di direzione e coordinazione nello stretto): 
+
+[Tattica]
+  - Movimento (Smarcamento e occupazione degli spazi senza palla):
+  - Difesa (Posizionamento, postura nell'1v1 e tempismo d'intercetto): 
+  - Transizioni (Reattività nel ripiegamento difensivo e contropiede):
+  - Lettura (Comprensione del gioco e velocità nel prendere decisioni):
+
+3. STATO INDIVIDUALE
+  - Punti di Forza: 
+  - Punti Deboli:
+  - Consigli di squadra
