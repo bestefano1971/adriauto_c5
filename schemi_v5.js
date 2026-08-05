@@ -117,10 +117,36 @@ function renderSchemiGrid() {
     grid.innerHTML = '';
     document.getElementById('schemi-list-title').textContent = selectedCategory === 'Tutti' ? 'Tutti gli Schemi' : `Schemi: ${selectedCategory}`;
 
-    const filtered = selectedCategory === 'Tutti' ? schemi : schemi.filter(s => s.category === selectedCategory);
+    let filtered = selectedCategory === 'Tutti' ? schemi : schemi.filter(s => s.category === selectedCategory);
+
+    // Apply Defense Filter
+    const filterDefenseEl = document.getElementById('schema-filter-defense');
+    const filterVal = filterDefenseEl ? filterDefenseEl.value : 'all';
+    if (filterVal === 'uomo') {
+        filtered = filtered.filter(s => s.defenseUomo);
+    } else if (filterVal === 'zona') {
+        filtered = filtered.filter(s => s.defenseZona);
+    }
+
+    // Apply Sorting (non-destructive)
+    const sortDefenseEl = document.getElementById('schema-sort-defense');
+    const sortVal = sortDefenseEl ? sortDefenseEl.value : 'default';
+    if (sortVal === 'uomo-first') {
+        filtered = [...filtered].sort((a, b) => {
+            const valA = a.defenseUomo ? 1 : 0;
+            const valB = b.defenseUomo ? 1 : 0;
+            return valB - valA;
+        });
+    } else if (sortVal === 'zona-first') {
+        filtered = [...filtered].sort((a, b) => {
+            const valA = a.defenseZona ? 1 : 0;
+            const valB = b.defenseZona ? 1 : 0;
+            return valB - valA;
+        });
+    }
 
     if (filtered.length === 0) {
-        grid.innerHTML = `<p style="color:var(--text-muted);">Nessuno schema trovato in questa categoria.</p>`;
+        grid.innerHTML = `<p style="color:var(--text-muted);">Nessuno schema trovato.</p>`;
         return;
     }
 
@@ -144,9 +170,33 @@ function renderSchemiGrid() {
         card.addEventListener('dragenter', handleDragEnter);
         card.addEventListener('dragleave', handleDragLeave);
         card.addEventListener('dragend', handleDragEnd);
+
+        // Visual badges for defense
+        let defenseBadges = '';
+        if (schema.defenseUomo) {
+            defenseBadges += `<span style="font-size: 0.7rem; color: #fff; background: rgba(59, 130, 246, 0.25); padding: 0.15rem 0.45rem; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.5); font-weight: 500;">Uomo</span>`;
+        }
+        if (schema.defenseZona) {
+            defenseBadges += `<span style="font-size: 0.7rem; color: #fff; background: rgba(16, 185, 129, 0.25); padding: 0.15rem 0.45rem; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.5); font-weight: 500;">Zona</span>`;
+        }
+        if (defenseBadges) {
+            defenseBadges = `<div style="display:flex; gap:0.4rem; align-items:center; margin-top:0.25rem;">
+                                <span style="font-size:0.7rem; color: var(--text-muted);">Difesa:</span>
+                                ${defenseBadges}
+                             </div>`;
+        } else {
+            defenseBadges = `<div style="display:flex; gap:0.4rem; align-items:center; margin-top:0.25rem;">
+                                <span style="font-size:0.7rem; color: var(--text-muted);">Difesa:</span>
+                                <span style="font-size: 0.7rem; color: var(--text-muted); font-style: italic;">Non specificata</span>
+                             </div>`;
+        }
+
         card.innerHTML = `
             <h3 style="margin: 0.5rem 0 0.25rem 0; font-size: 1.1rem; color: var(--color-tecn);">${escapeHTML(schema.title)}</h3>
-            <span style="font-size: 0.8rem; color: var(--text-muted); background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; align-self: flex-start;">${escapeHTML(schema.category)}</span>
+            <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <span style="font-size: 0.8rem; color: var(--text-muted); background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; align-self: flex-start;">${escapeHTML(schema.category)}</span>
+                ${defenseBadges}
+            </div>
             <div style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-secondary); display:flex; gap:0.5rem; align-items:center;">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 Animazione: ${schema.frames ? schema.frames.length : 1} Step
@@ -239,6 +289,8 @@ function openNewSchemaEditor() {
     }
     
     document.getElementById('schema-notes').value = '';
+    document.getElementById('schema-def-uomo').checked = false;
+    document.getElementById('schema-def-zona').checked = false;
     currentMediaBase64 = null;
     
     document.getElementById('schema-editor-title').textContent = "Nuovo Schema";
@@ -282,6 +334,8 @@ function openSchemaEditor(id) {
     }
     
     document.getElementById('schema-notes').value = schema.notes || '';
+    document.getElementById('schema-def-uomo').checked = !!schema.defenseUomo;
+    document.getElementById('schema-def-zona').checked = !!schema.defenseZona;
     
     if (schema.media) {
         currentMediaBase64 = schema.media;
@@ -428,6 +482,9 @@ async function saveCurrentSchema() {
         }
     }
 
+    const defenseUomo = document.getElementById('schema-def-uomo').checked;
+    const defenseZona = document.getElementById('schema-def-zona').checked;
+
     const schemaData = {
         id: currentSchemaId,
         title: title,
@@ -436,7 +493,9 @@ async function saveCurrentSchema() {
         notes: notes,
         media: currentMediaBase64,
         previewImage: null,
-        frames: currentFrames
+        frames: currentFrames,
+        defenseUomo: defenseUomo,
+        defenseZona: defenseZona
     };
 
     const index = schemi.findIndex(s => s.id === currentSchemaId);

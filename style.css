@@ -714,7 +714,7 @@ select option {
 
 .setup-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2fr 1.2fr 1.8fr;
     gap: 1.5rem;
     align-items: end;
 }
@@ -748,16 +748,43 @@ select option {
 .athlete-profile-card {
     padding: 1.25rem 1.5rem;
     margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     display: flex;
-    gap: 2rem;
+    gap: 1.75rem;
+    align-items: stretch;
+}
+
+.profile-card-left {
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.75rem;
+    min-width: 180px;
+    padding-right: 1.75rem;
+    border-right: 1px solid var(--border-color);
+}
+
+.profile-card-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
 }
 
 @media (max-width: 768px) {
     .athlete-profile-card {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: 1.25rem;
+    }
+    .profile-card-left {
+        padding-right: 0;
+        padding-bottom: 1rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
     }
 }
 
@@ -769,8 +796,8 @@ select option {
 }
 
 .profile-avatar-wrapper {
-    width: 7rem;
-    height: 7rem;
+    width: 6.5rem;
+    height: 6.5rem;
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid var(--color-player);
@@ -779,6 +806,7 @@ select option {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 auto;
 }
 
 .profile-avatar-img {
@@ -797,38 +825,46 @@ select option {
 .profile-name-row {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    justify-content: center;
+    gap: 0.5rem;
     margin-bottom: 0.25rem;
 }
 
 .profile-name-row h3 {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     font-weight: 800;
     line-height: 1.1;
+    margin: 0;
 }
 
 .jersey-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
+    width: 1.8rem;
+    height: 1.8rem;
     background: var(--color-player);
     color: var(--text-primary);
     border-radius: 50%;
     font-weight: 800;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     box-shadow: 0 0 10px hsla(185, 90%, 50%, 0.3);
 }
 
 .profile-badge {
-    font-size: 0.8rem;
-    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.55rem;
     border-radius: 12px;
     background: hsla(185, 90%, 50%, 0.15);
     color: var(--color-player);
     border: 1px solid hsla(185, 90%, 50%, 0.2);
     font-weight: 600;
+}
+
+.profile-details-grid-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.6rem 1.25rem;
 }
 
 /* Details grid inside profile card */
@@ -1002,6 +1038,16 @@ select option {
     font-size: 0.82rem;
     font-weight: 600;
     color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+}
+
+.slider-header-desc {
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+    line-height: 1.25;
 }
 
 .dual-sliders-container {
@@ -1489,11 +1535,13 @@ select option {
    ========================================================================== */
 .app-footer {
     text-align: center;
-    padding: 2rem 0;
+    padding: 0.2rem 0;
     border-top: 1px solid var(--border-color);
     color: var(--text-muted);
-    font-size: 0.85rem;
-    margin-top: 3rem;
+    font-size: 0.68rem;
+    line-height: 1;
+    margin-top: 0.4rem;
+    margin-bottom: 0.2rem;
 }
 
 /* ==========================================================================
@@ -1713,12 +1761,30 @@ select option {
 /* ==========================================================================
    TABELLONE PRESENZE STAGIONALE
    ========================================================================== */
+.attendance-board-table {
+    table-layout: fixed;
+    width: max-content;
+    border-collapse: collapse;
+}
+
 .attendance-board-table th, 
 .attendance-board-table td {
-    padding: 0.25rem 0.5rem; /* Ridotto il padding verticale per compattare le righe */
+    padding: 0.03rem 0.15rem;
     border: 1px solid var(--border-color);
     text-align: center;
     vertical-align: middle;
+    height: 20px;
+    font-size: 0.72rem;
+    line-height: 1.1;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.attendance-board-table th:not(.player-col-header),
+.attendance-board-table td:not(.player-col-cell) {
+    width: 82px;
+    min-width: 82px;
+    max-width: 82px;
 }
 
 .attendance-board-table th {
@@ -1728,19 +1794,25 @@ select option {
     background: hsla(224, 45%, 5%, 0.95);
     color: var(--text-secondary);
     font-weight: 700;
-    font-size: 0.78rem;
-    min-width: 80px;
+    font-size: 0.68rem;
+    padding: 0.15rem 0.15rem;
 }
 
 .attendance-board-table td.player-col-cell {
     position: sticky;
     left: 0;
-    background: #03060f !important; /* Solid dark color so content scrolling underneath is hidden */
+    background: #03060f !important;
     z-index: 5;
     font-weight: 700;
+    font-size: 0.72rem;
+    padding: 0.05rem 0.35rem;
     text-align: left;
-    min-width: 220px;
-    white-space: nowrap; /* Prevent names from wrapping to the next line */
+    width: 165px;
+    min-width: 165px;
+    max-width: 165px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     box-shadow: 2px 0 5px rgba(0,0,0,0.4);
     border-right: 2px solid var(--border-color-focus);
 }
@@ -1752,9 +1824,15 @@ select option {
     z-index: 20;
     background: #03060f !important;
     font-weight: 700;
+    font-size: 0.72rem;
+    padding: 0.15rem 0.35rem;
     text-align: left;
-    min-width: 220px;
+    width: 165px;
+    min-width: 165px;
+    max-width: 165px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     box-shadow: 2px 0 5px rgba(0,0,0,0.4);
     border-right: 2px solid var(--border-color-focus);
 }
@@ -1766,25 +1844,25 @@ select option {
 /* Select element inside the board cell */
 .cell-select {
     width: 100%;
-    height: 28px;
-    border-radius: 4px;
+    height: 22px;
+    border-radius: 3px;
     border: 1px solid var(--border-color);
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 800;
     text-align: center;
     text-align-last: center;
-    padding-right: 0.7rem; /* Space for custom arrow */
+    padding: 0 0.35rem 0 0;
     background-color: hsla(224, 45%, 3%, 0.6);
     color: var(--text-muted);
     cursor: pointer;
     transition: var(--transition-smooth);
     outline: none;
-    appearance: none; /* Hide default dropdown arrow for cleaner styling */
+    appearance: none;
     -webkit-appearance: none;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 3.5l3 3 3-3' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
     background-repeat: no-repeat;
-    background-position: right 0.35rem center;
-    background-size: 7px;
+    background-position: right 0.15rem center;
+    background-size: 6px;
 }
 
 .cell-select:focus {
@@ -2063,21 +2141,46 @@ button[title="Elimina Seduta"]:hover {
    PRINT LAYOUT OVERRIDES (@media print)
    ========================================================================== */
 @media print {
+    @page {
+        margin: 0.8cm !important;
+        size: auto;
+    }
+
+    * {
+        max-height: none !important;
+        max-width: none !important;
+        overflow: visible !important;
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    body, body * {
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+
     body {
-        background: #fff !important;
-        color: #000 !important;
-        font-size: 11pt;
+        font-size: 9.5pt !important;
     }
 
     .background-decorations,
     .app-header,
     .tab-navigation,
-    .evaluation-setup-bar,
     .action-buttons,
     .btn,
+    .btn-close-modal,
+    .modal-actions,
     #toast,
     .app-footer,
-    .slider-desc {
+    .slider-desc,
+    .hide-on-print,
+    .modal-overlay.hidden,
+    .modal-content.hidden {
+        display: none !important;
     }
 
     .container, .app-main {
@@ -2087,29 +2190,163 @@ button[title="Elimina Seduta"]:hover {
         width: 100% !important;
     }
 
+    /* Active tab panel visible during general print */
+    .tab-panel.active,
+    .subtab-panel-content:not(.hidden) {
+        display: block !important;
+    }
+
     .glass-panel {
-        background: none !important;
+        background: #ffffff !important;
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+        padding: 0.5rem !important;
+        margin-bottom: 1rem !important;
+        color: #000000 !important;
+    }
+
+    /* Print support for Preseason Summary Modal */
+    body.print-preseason .app-main,
+    body.print-preseason .app-header,
+    body.print-preseason .app-footer {
+        display: none !important;
+    }
+
+    body.print-preseason .modal-overlay {
+        position: static !important;
+        background: #ffffff !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    body.print-preseason #popup-preseason-summary {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: #ffffff !important;
         border: none !important;
         box-shadow: none !important;
         padding: 0 !important;
-        margin-bottom: 1.5rem;
+        margin: 0 !important;
+        color: #000000 !important;
+        display: block !important;
     }
 
-    /* Print styling: Show based on print target classes */
-    #tab-roster, #tab-attendance {
+    body.print-preseason #popup-preseason-summary .stat-bubble {
+        background: #f8f9fa !important;
+        border: 1px solid #ccc !important;
+    }
+
+    body.print-preseason #popup-preseason-summary .stat-bubble .num {
+        color: #000000 !important;
+    }
+
+    body.print-preseason #preseason-summary-body,
+    body.print-preseason #preseason-summary-body > div {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    /* Attendance board table printing */
+    .board-table-wrapper {
+        max-height: none !important;
+        overflow: visible !important;
+        border: 1px solid #000 !important;
+        background: #ffffff !important;
+    }
+
+    .attendance-board-table {
+        color: #000000 !important;
+        width: 100% !important;
+    }
+
+    .attendance-board-table th, .attendance-board-table td {
+        border: 1px solid #ccc !important;
+        color: #000000 !important;
+        background: #ffffff !important;
+    }
+
+    .cell-select, .logistic-select-hdr {
+        border: none !important;
+        background: transparent !important;
+        color: #000000 !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
     }
 
     body.print-evaluation #tab-roster {
         display: block !important;
     }
     
-    body.print-evaluation #tab-roster .sub-tab-container,
-    body.print-evaluation #subtab-roster-list,
-    body.print-evaluation #subtab-trends {
+    body.print-evaluation .screen-only-evaluation-header {
+        display: none !important;
+    }
+
+    body.print-evaluation .print-only-evaluation-header {
+        display: block !important;
     }
     
     body.print-evaluation #subtab-evaluation {
         display: block !important;
+    }
+
+    body.print-evaluation .evaluation-setup-bar {
+        display: block !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin-bottom: 1.5rem !important;
+    }
+    body.print-evaluation .evaluation-setup-bar .form-group:first-child {
+        display: none !important;
+    }
+    body.print-evaluation .evaluation-setup-bar #assessment-date {
+        background: #fff !important;
+        border: 1px solid #ccc !important;
+        color: #000 !important;
+        font-size: 11pt !important;
+        padding: 0.3rem !important;
+        border-radius: 4px !important;
+    }
+
+    
+    .growth-plan-card textarea,
+    input[type="text"],
+    input[type="number"],
+    textarea {
+        border: 1px solid #ccc !important;
+        background: #fff !important;
+        color: #000 !important;
+        resize: none !important;
+        padding: 0.5rem !important;
+        font-size: 10pt !important;
+        height: 65px !important;
+        overflow: auto !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Stili di stampa per i nuovi input dei punteggi comparativi */
+    .slider-value-input {
+        background: #fff !important;
+        border: 1px solid #ccc !important;
+        color: #000 !important;
+        font-size: 10pt !important;
+        font-weight: bold !important;
+        width: 45px !important;
+        height: 24px !important;
+        text-align: center !important;
+        border-radius: 4px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
 
     body.print-distinta #tab-attendance {
@@ -2165,9 +2402,12 @@ button[title="Elimina Seduta"]:hover {
     /* Show athlete card at the top of print */
     .athlete-profile-card {
         display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 1.5rem !important;
         border-bottom: 2px solid #000 !important;
-        margin-bottom: 2rem !important;
-        padding: 0 0 1rem 0 !important;
+        margin-bottom: 1rem !important;
+        padding: 0 0 0.5rem 0 !important;
         color: #000 !important;
         background: transparent !important;
         box-shadow: none !important;
@@ -2176,6 +2416,8 @@ button[title="Elimina Seduta"]:hover {
     .profile-avatar-wrapper {
         border-color: #000 !important;
         box-shadow: none !important;
+        width: 5rem !important;
+        height: 5rem !important;
     }
 
     .jersey-badge {
@@ -2191,7 +2433,11 @@ button[title="Elimina Seduta"]:hover {
     }
 
     .profile-details-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
         border-left: 1px solid #ccc !important;
+        padding-left: 1.5rem !important;
+        gap: 0.3rem 1rem !important;
         color: #000 !important;
     }
 
@@ -2208,28 +2454,27 @@ button[title="Elimina Seduta"]:hover {
     /* Dashboard Layout when printing */
     .dashboard-grid {
         grid-template-columns: 1fr !important;
-        gap: 1.5rem !important;
+        gap: 1rem !important;
         display: block !important;
     }
 
     .sliders-section {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 1.5rem !important;
-        page-break-after: always; /* Push chart and plans to next page */
+        gap: 1rem !important;
     }
 
     .category-card {
         border: 1px solid #ccc !important;
         border-radius: 8px !important;
-        padding: 1rem !important;
+        padding: 0.75rem !important;
         page-break-inside: avoid;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem !important;
     }
 
     .category-header {
-        margin-bottom: 1rem !important;
-        padding-bottom: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+        padding-bottom: 0.25rem !important;
         border-bottom: 1px solid #ccc !important;
     }
 
@@ -2241,8 +2486,8 @@ button[title="Elimina Seduta"]:hover {
     }
 
     .slider-group-dual {
-        margin-bottom: 0.5rem !important;
-        padding-bottom: 0.5rem !important;
+        margin-bottom: 0.25rem !important;
+        padding-bottom: 0.25rem !important;
         border-bottom: 1px solid #eee !important;
     }
 
@@ -2286,18 +2531,17 @@ button[title="Elimina Seduta"]:hover {
         display: block !important;
         position: relative !important;
         top: 0 !important;
-        page-break-before: always; /* Start on fresh sheet */
-        padding-top: 1rem;
+        padding-top: 0.5rem !important;
     }
 
     .dashboard-panel {
         border: 1px solid #ccc !important;
         border-radius: 8px !important;
-        padding: 1.5rem !important;
+        padding: 1rem !important;
     }
 
     .dual-score-overview {
-        margin-bottom: 1rem !important;
+        margin-bottom: 0.5rem !important;
     }
 
     .dual-score-box {
@@ -2307,20 +2551,21 @@ button[title="Elimina Seduta"]:hover {
     }
 
     .chart-container {
-        height: 380px !important; /* Make larger for print */
-        margin: 1.5rem 0 !important;
+        height: 280px !important; /* Compacter radar chart */
+        margin: 0.5rem 0 !important;
     }
 
     /* Print Growth Plan: make text areas print like clean paragraphs */
     .growth-plan-card {
         border: 1px solid #ccc !important;
         border-radius: 8px !important;
-        padding: 1.5rem !important;
-        margin-top: 2rem !important;
+        padding: 1rem !important;
+        margin-top: 1rem !important;
         page-break-inside: avoid;
+        grid-column: 1 / -1 !important;
     }
 
-    .growth-plan-card textarea {
+    /* .growth-plan-card textarea {
         border: none !important;
         background: transparent !important;
         color: #000 !important;
@@ -2329,7 +2574,7 @@ button[title="Elimina Seduta"]:hover {
         font-size: 11pt !important;
         height: auto !important;
         overflow: visible !important;
-    }
+    } */
 }
 
 /* ==========================================================================
@@ -2397,20 +2642,16 @@ button[title="Elimina Seduta"]:hover {
 /* Dashboard Main Grid */
 .dashboard-main-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 1.5rem;
-    padding: 1rem 2vw;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
+    padding: 1rem 0;
+    width: 100%;
     box-sizing: border-box;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
     .dashboard-main-grid {
-        grid-template-columns: 320px 1fr 320px;
-    }
-    .dashboard-col:nth-child(2) {
-        grid-column-start: 3;
+        grid-template-columns: 1fr 1fr 340px;
     }
 }
 
@@ -2753,6 +2994,201 @@ button[title="Elimina Seduta"]:hover {
     border: 1px solid rgba(239, 68, 68, 0.3);
     color: #ef4444;
     border-radius: var(--radius-sm);
+    background: hsla(224, 20%, 90%, 0.05);
+}
+
+
+/* ==========================================
+   SCHEMI & LAVAGNA TATTICA
+   ========================================== */
+.schemi-categories-list button.active {
+    background: var(--primary) !important;
+    color: white !important;
+}
+
+.schema-card {
+    background: hsla(224, 20%, 90%, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.schema-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    border-color: var(--color-tecn);
+}
+
+.tactical-board-container {
+    touch-action: none; /* Prevent scrolling when dragging */
+}
+
+.half-pitch-mode {
+    aspect-ratio: 3 / 2 !important;
+    height: 45vh !important; /* Riduce l'altezza per mantenere la larghezza proporzionata */
+    background-size: 100% 200% !important;
+    background-position: top center !important;
+}
+
+.board-piece {
+    position: absolute;
+    width: 8%;
+    aspect-ratio: 1.3 / 1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    border: 2px solid white;
+    user-select: none;
+    z-index: 10;
+}
+.board-piece:active {
+    cursor: grabbing;
+    z-index: 100 !important;
+}
+
+.board-piece.animating {
+    transition: top 1s ease-in-out, left 1s ease-in-out;
+}
+
+.piece-red {
+    background-color: #ffeb3b; /* Bright Yellow */
+    color: #000;
+    border: 2px solid #000;
+}
+.piece-red-gk {
+    background-color: #e91e63; /* Pink */
+    color: #fff;
+    border: 2px solid #000;
+}
+.piece-blue {
+    background-color: #00e5ff; /* Bright Cyan */
+    color: #000;
+    border: 2px solid #000;
+}
+.piece-blue-gk {
+    background-color: #ff9800; /* Orange */
+    color: #000;
+    border: 2px solid #000;
+}
+.piece-ball {
+    width: 6%;
+    aspect-ratio: 1 / 1;
+    background-color: white;
+    background-image: radial-gradient(circle at 30% 30%, #fff, #aaa);
+    border: 1px solid #333;
+    z-index: 20;
+    color: transparent;
+}
+.piece-ball:active {
+    z-index: 101 !important;
+}
+
+/* Direzione Pedine (Naso) */
+.board-piece:not(.piece-ball)::after {
+    content: '';
+    position: absolute;
+    top: -6px; /* Punta verso l'alto (avanti) */
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 8px solid #000;
+}
+
+/* Drag and drop for schema cards */
+.schema-card.dragging {
+    opacity: 0.5;
+}
+.schema-card.drag-over {
+    border: 2px dashed var(--color-tecn);
+    background: rgba(255,255,255,0.1);
+}
+/* ==========================================
+   ========================================== */
+}
+
+}
+
+}
+
+}
+
+/* LOGIN MODAL OVERLAY */
+#login-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: var(--bg-dark);
+    z-index: 999999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#login-overlay.hidden {
+    display: none !important;
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 3rem 2.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+.login-box h2 {
+    color: var(--text-main);
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+.login-box input {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.3);
+    color: white;
+    font-size: 1rem;
+}
+.login-box button {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1.1rem;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: 0.2s;
+}
+.login-box button:hover {
+    background: var(--color-player);
+}
+.login-error {
+    color: #ef4444;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    display: none;
+}
+
+/* HEADER LOGOUT BTN */
+.btn-logout {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    border-radius: var(--radius-sm);
     padding: 0.4rem 0.8rem;
     cursor: pointer;
     transition: 0.2s;
@@ -2762,12 +3198,26 @@ button[title="Elimina Seduta"]:hover {
     background: #ef4444;
     color: white;
 }
+.print-only-training-header {
+    display: none;
+}
 @media print {
     body * {
         visibility: hidden;
     }
+    /* Scheda di allenamento */
     #training-session-form-container, #training-session-form-container * {
         visibility: visible;
+    }
+    .print-only-training-header {
+        display: block !important;
+        visibility: visible !important;
+    }
+    .print-only-training-header * {
+        visibility: visible !important;
+    }
+    .screen-only-training-header {
+        display: none !important;
     }
     #training-session-form-container {
         position: absolute;
@@ -2779,6 +3229,16 @@ button[title="Elimina Seduta"]:hover {
         padding: 0;
         overflow: visible !important;
         box-shadow: none !important;
+    }
+    /* Scheda di valutazione della performance */
+    body.print-evaluation #tab-roster,
+    body.print-evaluation #tab-roster * {
+        visibility: visible !important;
+    }
+    /* Distinta convocati */
+    body.print-distinta #tab-attendance,
+    body.print-distinta #tab-attendance * {
+        visibility: visible !important;
     }
     .modal-actions, #btn-export-pdf, #board-tools-popup {
         display: none !important;
@@ -2807,4 +3267,213 @@ button[title="Elimina Seduta"]:hover {
     color: #ff007f;
     background: rgba(255, 0, 127, 0.15);
     border-color: rgba(255, 0, 127, 0.3) !important;
+}
+
+/* Nasconde la valutazione del Mister quando attiva la modalita nascondi */
+.hide-coach-mode .coach-slider {
+    display: none !important;
+}
+.hide-coach-mode .dual-score-box.coach {
+    display: none !important;
+}
+.hide-coach-mode .dual-score-box.gap {
+    display: none !important;
+}
+.hide-coach-mode #gap-analysis-text {
+    display: none !important;
+}
+.hide-coach-mode .coach-avg-label {
+    display: none !important;
+}
+.hide-coach-mode .dual-score-overview {
+    grid-template-columns: 1fr !important;
+}
+
+/* ==========================================================================
+   PRINT & PDF LAYOUT STYLES FOR ASSENZE SUBTAB
+   ========================================================================== */
+@media print {
+    body.print-absences #subtab-absences,
+    body.print-absences #subtab-absences * {
+        visibility: visible !important;
+    }
+
+    body.print-absences #subtab-absences {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0.5cm !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        display: block !important;
+    }
+
+    body.print-absences #subtab-absences .glass-panel {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        color: #0f172a !important;
+        margin-bottom: 1rem !important;
+        padding: 1rem !important;
+    }
+
+    body.print-absences #subtab-absences table.data-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        border: 1px solid #94a3b8 !important;
+    }
+
+    body.print-absences #subtab-absences table.data-table th {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        border-bottom: 2px solid #64748b !important;
+        font-weight: bold !important;
+    }
+
+    body.print-absences #subtab-absences table.data-table td {
+        border-bottom: 1px solid #cbd5e1 !important;
+        color: #0f172a !important;
+    }
+
+    body.print-absences #absence-calendar-grid-matrix > div {
+        border: 1px solid #cbd5e1 !important;
+        background: #f8fafc !important;
+        color: #0f172a !important;
+    }
+
+    body.print-absences .btn,
+    body.print-absences button,
+    body.print-absences select,
+    body.print-absences label {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   PRINT & PDF LAYOUT STYLES FOR RIEPILOGO PSICOFISICO SUBTAB
+   ========================================================================== */
+@media print {
+    body.print-riepilogo #tab-roster,
+    body.print-riepilogo #subtab-riepilogo,
+    body.print-riepilogo #subtab-riepilogo * {
+        visibility: visible !important;
+    }
+
+    body.print-riepilogo #subtab-riepilogo {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0.5cm !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        display: block !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body.print-riepilogo #subtab-riepilogo .glass-panel {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        color: #0f172a !important;
+        margin-bottom: 1rem !important;
+        padding: 1.25rem !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        break-inside: avoid;
+    }
+
+    body.print-riepilogo #subtab-riepilogo h1,
+    body.print-riepilogo #subtab-riepilogo h2,
+    body.print-riepilogo #subtab-riepilogo h3,
+    body.print-riepilogo #subtab-riepilogo h4,
+    body.print-riepilogo #subtab-riepilogo h5,
+    body.print-riepilogo #subtab-riepilogo p,
+    body.print-riepilogo #subtab-riepilogo span,
+    body.print-riepilogo #subtab-riepilogo strong,
+    body.print-riepilogo #subtab-riepilogo small {
+        color: #0f172a !important;
+    }
+
+    body.print-riepilogo #subtab-riepilogo table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+    }
+
+    body.print-riepilogo #subtab-riepilogo th {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        border-bottom: 2px solid #64748b !important;
+        font-weight: bold !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body.print-riepilogo #subtab-riepilogo td {
+        border-bottom: 1px solid #e2e8f0 !important;
+        color: #0f172a !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body.print-riepilogo .btn,
+    body.print-riepilogo button,
+    body.print-riepilogo label {
+        display: none !important;
+    }
+}
+
+/* RESPONSIVE LAYOUT PER PROGRAMMA ALLENAMENTI (GRIGLIA A 5 COLONNE PER SETTIMANA) */
+.training-week-section {
+    background: rgba(15, 23, 42, 0.45);
+    border: 1.5px solid rgba(56, 189, 248, 0.4);
+    border-radius: 12px;
+    padding: 1rem 1.15rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 0 15px rgba(56, 189, 248, 0.03);
+    backdrop-filter: blur(8px);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.training-week-section:hover {
+    border-color: rgba(56, 189, 248, 0.7);
+    box-shadow: 0 6px 25px rgba(56, 189, 248, 0.15), inset 0 0 20px rgba(56, 189, 248, 0.05);
+}
+
+.training-week-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.85rem;
+}
+
+@media (max-width: 1500px) {
+    .training-week-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .training-week-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .training-week-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .training-week-grid {
+        grid-template-columns: 1fr !important;
+    }
 }

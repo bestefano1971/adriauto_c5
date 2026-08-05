@@ -5,8 +5,12 @@
 window.trainingBoardsState = {
     'board-warmup-full': [],
     'board-warmup-half': [],
+    'board-athletic-full': [],
+    'board-athletic-half': [],
     'board-mainPhase-full': [],
     'board-mainPhase-half': [],
+    'board-main2Phase-full': [],
+    'board-main2Phase-half': [],
     'board-finalPhase-full': [],
     'board-finalPhase-half': []
 };

@@ -12,16 +12,224 @@ const paramInfo = {
     'tecn-shot': { label: 'Tiro', cat: 'Tecnica Individuale' },
     'tecn-dribble': { label: 'Dribbling', cat: 'Tecnica Individuale' },
     
-    'fisi-speed': { label: 'velocitÃ Â ', cat: 'Condizione Fisica' },
+    'fisi-speed': { label: 'Velocità', cat: 'Condizione Fisica' },
     'fisi-stamina': { label: 'Resistenza', cat: 'Condizione Fisica' },
     'fisi-strength': { label: 'Forza', cat: 'Condizione Fisica' },
-    'fisi-AgilitÃ ': { label: 'AgilitÃ Â ', cat: 'Condizione Fisica' },
+    'fisi-agility': { label: 'Agilità', cat: 'Condizione Fisica' },
     
     'tatt-movement': { label: 'Movimento', cat: 'Tattica' },
     'tatt-defense': { label: 'Difesa', cat: 'Tattica' },
     'tatt-transition': { label: 'Transizioni', cat: 'Tattica' },
     'tatt-reading': { label: 'Lettura', cat: 'Tattica' }
 };
+
+function switchTabTo(tabName, subTabName = null) {
+    // Switch main tabs
+    const tabBtns = document.querySelectorAll('.tab-navigation .tab-btn, .sidebar-nav .nav-item');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    
+    tabBtns.forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabName) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    tabPanels.forEach(panel => {
+        if (panel.id === tabName) {
+            panel.classList.add('active');
+        } else {
+            panel.classList.remove('active');
+        }
+    });
+
+    // Handle subtabs if requested
+    if (subTabName) {
+        setTimeout(() => {
+            const subBtns = document.querySelectorAll('.profile-sub-tab-btn, .roster-sub-tab-btn, .attendance-sub-tab-btn, .athletic-sub-tab-btn, .preparation-sub-tab-btn');
+            const subBtnToClick = Array.from(subBtns).find(b => b.getAttribute('data-subtab') === subTabName);
+            if (subBtnToClick) {
+                subBtnToClick.click();
+            }
+        }, 50);
+    } else {
+        switch(tabName) {
+            case 'tab-dashboard': if(typeof window.renderDashboardAlertsWidget === 'function') window.renderDashboardAlertsWidget(); break;
+            case 'tab-roster': if(typeof renderRoster === 'function') renderRoster(); break;
+            case 'tab-attendance': if(typeof renderAttendanceBoard === 'function') renderAttendanceBoard(); break;
+            case 'tab-athletic': if(typeof renderAthleticTestsTable === 'function') renderAthleticTestsTable(); break;
+            case 'tab-preparation': if(typeof renderTeamFitnessDashboard === 'function') renderTeamFitnessDashboard(); break;
+            case 'tab-psychophysical': if(typeof renderPsychophysicalDashboard === 'function') renderPsychophysicalDashboard(); break;
+            case 'tab-training-program': if(typeof renderTrainingProgramList === 'function') renderTrainingProgramList(); break;
+        }
+    }
+    
+    // Mostra/Nascondi popup attrezzi solo nella tab schemi
+    const boardToolsPopup = document.getElementById('board-tools-popup');
+    if (boardToolsPopup) {
+        if (tabName === 'tab-schemi') {
+            boardToolsPopup.style.display = 'block';
+        } else {
+            boardToolsPopup.style.display = 'none';
+        }
+    }
+    
+    // Trigger any resize events for charts
+    window.dispatchEvent(new Event('resize'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+window.switchTabTo = switchTabTo;
+
+const defaultParamLabels = {
+    'psic-focus': { label: 'Focus', desc: "Concentrazione mentale e costanza dell'attenzione." },
+    'psic-stress': { label: 'Stress', desc: "Gestione della pressione emotiva e delle situazioni critiche." },
+    'psic-grinta': { label: 'Grinta', desc: "Spirito combattivo, determinazione e sacrificio." },
+    'psic-team': { label: 'Team', desc: "Spirito cooperativo, comunicazione e supporto reciproco." },
+
+    'tecn-control': { label: 'Controllo', desc: "Qualità e orientamento della ricezione della palla." },
+    'tecn-pass': { label: 'Passaggio', desc: "Precisione, forza e scelta del tempo nel servire i compagni." },
+    'tecn-shot': { label: 'Tiro', desc: "Precisione e potenza nella conclusione in porta." },
+    'tecn-dribble': { label: 'Dribbling', desc: "Uno contro uno e capacità di superare l'avversario." },
+
+    'fisi-speed': { label: 'Velocità', desc: "Accelerazione, rapidità di movimento e cambio di passo." },
+    'fisi-stamina': { label: 'Resistenza', desc: "Capacità di mantenere un ritmo elevato per l'intera partita." },
+    'fisi-strength': { label: 'Forza', desc: "Potenza muscolare, stabilità nei duelli fisici e protezione palla." },
+    'fisi-agility': { label: 'Agilità', desc: "Capacità di cambiare direzione ed eseguire movimenti complessi con fluidità." },
+
+    'tatt-movement': { label: 'Movimento', desc: "Smarcamento, occupazione degli spazi e coordinazione di squadra." },
+    'tatt-defense': { label: 'Difesa', desc: "Posizionamento difensivo, marcatura e tempi di intervento." },
+    'tatt-transition': { label: 'Transizioni', desc: "Reattività e intelligenza nel passaggio tra fase offensiva e difensiva." },
+    'tatt-reading': { label: 'Lettura', desc: "Comprensione delle situazioni di gioco e anticipo delle intenzioni avversarie." }
+};
+
+const gkParamLabels = {
+    'psic-focus': { label: 'Focus & Presenza', desc: "Concentrazione massima sui tiri, rimbalzi e retropassaggi." },
+    'psic-stress': { label: 'Pressione 1vs1', desc: "Freddezza e lucidità nei duelli diretti a tu per tu con l'attaccante." },
+    'psic-grinta': { label: 'Leadership & Coraggio', desc: "Determinazione uscite basse, blocco palloni e guida della squadra." },
+    'psic-team': { label: 'Guida della Difesa', desc: "Comunicazione continua, chiamata marcature e diagonali." },
+
+    'tecn-control': { label: 'Uscita Bassa / Croce', desc: "Tecnica della croce, scivolata e sbarramento porta su tiro ravvicinato." },
+    'tecn-pass': { label: 'Rinvio & Rilancio', desc: "Precisione del rilancio con le mani e coi piedi per contropiede." },
+    'tecn-shot': { label: 'Parata & Reattività', desc: "Istinto di parata su tiri veloci, deviazioni d'istinto e riflessi." },
+    'tecn-dribble': { label: 'Posizionamento & Copertura', desc: "Scelta della posizione sulla linea di porta e chiusura degli angoli." },
+
+    'fisi-speed': { label: 'Esplosività 1-3m', desc: "Scatto fulmineo nell'uscita sui piedi dell'attaccante." },
+    'fisi-stamina': { label: 'Tenuta Fisica', desc: "Resistenza agli sforzi ripetuti e concentrazione sui 40 minuti." },
+    'fisi-strength': { label: 'Forza Muscolare & Presa', desc: "Forza sulle gambe per le uscite e fermezza nella presa palla." },
+    'fisi-agility': { label: 'Reattività al Suolo', desc: "Velocità nel rialzarsi e nella seconda parata su ribattuta." },
+
+    'tatt-movement': { label: 'Uscita Spazio / Copertura', desc: "Scelta del tempo nell'uscire fuori dall'area per anticipare la palla." },
+    'tatt-defense': { label: 'Lettura 1vs1 & Diagonali', desc: "Capacità di valutare se restare o uscire sull'uomo lanciato." },
+    'tatt-transition': { label: 'Portiere di Movimento (5vs4)', desc: "Gestione del gioco col portiere di movimento e tiro a porta vuota." },
+    'tatt-reading': { label: 'Lettura Preventiva', desc: "Anticipo delle traiettorie dei passaggi avversari e chiamate." }
+};
+
+const gkDefaultPlans = {
+    'psic-focus': {
+        strength: "Mantenere costante la concentrazione anche nelle fasi di pressione prolungata o basso ritmo.",
+        weaknessGoal: "Eliminare le disattenzioni sui retropassaggi e sui rimbalzi improvvisi.",
+        action: "Esercizi di reattività visiva con palline di diversa dimensione prima della seduta."
+    },
+    'psic-stress': {
+        strength: "Freddezza e lucidità assoluta nei duelli 1vs1 col pallone calciato a bruciapelo.",
+        weaknessGoal: "Mantenere la serenità emotiva anche dopo un errore o un gol subito.",
+        action: "Simulazioni ad alta frequenza di 1vs1 consecutivi per allenare il recupero psicologico rapido."
+    },
+    'tecn-control': {
+        strength: "Esecuzione perfetta della croce e sbarramento totale sui tiri ravvicinati.",
+        weaknessGoal: "Perfezionare i tempi di uscita bassa sui piedi dell'attaccante in corsa.",
+        action: "20 ripetizioni di chiusura a croce su pallone vagante ai limiti dell'area."
+    },
+    'tecn-pass': {
+        strength: "Rilanci con le mani di eccezionale precisione per innescare le transizioni veloci.",
+        weaknessGoal: "Migliorare la sicurezza e la precisione nel rinvio col piede debole.",
+        action: "Esercitazioni di rilancio mirato su bersagli fissi sia di mano che di piede."
+    },
+    'tecn-shot': {
+        strength: "Riflessi fulminei e parate d'istinto sulle deviazioni in area di rigore.",
+        weaknessGoal: "Migliorare la tecnica di respinta laterale per evitare di rilasciare palla al centro.",
+        action: "Lavoro con sagome deviatrici e respinta indirizzata verso la linea laterale."
+    },
+    'tecn-dribble': {
+        strength: "Posizionamento impeccabile sulla linea di porta a copertura del primo palo.",
+        weaknessGoal: "Perfezionare la chiusura degli angoli di tiro sulle conclusioni defilate.",
+        action: "Esercizi di spostamento veloci a passi incrociati lungo la linea di porta."
+    },
+    'fisi-speed': {
+        strength: "Esplosività nei primi 2 metri per chiudere lo specchio prima del tiro.",
+        weaknessGoal: "Aumentare la velocità di scatto in avanti nelle uscite in presa alta.",
+        action: "Scatti esplosivi brevi da posizione sdraiata o in ginocchio con partenza al segnale."
+    },
+    'fisi-Agilità': {
+        strength: "Grande fluidità nel rialzarsi immediatamente dopo una parata a terra.",
+        weaknessGoal: "Migliorare la mobilità articolare delle anche per la spaccata difensiva.",
+        action: "Sessioni di mobilità articolare e stretching dinamico specifico per portieri."
+    },
+    'tatt-transition': {
+        strength: "Abilità nel partecipare alla manovra offensiva come 5° uomo di movimento.",
+        weaknessGoal: "Migliorare i tempi di rientro in porta sui recuperi palla avversari.",
+        action: "Simulazioni tattiche di 5vs4 offensivo e transizione negativa di rientro."
+    },
+    'tatt-reading': {
+        strength: "Guida impeccabile della difesa con chiamate chiare e tempestive.",
+        weaknessGoal: "Valutare con maggior anticipo le uscite preventive sui filtranti veloci.",
+        action: "Analisi video delle imbucate avversarie ed esercitazioni di uscita anticipata."
+    }
+};
+
+window.updateAssessmentParameterLabels = function(player) {
+    const isGK = player && (player.role === 'Portiere' || player.role === 'POR');
+    
+    let gkBanner = document.getElementById('gk-evaluation-banner');
+    const evalHeader = document.querySelector('.evaluation-setup-bar');
+    
+    if (isGK) {
+        if (!gkBanner && evalHeader) {
+            gkBanner = document.createElement('div');
+            gkBanner.id = 'gk-evaluation-banner';
+            gkBanner.style.cssText = 'margin-top:0.75rem; padding:0.6rem 1rem; background:rgba(234, 179, 8, 0.15); border:1px solid rgba(234, 179, 8, 0.4); border-radius:8px; color:#fde047; font-size:0.88rem; font-weight:700; display:flex; align-items:center; justify-content:space-between; animation:slideInUp 0.3s ease;';
+            gkBanner.innerHTML = `
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <span style="font-size:1.2rem;">🧤</span>
+                    <span>Scheda di Autovalutazione Specifiche per PORTIERE</span>
+                </div>
+                <span style="font-size:0.75rem; background:rgba(234, 179, 8, 0.25); padding:0.2rem 0.6rem; border-radius:4px; text-transform:uppercase;">Ruolo: Portiere</span>
+            `;
+            evalHeader.appendChild(gkBanner);
+        } else if (gkBanner) {
+            gkBanner.style.display = 'flex';
+        }
+    } else {
+        if (gkBanner) gkBanner.style.display = 'none';
+    }
+
+    const labelsMap = isGK ? gkParamLabels : defaultParamLabels;
+
+    Object.keys(labelsMap).forEach(key => {
+        const item = labelsMap[key];
+        const sliderInput = document.getElementById(`${key}-player`);
+        if (sliderInput) {
+            const group = sliderInput.closest('.slider-group-dual');
+            if (group) {
+                const nameSpan = group.querySelector('.slider-header-title span:first-child');
+                const descSmall = group.querySelector('.slider-header-desc');
+                if (nameSpan) nameSpan.textContent = item.label;
+                if (descSmall) descSmall.textContent = item.desc;
+            }
+        }
+    });
+
+    const tecnCategoryH2 = document.querySelector('.category-card[data-category="tecnica"] h2');
+    if (tecnCategoryH2) tecnCategoryH2.textContent = isGK ? 'Tecnica Portiere' : 'Tecnica Individuale';
+
+    const tattCategoryH2 = document.querySelector('.category-card[data-category="tattica"] h2');
+    if (tattCategoryH2) tattCategoryH2.textContent = isGK ? 'Tattica & Gioco coi Piedi' : 'Tattica';
+};
+
+window.defaultParamLabels = defaultParamLabels;
+window.gkParamLabels = gkParamLabels;
+window.gkDefaultPlans = gkDefaultPlans;
 
 // Default expert futsal suggestions for Strength/Weakness (in Italian)
 const defaultPlans = {
@@ -106,6 +314,45 @@ const defaultPlans = {
         action: "Partite a tema a tocchi limitati (1 o 2 tocchi) per cosÃ¬ a leggere il giÃ ."
     }
 };
+window.defaultPlans = defaultPlans;
+
+function getSyntheticPlanText(sheet, key, type, isGK) {
+    if (!key) return '';
+    const planSource = isGK ? (window.gkDefaultPlans || {}) : (window.defaultPlans || {});
+    const descSource = isGK ? (window.gkParamLabels || {}) : (window.paramDescriptions || {});
+
+    let text = '';
+    if (type === 'strength') {
+        if (sheet && sheet.strengthPlan && sheet.strengthPlan.trim()) {
+            text = sheet.strengthPlan.trim();
+        } else if (planSource[key] && planSource[key].strength) {
+            text = planSource[key].strength;
+        } else if (descSource[key] && descSource[key].desc) {
+            text = descSource[key].desc;
+        }
+    } else {
+        if (sheet && sheet.weaknessGoal && sheet.weaknessGoal.trim()) {
+            text = sheet.weaknessGoal.trim();
+            if (sheet.actionPlan && sheet.actionPlan.trim()) {
+                text += ` — ${sheet.actionPlan.trim()}`;
+            }
+        } else if (sheet && sheet.actionPlan && sheet.actionPlan.trim()) {
+            text = sheet.actionPlan.trim();
+        } else if (planSource[key] && planSource[key].weaknessGoal) {
+            text = planSource[key].weaknessGoal;
+        } else if (descSource[key] && descSource[key].desc) {
+            text = descSource[key].desc;
+        }
+    }
+
+    if (!text) return '';
+    text = text.replace(/Ã |â€™|Ãƒ|â€š|Â|Ã©/g, '').trim();
+    if (text.length > 80) {
+        text = text.substring(0, 77) + '...';
+    }
+    return text;
+}
+window.getSyntheticPlanText = getSyntheticPlanText;
 
 // ==========================================================================
 // UTILITY FUNCTIONS (PHOTO COMPRESSION & INITIALS)
@@ -163,6 +410,36 @@ function getInitials(name) {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
+window.parseBirthData = function(inputVal) {
+    if (!inputVal) return { birthDate: '', birthYear: '' };
+    const clean = String(inputVal).trim();
+    if (clean.includes('-')) {
+        const parts = clean.split('-');
+        return { birthDate: clean, birthYear: parts[0] };
+    }
+    if (clean.includes('/')) {
+        const parts = clean.split('/');
+        if (parts.length === 3) {
+            const iso = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+            return { birthDate: iso, birthYear: parts[2] };
+        }
+    }
+    return { birthDate: clean, birthYear: clean };
+};
+
+window.formatBirthDateDisplay = function(player) {
+    if (!player) return '--';
+    const val = player.birthDate || player.birthYear;
+    if (!val) return '--';
+    if (typeof val === 'string' && val.includes('-')) {
+        const parts = val.split('-');
+        if (parts.length === 3) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+    }
+    return val;
+};
+
 window.togglePlayerBio = function(event, btn) {
     event.stopPropagation();
     const card = btn.closest('.player-card');
@@ -177,12 +454,99 @@ window.togglePlayerBio = function(event, btn) {
     }
 };
 
+window.toggleEditProfileCardMode = function(show) {
+    const editForm = document.getElementById('form-profile-card-edit');
+    const detailsGrid = document.querySelector('.profile-details-grid-content');
+    if (!editForm) return;
+
+    const isShowing = show !== undefined ? show : editForm.classList.contains('hidden');
+    if (isShowing) {
+        editForm.classList.remove('hidden');
+        if (detailsGrid) detailsGrid.classList.add('hidden');
+    } else {
+        editForm.classList.add('hidden');
+        if (detailsGrid) detailsGrid.classList.remove('hidden');
+    }
+};
+
+window.handleAthleteCardPhotoUpload = function(input, playerId) {
+    const file = input.files && input.files[0];
+    if (!file) return;
+
+    compressPlayerPhoto(file, (compressedBase64) => {
+        if (!compressedBase64) return;
+        const playerIndex = players.findIndex(p => String(p.id) === String(playerId));
+        if (playerIndex === -1) return;
+
+        players[playerIndex].photo = compressedBase64;
+        localStorage.setItem('futsal_portal_players', JSON.stringify(players));
+
+        updateAthleteProfileCard(players[playerIndex]);
+        if (typeof renderRoster === 'function') renderRoster();
+        if (typeof renderGrid === 'function') renderGrid();
+        if (typeof renderQuartets === 'function') renderQuartets();
+
+        showToast("Foto del profilo aggiornata!", "success");
+    });
+};
+
+window.saveAthleteProfileCardEdit = function() {
+    const selectPlayerVal = document.getElementById('select-player').value;
+    const playerIndex = players.findIndex(p => String(p.id) === String(selectPlayerVal));
+    if (playerIndex === -1) {
+        showToast("Seleziona prima un giocatore!", "error");
+        return;
+    }
+
+    const nameVal = document.getElementById('prof-card-input-name').value.trim();
+    if (!nameVal) {
+        showToast("Inserisci il nome del giocatore!", "error");
+        return;
+    }
+
+    const birthData = parseBirthData(document.getElementById('prof-card-input-birth').value);
+
+    players[playerIndex].name = window.getInvertedName ? window.getInvertedName(nameVal) : nameVal;
+    players[playerIndex].number = document.getElementById('prof-card-input-number').value;
+    players[playerIndex].role = document.getElementById('prof-card-input-role').value;
+    players[playerIndex].birthDate = birthData.birthDate;
+    players[playerIndex].birthYear = birthData.birthYear;
+    players[playerIndex].height = document.getElementById('prof-card-input-height').value;
+    players[playerIndex].weight = document.getElementById('prof-card-input-weight').value;
+    players[playerIndex].foot = document.getElementById('prof-card-input-foot').value;
+    players[playerIndex].job = document.getElementById('prof-card-input-job').value.trim();
+    players[playerIndex].experience = document.getElementById('prof-card-input-experience').value.trim();
+
+    localStorage.setItem('futsal_portal_players', JSON.stringify(players));
+
+    // Update UI dropdowns & profile card
+    populatePlayerDropdowns();
+    document.getElementById('select-player').value = players[playerIndex].id;
+    updateAthleteProfileCard(players[playerIndex]);
+
+    // Refresh roster, grid, quartets and dossier if open
+    if (typeof renderRoster === 'function') renderRoster();
+    if (typeof renderGrid === 'function') renderGrid();
+    if (typeof renderQuartets === 'function') renderQuartets();
+
+    toggleEditProfileCardMode(false);
+    showToast(`Profilo di ${players[playerIndex].name} aggiornato in automatico!`, "success");
+};
+
 function updateAthleteProfileCard(player) {
     const profileCard = document.getElementById('athlete-profile-card');
+
+    // Update evaluation parameters labels dynamically based on role (Goalkeeper vs Field Player)
+    if (typeof updateAssessmentParameterLabels === 'function') {
+        updateAssessmentParameterLabels(player);
+    }
+
     if (!profileCard) return;
 
     if (!player) {
         profileCard.classList.add('hidden');
+        const histGroup = document.getElementById('historical-sheets-select-group');
+        if (histGroup) histGroup.style.display = 'none';
         if (athleteAttendanceChartInstance) {
             athleteAttendanceChartInstance.destroy();
             athleteAttendanceChartInstance = null;
@@ -191,39 +555,90 @@ function updateAthleteProfileCard(player) {
     }
 
     profileCard.classList.remove('hidden');
-    
+
+    // Populate inputs for Edit Mode
+    const inputName = document.getElementById('prof-card-input-name');
+    const inputNum = document.getElementById('prof-card-input-number');
+    const inputRole = document.getElementById('prof-card-input-role');
+    const inputBirth = document.getElementById('prof-card-input-birth');
+    const inputHeight = document.getElementById('prof-card-input-height');
+    const inputWeight = document.getElementById('prof-card-input-weight');
+    const inputFoot = document.getElementById('prof-card-input-foot');
+    const inputJob = document.getElementById('prof-card-input-job');
+    const inputExp = document.getElementById('prof-card-input-experience');
+
+    if (inputName) inputName.value = window.getInvertedName ? window.getInvertedName(player.name) : player.name;
+    if (inputNum) inputNum.value = player.number || '';
+    if (inputRole) inputRole.value = player.role || 'Universale';
+    if (inputBirth) inputBirth.value = player.birthDate || (player.birthYear && player.birthYear.length === 4 ? player.birthYear + '-01-01' : '');
+    if (inputHeight) inputHeight.value = player.height || '';
+    if (inputWeight) inputWeight.value = player.weight || '';
+    if (inputFoot) inputFoot.value = player.foot || 'Destro';
+    if (inputJob) inputJob.value = player.job || '';
+    if (inputExp) inputExp.value = player.experience || '';
+
     // Avatar
     const avatarContainer = document.getElementById('profile-card-avatar-container');
     if (avatarContainer) {
         const initials = getInitials(player.name);
-        avatarContainer.innerHTML = player.photo 
+        const avatarImg = player.photo 
             ? `<img src="${player.photo}" alt="${escapeHTML(player.name)}" class="player-avatar-img">`
             : `<span class="profile-avatar-initials">${initials}</span>`;
+
+        avatarContainer.innerHTML = `
+            <div style="position:relative; cursor:pointer;" onclick="document.getElementById('profile-card-photo-input').click()" title="Clicca per caricare/cambiare la foto del profilo">
+                ${avatarImg}
+                <span style="position:absolute; bottom:0; right:0; background:var(--color-player); color:#000; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; box-shadow:0 2px 4px rgba(0,0,0,0.5);">📷</span>
+            </div>
+            <input type="file" id="profile-card-photo-input" accept="image/*" style="display:none;" onchange="handleAthleteCardPhotoUpload(this, '${player.id}')">
+        `;
     }
-    
+
     // Name, Number, Role, Foot
     const nameEl = document.getElementById('profile-card-name');
     const numberEl = document.getElementById('profile-card-number');
     const roleEl = document.getElementById('profile-card-role');
     const footEl = document.getElementById('profile-card-foot');
-    
-    if (nameEl) nameEl.textContent = player.name;
-    if (numberEl) numberEl.textContent = player.number;
-    if (roleEl) roleEl.textContent = player.role ? player.role : '--';
-    if (footEl) footEl.textContent = player.foot ? player.foot : '--';
-    
+
+    if (nameEl) nameEl.textContent = window.getInvertedName ? window.getInvertedName(player.name) : player.name;
+    if (numberEl) numberEl.textContent = player.number || '';
+    if (roleEl) roleEl.textContent = player.role || '--';
+    if (footEl) footEl.textContent = player.foot || '--';
+
     // Birth Year, Weight, Height, Job, Experience
     const birthYearEl = document.getElementById('profile-card-birth-year');
     const weightEl = document.getElementById('profile-card-weight');
     const heightEl = document.getElementById('profile-card-height');
     const jobEl = document.getElementById('profile-card-job');
     const expEl = document.getElementById('profile-card-experience');
-    
-    if (birthYearEl) birthYearEl.textContent = player.birthYear ? player.birthYear : '--';
-    if (weightEl) weightEl.textContent = player.weight ? player.weight : '--';
-    if (heightEl) heightEl.textContent = player.height ? player.height : '--';
-    if (jobEl) jobEl.textContent = player.job ? player.job : '--';
-    if (expEl) expEl.textContent = player.experience ? player.experience : '--';
+
+    if (birthYearEl) birthYearEl.textContent = formatBirthDateDisplay(player);
+    if (weightEl) weightEl.textContent = player.weight || '--';
+    if (heightEl) heightEl.textContent = player.height || '--';
+    if (jobEl) jobEl.textContent = player.job || '--';
+    if (expEl) expEl.textContent = player.experience || '--';
+
+    // Populate Historical Sheets dropdown for this player
+    const histGroup = document.getElementById('historical-sheets-select-group');
+    const histSelect = document.getElementById('select-historical-sheet');
+
+    if (histGroup && histSelect) {
+        const playerSheets = typeof assessments !== 'undefined' ? assessments.filter(a => String(a.playerId) === String(player.id)) : [];
+        if (playerSheets.length > 0) {
+            histGroup.style.display = 'block';
+            playerSheets.sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+            histSelect.innerHTML = `
+                <option value="">-- Compila Nuova Valutazione (Oggi) --</option>
+                ${playerSheets.map(s => {
+                    const dStr = s.date ? s.date.split('-').reverse().join('/') : '';
+                    const isCurrent = typeof activeAssessmentId !== 'undefined' && activeAssessmentId === s.id;
+                    return `<option value="${s.id}" ${isCurrent ? 'selected' : ''}>✏️ Modifica Scheda Storica del ${dStr} (Mister: ${s.overallCoach || '-'})</option>`;
+                }).join('')}
+            `;
+        } else {
+            histGroup.style.display = 'none';
+        }
+    }
 }
 
 function renderAthleteAttendanceChart(present, absent, injured, justified, convocationsCount = 0, test = 0) {
@@ -317,18 +732,42 @@ try {
     });
     if(migrated) localStorage.setItem('futsal_portal_players', JSON.stringify(players));
 } catch(e) { console.error("Error loading players:", e); }
+window.players = players;
 
 let assessments = [];
 try { assessments = JSON.parse(localStorage.getItem('futsal_portal_assessments')) || []; } catch(e) { console.error("Error loading assessments:", e); }
 
 let trainings = [];
 try { trainings = JSON.parse(localStorage.getItem('futsal_portal_trainings')) || []; } catch(e) { console.error("Error loading trainings:", e); }
+window.trainings = trainings;
 
 let convocations = [];
 try { convocations = JSON.parse(localStorage.getItem('futsal_portal_convocations')) || []; } catch(e) { console.error("Error loading convocations:", e); }
 
 let athleticTests = [];
 try { athleticTests = JSON.parse(localStorage.getItem('futsal_portal_athletic_tests')) || []; } catch(e) { console.error("Error loading athletic_tests:", e); }
+
+let removedDates = [];
+try { removedDates = JSON.parse(localStorage.getItem('futsal_portal_removed_dates')) || []; } catch(e) { console.error("Error loading removed_dates:", e); }
+
+function removeDate(dateStr) {
+    if (!dateStr) return;
+    if (!removedDates.includes(dateStr)) {
+        removedDates.push(dateStr);
+        localStorage.setItem('futsal_portal_removed_dates', JSON.stringify(removedDates));
+    }
+}
+
+function unremoveDate(dateStr) {
+    if (!dateStr) return;
+    if (removedDates.includes(dateStr)) {
+        removedDates = removedDates.filter(d => d !== dateStr);
+        localStorage.setItem('futsal_portal_removed_dates', JSON.stringify(removedDates));
+    }
+}
+
+window.removeDate = removeDate;
+window.unremoveDate = unremoveDate;
 
 let tempPlayerScores = {};
 let tempCoachScores = {};
@@ -351,7 +790,7 @@ let trainingsAttendanceChartInstance = null;
 let yoyoChartInstance = null;
 let cmjChartInstance = null;
 let sprintChartInstance = null;
-let AgilitÃ  = null;
+let agilityChartInstance = null;
 
 // ==========================================================================
 // DOM ELEMENTS & INITIALIZATION
@@ -384,14 +823,17 @@ function initApp() {
     syncSlidersUI();
 
     // 5. Setup Action buttons
-    document.getElementById('btn-save').addEventListener('click', saveAssessment);
-    document.getElementById('btn-reset').addEventListener('click', () => {
-        if(confirm("Sei sicuro di voler resettare tutti i parametri di questa scheda?")) {
-            resetAssessmentForm();
-            showToast("Parametri resettati", "info");
-        }
-    });
-    document.getElementById('btn-print').addEventListener('click', handlePrint);
+    const btnSave = document.getElementById('btn-save');
+    if (btnSave) btnSave.addEventListener('click', saveAssessment);
+
+    const btnPrint = document.getElementById('btn-print');
+    if (btnPrint) btnPrint.addEventListener('click', handlePrint);
+
+    const btnExportTxt = document.getElementById('btn-export-txt');
+    if (btnExportTxt) btnExportTxt.addEventListener('click', exportEvaluationToTXT);
+
+    const btnCloseSheet = document.getElementById('btn-close-sheet');
+    if (btnCloseSheet) btnCloseSheet.addEventListener('click', closeEvaluationForm);
 
     const cancelEditBtn = document.getElementById('btn-cancel-edit');
     if (cancelEditBtn) {
@@ -490,6 +932,7 @@ function initApp() {
                     selectedIds: []
                 };
                 
+                unremoveDate(date);
                 convocations.push(newMatch);
                 convocations.sort((a, b) => new Date(b.date) - new Date(a.date));
                 localStorage.setItem('futsal_portal_convocations', JSON.stringify(convocations));
@@ -501,12 +944,17 @@ function initApp() {
                     return;
                 }
                 
+                const trainingLogisticEl = document.getElementById('popup-training-logistic');
+                const trainingLogistic = trainingLogisticEl ? trainingLogisticEl.value : '';
+
                 const newTraining = {
                     id: Date.now(),
                     date: date,
-                    type: sessionType || 'Allenamento'
+                    type: sessionType || 'Allenamento',
+                    ...(trainingLogistic ? { logistic: trainingLogistic } : {})
                 };
                 
+                unremoveDate(date);
                 trainings.push(newTraining);
                 trainings.sort((a, b) => new Date(b.date) - new Date(a.date));
                 localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
@@ -624,10 +1072,13 @@ function initApp() {
                         
                         // 2. Create in trainings
                         const type = document.getElementById('edit-col-type').value.trim();
+                        const editLogisticEl = document.getElementById('edit-col-training-logistic');
+                        const editLogistic = editLogisticEl ? editLogisticEl.value : '';
                         const newSession = {
                             id: Date.now(),
                             date: newDate,
-                            type: type || 'Allenamento Tabellone',
+                            type: type || 'Allenamento',
+                            ...(editLogistic ? { logistic: editLogistic } : {}),
                             roster: {}
                         };
                         trainings.push(newSession);
@@ -675,9 +1126,16 @@ function initApp() {
                 } else {
                     // Keep as training, just update
                     const type = document.getElementById('edit-col-type').value.trim();
+                    const editLogisticEl = document.getElementById('edit-col-training-logistic');
+                    const editLogistic = editLogisticEl ? editLogisticEl.value : '';
                     if (sessionIndex !== -1) {
                         trainings[sessionIndex].date = newDate;
-                        trainings[sessionIndex].type = type || 'Allenamento Tabellone';
+                        trainings[sessionIndex].type = type || 'Allenamento';
+                        if (editLogistic) {
+                            trainings[sessionIndex].logistic = editLogistic;
+                        } else {
+                            delete trainings[sessionIndex].logistic;
+                        }
                         
                         trainings.sort((a, b) => new Date(b.date) - new Date(a.date));
                         localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
@@ -687,7 +1145,8 @@ function initApp() {
                         const newSession = {
                             id: Date.now(),
                             date: newDate,
-                            type: type || 'Allenamento Tabellone',
+                            type: type || 'Allenamento',
+                            ...(editLogistic ? { logistic: editLogistic } : {}),
                             roster: {}
                         };
                         trainings.push(newSession);
@@ -711,35 +1170,26 @@ function initApp() {
     if (deleteColumnBtn) {
         deleteColumnBtn.addEventListener('click', () => {
             const originalDate = document.getElementById('edit-col-original-date').value;
-            const wasMatch = convocations.some(c => c.date === originalDate);
+            if (!originalDate) return;
             
-            if (wasMatch) {
-                if (confirm("Sei sicuro di voler eliminare questa partita/amichevole? Verranno eliminate anche le relative convocazioni.")) {
-                    convocations = convocations.filter(c => c.date !== originalDate);
-                    localStorage.setItem('futsal_portal_convocations', JSON.stringify(convocations));
-                    
-                    showToast("Gara/Amichevole eliminata con successo!", "success");
-                    closeModal();
-                    renderConvocationsHistory();
-                    renderAttendanceBoard();
-                    renderRoster(); // Update stats
-                }
-            } else {
-                const exists = trainings.some(t => t.date === originalDate);
-                if (exists) {
-                    if (confirm("Sei sicuro di voler eliminare questo allenamento? Verranno eliminate anche le relative presenze.")) {
-                        trainings = trainings.filter(t => t.date !== originalDate);
-                        localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
-                        
-                        showToast("Allenamento eliminato con successo!", "success");
-                        closeModal();
-                        renderTrainingHistory();
-                        renderAttendanceBoard();
-                        renderRoster(); // Update stats
-                    }
-                } else {
-                    showToast("Impossibile eliminare uno slot pre-generato non memorizzato.", "error");
-                }
+            const wasMatch = convocations.some(c => c.date === originalDate);
+            const msg = wasMatch ? "Sei sicuro di voler eliminare questa partita/amichevole? Verranno eliminate anche le relative convocazioni." : "Sei sicuro di voler eliminare questo allenamento / seduta? Verranno eliminate anche le relative presenze.";
+            
+            if (confirm(msg)) {
+                convocations = convocations.filter(c => c.date !== originalDate);
+                localStorage.setItem('futsal_portal_convocations', JSON.stringify(convocations));
+                
+                trainings = trainings.filter(t => t.date !== originalDate);
+                localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
+                
+                removeDate(originalDate);
+                
+                showToast("Seduta eliminata con successo!", "success");
+                closeModal();
+                if (window.renderTrainingHistory) renderTrainingHistory();
+                if (window.renderConvocationsHistory) renderConvocationsHistory();
+                renderAttendanceBoard();
+                if (window.renderRoster) renderRoster(); // Update stats
             }
         });
     }
@@ -760,13 +1210,37 @@ function initApp() {
         });
     }
 
+    let originalTitle = document.title;
+
     window.addEventListener('beforeprint', () => {
+        originalTitle = document.title;
+
+        if (document.body.classList.contains('print-evaluation')) {
+            const playerSelect = document.getElementById('select-player');
+            const playerName = playerSelect ? playerSelect.options[playerSelect.selectedIndex]?.text : '';
+            const cleanPlayerName = playerName ? playerName.split(' (')[0].trim() : 'Giocatore';
+            
+            const rawDate = document.getElementById('assessment-date')?.value || new Date().toISOString().split('T')[0];
+            const formattedDate = rawDate.split('-').reverse().join('-'); // DD-MM-YYYY
+            
+            document.title = `${formattedDate} - Valutazione Performance - ${cleanPlayerName}`;
+        } else if (document.body.classList.contains('print-distinta')) {
+            const matchSelect = document.getElementById('select-match');
+            const matchName = matchSelect ? matchSelect.options[matchSelect.selectedIndex]?.text : '';
+            const cleanMatchName = matchName ? matchName.trim() : 'Gara';
+            
+            const rawDate = document.getElementById('match-date-display')?.textContent || new Date().toLocaleDateString('it-IT');
+            const cleanDate = rawDate.replace(/\//g, '-');
+            document.title = `${cleanDate} - Distinta - ${cleanMatchName}`;
+        }
+
         // Adapt charts colors dynamically for printer friendly colors
         adaptChartsForPrint(true);
     });
 
     window.addEventListener('afterprint', () => {
-        document.body.classList.remove('print-evaluation', 'print-distinta');
+        document.title = originalTitle;
+        document.body.classList.remove('print-evaluation', 'print-distinta', 'print-preseason');
         adaptChartsForPrint(false);
     });
 
@@ -807,7 +1281,9 @@ function setupTabs() {
             });
 
             // Tab-specific trigger actions
-            if (targetTab === 'tab-profile') {
+            if (targetTab === 'tab-dashboard') {
+                if (typeof window.renderDashboardAlertsWidget === 'function') window.renderDashboardAlertsWidget();
+            } else if (targetTab === 'tab-profile') {
                 const activeSubTab = document.querySelector('.profile-sub-tab-btn.active');
                 const targetSub = activeSubTab ? activeSubTab.getAttribute('data-subtab') : 'subtab-roster-list';
                 if (targetSub === 'subtab-roster-list') {
@@ -890,13 +1366,13 @@ function setupRosterForm() {
         }
 
         const birthYearVal = document.getElementById('new-player-birth-year').value;
+        const birthData = parseBirthData(birthYearVal);
         const weightVal = document.getElementById('new-player-weight').value;
         const heightVal = document.getElementById('new-player-height').value;
         const job = document.getElementById('new-player-job').value.trim();
         const experience = document.getElementById('new-player-experience').value.trim();
         const photoFile = document.getElementById('new-player-photo').files[0];
 
-        const birthYear = birthYearVal ? parseInt(birthYearVal, 10) : null;
         const weight = weightVal ? parseInt(weightVal, 10) : null;
         const height = heightVal ? parseInt(heightVal, 10) : null;
 
@@ -916,7 +1392,8 @@ function setupRosterForm() {
                         number,
                         foot,
                         photo: finalPhoto,
-                        birthYear,
+                        birthDate: birthData.birthDate,
+                        birthYear: birthData.birthYear,
                         weight,
                         height,
                         job,
@@ -936,7 +1413,8 @@ function setupRosterForm() {
                     number,
                     foot,
                     photo: photoBase64,
-                    birthYear,
+                    birthDate: birthData.birthDate,
+                    birthYear: birthData.birthYear,
                     weight,
                     height,
                     job,
@@ -1264,9 +1742,12 @@ window.openPlayerSummaryModal = function(id) {
     const pTests = typeof athleticTests !== 'undefined' ? athleticTests.filter(t => t.playerId === id).sort((a,b) => new Date(b.date) - new Date(a.date)) : [];
     const latestYoyo = pTests.find(t => t.type === 'yoyo');
     const latestSprint = pTests.find(t => t.type === 'sprint');
-    const latestCmj = pTests.find(t => t.type === 'cmj');
-    const latestAgilitÃ  = pTests.find(t => t.type === 'AgilitÃ ');
-    const validEvals = typeof assessments !== 'undefined' ? assessments.filter(e => e.playerId === id && (e.coachScores || e.playerScores)) : [];
+    const latestAgility = pTests.find(t => t.type === 'Agilità' || t.type === 'agility' || t.type === 'AgilitÃ ');
+    const latestCmj = pTests.find(t => t.type === 'cmj' || t.type === 'CMJ');
+    const validEvals = typeof assessments !== 'undefined' ? assessments.filter(e => String(e.playerId) === String(id) && (e.coachScores || e.playerScores)) : [];
+    
+    const sortedEvals = [...validEvals].sort((a,b) => new Date(b.date) - new Date(a.date));
+    const latestEval = sortedEvals[0];
     
     let coachAvgTech=0, coachAvgTac=0, coachAvgPhy=0, coachAvgPsy=0, coachAvgOverall=0;
     let coachActualLen = 0;
@@ -1278,7 +1759,7 @@ window.openPlayerSummaryModal = function(id) {
     
     const keysPsy = ['psic-focus', 'psic-stress', 'psic-grinta', 'psic-team'];
     const keysTech = ['tecn-control', 'tecn-pass', 'tecn-shot', 'tecn-dribble'];
-    const keysPhy = ['fisi-speed', 'fisi-stamina', 'fisi-strength', 'fisi-AgilitÃ '];
+    const keysPhy = ['fisi-speed', 'fisi-stamina', 'fisi-strength', 'fisi-agility'];
     const keysTac = ['tatt-movement', 'tatt-defense', 'tatt-transition', 'tatt-reading'];
     const allSubKeys = [...keysTech, ...keysTac, ...keysPhy, ...keysPsy];
     
@@ -1366,11 +1847,10 @@ window.openPlayerSummaryModal = function(id) {
     const allActivities = [];
     if (typeof trainings !== 'undefined') {
         trainings.forEach(t => {
-            if(t.roster && t.roster[id] !== undefined && t.roster[id] !== '-') {
-                totalAtt++;
-                if(t.roster[id] === 'P') presentCount++;
-                allActivities.push({ date: t.date, type: t.type, status: t.roster[id], isMatch: false });
-            }
+            totalAtt++;
+            const st = (t.roster && t.roster[id] !== undefined) ? t.roster[id] : 'P';
+            if (st !== 'A' && st !== 'I' && st !== 'G' && st !== '-') presentCount++;
+            allActivities.push({ date: t.date, type: t.type, status: st, isMatch: false });
         });
     }
     const attPerc = totalAtt > 0 ? Math.round((presentCount / totalAtt) * 100) : 0;
@@ -1428,9 +1908,30 @@ window.openPlayerSummaryModal = function(id) {
     const modalBody = document.getElementById('player-summary-body');
     
     const initials = getInitials(player.name);
-    const avatarHTML = player.photo 
-        ? `<img src="${player.photo}" alt="${escapeHTML(player.name)}" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--color-player);">`
-        : `<div style="width:100px; height:100px; border-radius:50%; background:var(--color-player); display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:bold; color:#0f172a;">${initials}</div>`;
+    const avatarContentHTML = player.photo 
+        ? `<img src="${player.photo}" alt="${escapeHTML(player.name)}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`
+        : `<div style="width:100%; height:100%; border-radius:50%; background:var(--color-player); display:flex; align-items:center; justify-content:center; font-size:2.2rem; font-weight:bold; color:#0f172a;">${initials}</div>`;
+
+    const avatarHTML = `
+        <div style="display:flex; flex-direction:column; align-items:center; gap:0.25rem;">
+            <div style="position:relative; width:90px; height:90px; flex-shrink:0;">
+                <div id="dossier-avatar-preview" onclick="document.getElementById('dossier-photo-input').click()" 
+                     title="Clicca per caricare/cambiare la foto del profilo"
+                     style="width:90px; height:90px; border-radius:50%; overflow:hidden; border:3px solid var(--color-player); cursor:pointer; background:rgba(0,0,0,0.3); transition:transform 0.2s ease; box-shadow:0 4px 12px rgba(0,0,0,0.4);"
+                     onmouseover="this.style.transform='scale(1.05)'"
+                     onmouseout="this.style.transform='scale(1)'">
+                    ${avatarContentHTML}
+                </div>
+                <button type="button" onclick="document.getElementById('dossier-photo-input').click()" 
+                    title="Cambia Foto Profilo"
+                    style="position:absolute; bottom:-2px; right:-2px; background:var(--color-player); color:#000; border:2px solid #0f172a; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:0.8rem; box-shadow:0 2px 6px rgba(0,0,0,0.5);">
+                    📷
+                </button>
+                <input type="file" id="dossier-photo-input" accept="image/*" style="display:none;" onchange="handleDossierPhotoUpload(this, '${player.id}')">
+            </div>
+            ${player.photo ? `<button type="button" onclick="removeDossierPhoto('${player.id}')" style="font-size:0.7rem; background:transparent; border:none; color:var(--color-danger); cursor:pointer; padding:0; margin-top:2px;" title="Rimuovi Foto del Profilo">Rimuovi foto</button>` : ''}
+        </div>
+    `;
 
     // Helper to determine the displayed value and the average fallback
     const pTechVal = validEvals.length > 0 ? playerAvgTech : '-';
@@ -1447,12 +1948,12 @@ window.openPlayerSummaryModal = function(id) {
     const yoyoVal = latestYoyo ? latestYoyo.value : '-';
     const sprintVal = latestSprint ? latestSprint.value : '-';
     const cmjVal = latestCmj ? latestCmj.value : '-';
-    const ttestVal = latestAgilitÃ  ? latestAgilitÃ .value : '-';
+    const ttestVal = latestAgility ? latestAgility.value : '-';
 
     modalBody.innerHTML = `
         <!-- Header Info (EDITABLE) -->
         <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap; background:rgba(255,255,255,0.03); padding:1rem; border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
-            <div style="transform: scale(0.8); transform-origin: left center;">${avatarHTML}</div>
+            <div>${avatarHTML}</div>
             <div style="flex:1; min-width:200px; display:flex; flex-direction:column; gap:0.25rem;">
                 <input type="text" id="edit-dossier-name" value="${escapeHTML(window.getInvertedName(player.name))}" style="font-size:1.4rem; font-weight:bold; color:var(--text-main); background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:0.2rem 0.5rem; width:100%; font-family:inherit;" />
                 <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
@@ -1468,8 +1969,8 @@ window.openPlayerSummaryModal = function(id) {
                         <input type="number" id="edit-dossier-number" value="${player.number || ''}" style="width:30px; background:transparent; border:none; color:#fff; font-weight:bold; font-size:0.8rem; text-align:center;" />
                     </div>
                     <div style="display:flex; align-items:center; gap:0.25rem; background:rgba(255,255,255,0.1); padding:0.1rem 0.5rem; border-radius:20px;">
-                        <span style="font-size:0.8rem;">Classe</span>
-                        <input type="number" id="edit-dossier-birth" value="${player.birthYear || ''}" style="width:40px; background:transparent; border:none; color:#fff; font-weight:bold; font-size:0.8rem; text-align:center;" />
+                        <span style="font-size:0.8rem;">📅 Nascita</span>
+                        <input type="date" id="edit-dossier-birth" value="${player.birthDate || (player.birthYear && player.birthYear.length === 4 ? player.birthYear + '-01-01' : '')}" style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.1rem 0.3rem; color:#fff; font-size:0.8rem;" />
                     </div>
                 </div>
             </div>
@@ -1499,7 +2000,7 @@ window.openPlayerSummaryModal = function(id) {
             
             <!-- Performance -->
             <div class="glass-panel" style="padding:0.75rem; grid-column: 1 / -1;">
-                <h4 style="margin-top:0; margin-bottom:0.25rem; color:var(--color-tech); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:0.25rem; font-size:0.95rem;">Performance & Autovalutazione</h4>
+                <h4 style="margin-top:0; margin-bottom:0.4rem; color:var(--color-tech); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:0.3rem; font-size:1.1rem; font-weight:bold;">Performance & Autovalutazione</h4>
                 <div style="display:flex; flex-wrap:wrap; gap:0.5rem; overflow:hidden;">
                     <div style="flex:1; min-width:0; position:relative; min-height: 200px; display:flex; align-items:center; justify-content:center; flex-direction:column;">
                         <canvas id="dossier-radar-chart"></canvas>
@@ -1508,11 +2009,43 @@ window.openPlayerSummaryModal = function(id) {
                         <canvas id="dossier-specific-chart"></canvas>
                     </div>
                 </div>
-                <div style="display:flex; justify-content:space-around; align-items:center; margin-top:0.5rem; text-align:center; background:rgba(0,0,0,0.2); padding:0.5rem; border-radius:6px;">
-                    <div><div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">Tecnica</div><div style="font-size:1.1rem; font-weight:bold; color:#4ade80;">${techVal}</div><div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">Auto-val: <span style="color:#fff;">${pTechVal}</span></div></div>
-                    <div><div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">Tattica</div><div style="font-size:1.1rem; font-weight:bold; color:#facc15;">${tacVal}</div><div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">Auto-val: <span style="color:#fff;">${pTacVal}</span></div></div>
-                    <div><div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">Fisica</div><div style="font-size:1.1rem; font-weight:bold; color:#f87171;">${phyVal}</div><div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">Auto-val: <span style="color:#fff;">${pPhyVal}</span></div></div>
-                    <div><div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">Psicologia</div><div style="font-size:1.1rem; font-weight:bold; color:#c084fc;">${psyVal}</div><div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">Auto-val: <span style="color:#fff;">${pPsyVal}</span></div></div>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:0.5rem; margin-top:0.75rem; text-align:center; background:rgba(0,0,0,0.25); padding:0.6rem; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Tecnica</div>
+                        <div style="font-size:1.2rem; font-weight:800; color:#4ade80; margin-top:0.1rem;">${techVal} <span style="font-size:0.7rem; color:rgba(255,255,255,0.5); font-weight:normal;">(Mister)</span></div>
+                        <div style="font-size:0.95rem; font-weight:800; color:#38bdf8; background:rgba(56, 189, 248, 0.18); border:1px solid rgba(56, 189, 248, 0.35); padding:0.2rem 0.5rem; border-radius:6px; margin-top:0.25rem;">Auto-val: ${pTechVal}</div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Tattica</div>
+                        <div style="font-size:1.2rem; font-weight:800; color:#facc15; margin-top:0.1rem;">${tacVal} <span style="font-size:0.7rem; color:rgba(255,255,255,0.5); font-weight:normal;">(Mister)</span></div>
+                        <div style="font-size:0.95rem; font-weight:800; color:#38bdf8; background:rgba(56, 189, 248, 0.18); border:1px solid rgba(56, 189, 248, 0.35); padding:0.2rem 0.5rem; border-radius:6px; margin-top:0.25rem;">Auto-val: ${pTacVal}</div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Fisica</div>
+                        <div style="font-size:1.2rem; font-weight:800; color:#f87171; margin-top:0.1rem;">${phyVal} <span style="font-size:0.7rem; color:rgba(255,255,255,0.5); font-weight:normal;">(Mister)</span></div>
+                        <div style="font-size:0.95rem; font-weight:800; color:#38bdf8; background:rgba(56, 189, 248, 0.18); border:1px solid rgba(56, 189, 248, 0.35); padding:0.2rem 0.5rem; border-radius:6px; margin-top:0.25rem;">Auto-val: ${pPhyVal}</div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Psicologia</div>
+                        <div style="font-size:1.2rem; font-weight:800; color:#c084fc; margin-top:0.1rem;">${psyVal} <span style="font-size:0.7rem; color:rgba(255,255,255,0.5); font-weight:normal;">(Mister)</span></div>
+                        <div style="font-size:0.95rem; font-weight:800; color:#38bdf8; background:rgba(56, 189, 248, 0.18); border:1px solid rgba(56, 189, 248, 0.35); padding:0.2rem 0.5rem; border-radius:6px; margin-top:0.25rem;">Auto-val: ${pPsyVal}</div>
+                    </div>
+                </div>
+
+                <!-- Piano di Crescita dell'ultima Valutazione -->
+                <div style="margin-top:0.6rem; padding-top:0.5rem; border-top:1px dashed rgba(255,255,255,0.1); font-size:0.8rem; display:flex; flex-direction:column; gap:0.4rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="color:var(--color-tatt); font-weight:bold; font-size:0.85rem;">💪 Punto di Forza / Piano:</span>
+                        <span style="color:var(--text-muted); font-size:0.75rem;">${latestEval ? formatDate(latestEval.date) : ''}</span>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.25); padding:0.4rem 0.6rem; border-radius:4px; color:var(--text-primary); font-size:0.8rem; line-height:1.35;">
+                        ${latestEval && latestEval.strengthPlan ? escapeHTML(latestEval.strengthPlan) : 'Non specificato'}
+                    </div>
+                    
+                    <span style="color:var(--color-fisi); font-weight:bold; font-size:0.85rem; margin-top:0.2rem;">⚠️ Obiettivo Debolezza / Piano d'Azione:</span>
+                    <div style="background:rgba(0,0,0,0.25); padding:0.4rem 0.6rem; border-radius:4px; color:var(--text-primary); font-size:0.8rem; line-height:1.35;">
+                        ${latestEval && (latestEval.weaknessGoal || latestEval.actionPlan) ? escapeHTML([latestEval.weaknessGoal, latestEval.actionPlan].filter(Boolean).join(' — ')) : 'Non specificato'}
+                    </div>
                 </div>
             </div>
 
@@ -1536,16 +2069,16 @@ window.openPlayerSummaryModal = function(id) {
                 </div>
             </div>
 
-            <!-- Ruoli & AdattabilitÃƒÂ  -->
+            <!-- Ruoli & Adattabilità -->
             <div class="glass-panel" style="padding:0.75rem; grid-column: 1 / -1; display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
                 <div style="flex:1; min-width:140px;">
-                    <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:0.2rem;">AdattabilitÃƒÂ </div>
+                    <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:0.2rem;">Adattabilità</div>
                     <select id="edit-dossier-sec-roles" style="background:#1e293b; border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.3rem; color:#fff; width:100%; font-size:0.8rem; cursor:pointer;">
                         <option value="" ${!player.secondaryRoles ? 'selected' : ''}>Nessuna</option>
                         <option value="Laterale Destro" ${player.secondaryRoles==='Laterale Destro'?'selected':''}>Laterale Destro</option>
                         <option value="Laterale Sinistro" ${player.secondaryRoles==='Laterale Sinistro'?'selected':''}>Laterale Sinistro</option>
                         <option value="Pivot di Manovra" ${player.secondaryRoles==='Pivot di Manovra'?'selected':''}>Pivot di Manovra</option>
-                        <option value="Pivot di ProfonditÃƒÂ " ${player.secondaryRoles==='Pivot di ProfonditÃƒÂ '?'selected':''}>Pivot di ProfonditÃƒÂ </option>
+                        <option value="Pivot di Profondità" ${player.secondaryRoles==='Pivot di Profondità' || player.secondaryRoles==='Pivot di ProfonditÃƒÂ ' ?'selected':''}>Pivot di Profondità</option>
                         <option value="Difensore d'Impostazione" ${player.secondaryRoles==="Difensore d'Impostazione"?'selected':''}>Difensore d'Impostazione</option>
                         <option value="Difensore Marcatore" ${player.secondaryRoles==='Difensore Marcatore'?'selected':''}>Difensore Marcatore</option>
                         <option value="Portiere Volante" ${player.secondaryRoles==='Portiere Volante'?'selected':''}>Portiere Volante</option>
@@ -1556,9 +2089,10 @@ window.openPlayerSummaryModal = function(id) {
                     <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:0.2rem;">Quartetto</div>
                     <select id="edit-dossier-quartets" style="background:#1e293b; border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.3rem; color:#fff; width:100%; font-size:0.8rem; cursor:pointer;">
                         <option value="" ${!player.quartets ? 'selected' : ''}>Nessuno</option>
-                        <option value="1Ã‚Â° Quartetto (Titolari)" ${player.quartets==='1Ã‚Â° Quartetto (Titolari)'?'selected':''}>1Ã‚Â° Quartetto (Titolari)</option>
-                        <option value="2Ã‚Â° Quartetto (Prime Rotazioni)" ${player.quartets==='2Ã‚Â° Quartetto (Prime Rotazioni)'?'selected':''}>2Ã‚Â° Quartetto (Prime Rotazioni)</option>
-                        <option value="3Ã‚Â° Quartetto (Seconde Rotazioni)" ${player.quartets==='3Ã‚Â° Quartetto (Seconde Rotazioni)'?'selected':''}>3Ã‚Â° Quartetto (Seconde Rotazioni)</option>
+                        <option value="1° Quartetto (Titolari)" ${player.quartets==='1° Quartetto (Titolari)' || player.quartets==='1Ã‚Â° Quartetto (Titolari)' ?'selected':''}>1° Quartetto (Titolari)</option>
+                        <option value="2° Quartetto (Prime Rotazioni)" ${player.quartets==='2° Quartetto (Prime Rotazioni)' || player.quartets==='2Ã‚Â° Quartetto (Prime Rotazioni)' ?'selected':''}>2° Quartetto (Prime Rotazioni)</option>
+                        <option value="3° Quartetto (Seconde Rotazioni)" ${player.quartets==='3° Quartetto (Seconde Rotazioni)' || player.quartets==='3Ã‚Â° Quartetto (Seconde Rotazioni)' ?'selected':''}>3° Quartetto (Seconde Rotazioni)</option>
+                        <option value="4° Quartetto (Terze Rotazioni)" ${player.quartets==='4° Quartetto (Terze Rotazioni)' || player.quartets==='4Ã‚Â° Quartetto (Terze Rotazioni)' ?'selected':''}>4° Quartetto (Terze Rotazioni)</option>
                         <option value="Rotazione Libera" ${player.quartets==='Rotazione Libera'?'selected':''}>Rotazione Libera</option>
                     </select>
                 </div>
@@ -1576,7 +2110,7 @@ window.openPlayerSummaryModal = function(id) {
             </div>
             
             <div style="grid-column: 1 / -1; display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.25rem;">
-                <button class="btn btn-danger" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="if(confirm('Sei sicuro di voler eliminare questo giÃ .id}'); closePlayerSummaryModal(); }">Cancella</button>
+                <button class="btn btn-danger" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="if(confirm('Sei sicuro di voler eliminare questo giocatore?')){ deletePlayer('${player.id}'); closePlayerSummaryModal(); }">Cancella</button>
                 <button class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="savePlayerFromDossier('${player.id}')">Salva Modifiche</button>
             </div>
         </div>
@@ -1666,7 +2200,7 @@ window.openPlayerSummaryModal = function(id) {
             const specificLabels = [
                 'Controllo', 'Passaggio', 'Tiro', 'Dribbling',
                 'Movimento', 'Difesa', 'Transizioni', 'Lettura',
-                'velocitÃ Â ', 'Resistenza', 'Forza', 'AgilitÃ Â ',
+                'Velocità', 'Resistenza', 'Forza', 'Agilità',
                 'Focus', 'Stress', 'Grinta', 'Team'
             ];
             
@@ -1681,14 +2215,14 @@ window.openPlayerSummaryModal = function(id) {
             const coachSpecificData = [
                 safeNum(sc['tecn-control']), safeNum(sc['tecn-pass']), safeNum(sc['tecn-shot']), safeNum(sc['tecn-dribble']),
                 safeNum(sc['tatt-movement']), safeNum(sc['tatt-defense']), safeNum(sc['tatt-transition']), safeNum(sc['tatt-reading']),
-                safeNum(sc['fisi-speed']), safeNum(sc['fisi-stamina']), safeNum(sc['fisi-strength']), safeNum(sc['fisi-AgilitÃ ']),
+                safeNum(sc['fisi-speed']), safeNum(sc['fisi-stamina']), safeNum(sc['fisi-strength']), safeNum(sc['fisi-agility'] || sc['fisi-Agilità'] || sc['fisi-AgilitÃ ']),
                 safeNum(sc['psic-focus']), safeNum(sc['psic-stress']), safeNum(sc['psic-grinta']), safeNum(sc['psic-team'])
             ];
 
             const playerSpecificData = [
                 safeNum(sp['tecn-control']), safeNum(sp['tecn-pass']), safeNum(sp['tecn-shot']), safeNum(sp['tecn-dribble']),
                 safeNum(sp['tatt-movement']), safeNum(sp['tatt-defense']), safeNum(sp['tatt-transition']), safeNum(sp['tatt-reading']),
-                safeNum(sp['fisi-speed']), safeNum(sp['fisi-stamina']), safeNum(sp['fisi-strength']), safeNum(sp['fisi-AgilitÃ ']),
+                safeNum(sp['fisi-speed']), safeNum(sp['fisi-stamina']), safeNum(sp['fisi-strength']), safeNum(sp['fisi-agility'] || sp['fisi-Agilità'] || sp['fisi-AgilitÃ ']),
                 safeNum(sp['psic-focus']), safeNum(sp['psic-stress']), safeNum(sp['psic-grinta']), safeNum(sp['psic-team'])
             ];
 
@@ -1759,10 +2293,12 @@ window.savePlayerFromDossier = function(id) {
     const playerIndex = players.findIndex(p => String(p.id) === String(id));
     if (playerIndex === -1) return;
 
+    const birthData = parseBirthData(document.getElementById('edit-dossier-birth').value);
     players[playerIndex].name = window.getInvertedName(document.getElementById('edit-dossier-name').value);
     players[playerIndex].role = document.getElementById('edit-dossier-role').value;
     players[playerIndex].number = document.getElementById('edit-dossier-number').value;
-    players[playerIndex].birthYear = document.getElementById('edit-dossier-birth').value;
+    players[playerIndex].birthDate = birthData.birthDate;
+    players[playerIndex].birthYear = birthData.birthYear;
     players[playerIndex].height = document.getElementById('edit-dossier-height').value;
     players[playerIndex].weight = document.getElementById('edit-dossier-weight').value;
     players[playerIndex].foot = document.getElementById('edit-dossier-foot').value;
@@ -1776,6 +2312,54 @@ window.savePlayerFromDossier = function(id) {
     showToast("Profilo aggiornato!", "success");
     closePlayerSummaryModal();
     if(typeof renderRoster === 'function') renderRoster();
+};
+
+window.handleDossierPhotoUpload = function(input, playerId) {
+    const file = input.files && input.files[0];
+    if (!file) return;
+
+    compressPlayerPhoto(file, (compressedBase64) => {
+        if (!compressedBase64) return;
+        const playerIndex = players.findIndex(p => String(p.id) === String(playerId));
+        if (playerIndex === -1) return;
+
+        players[playerIndex].photo = compressedBase64;
+        localStorage.setItem('futsal_portal_players', JSON.stringify(players));
+
+        const avatarPreviewEl = document.getElementById('dossier-avatar-preview');
+        if (avatarPreviewEl) {
+            avatarPreviewEl.innerHTML = `<img src="${compressedBase64}" alt="${escapeHTML(players[playerIndex].name)}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+        }
+
+        if (typeof renderRoster === 'function') renderRoster();
+        if (typeof renderGrid === 'function') renderGrid();
+        if (typeof renderQuartets === 'function') renderQuartets();
+
+        showToast("Foto del profilo aggiornata!", "success");
+    });
+};
+
+window.removeDossierPhoto = function(playerId) {
+    if (!confirm("Vuoi rimuovere la foto del profilo di questo giocatore?")) return;
+
+    const playerIndex = players.findIndex(p => String(p.id) === String(playerId));
+    if (playerIndex === -1) return;
+
+    players[playerIndex].photo = null;
+    localStorage.setItem('futsal_portal_players', JSON.stringify(players));
+
+    const player = players[playerIndex];
+    const initials = getInitials(player.name);
+    const avatarPreviewEl = document.getElementById('dossier-avatar-preview');
+    if (avatarPreviewEl) {
+        avatarPreviewEl.innerHTML = `<div style="width:100%; height:100%; border-radius:50%; background:var(--color-player); display:flex; align-items:center; justify-content:center; font-size:2.2rem; font-weight:bold; color:#0f172a;">${initials}</div>`;
+    }
+
+    if (typeof renderRoster === 'function') renderRoster();
+    if (typeof renderGrid === 'function') renderGrid();
+    if (typeof renderQuartets === 'function') renderQuartets();
+
+    showToast("Foto del profilo rimossa", "info");
 };
 
 window.deletePlayer = function(id) {
@@ -1824,30 +2408,94 @@ window.viewTrendForPlayer = function(playerId) {
 function populatePlayerDropdowns() {
     const selectPlayer = document.getElementById('select-player');
     const selectTrendPlayer = document.getElementById('select-trend-player');
+    if (!selectPlayer || !selectTrendPlayer) return;
 
     // Save current selections
     const prevSelectVal = selectPlayer.value;
     const prevTrendVal = selectTrendPlayer.value;
 
+    // Sort players alphabetically by Cognome Nome (or inverted name)
+    const sortedPlayers = [...players].sort((a, b) => {
+        const nameA = window.getInvertedName ? window.getInvertedName(a.name) : (a.name || '');
+        const nameB = window.getInvertedName ? window.getInvertedName(b.name) : (b.name || '');
+        return nameA.localeCompare(nameB, 'it', { sensitivity: 'base' });
+    });
+
     const optionsHTML = `
-        <option value="">-- Seleziona giÃ  --</option>
-        ${players.map(p => `<option value="${p.id}">${escapeHTML(p.name)} (#${p.number})</option>`).join('')}
+        <option value="">-- Seleziona giocatore --</option>
+        ${sortedPlayers.map(p => {
+            const displayName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+            const numLabel = p.number ? ` (#${p.number})` : '';
+            return `<option value="${p.id}">${escapeHTML(displayName)}${numLabel}</option>`;
+        }).join('')}
     `;
 
     selectPlayer.innerHTML = optionsHTML;
     selectTrendPlayer.innerHTML = optionsHTML;
 
     // Restore selections if player still exists
-    if (players.some(p => p.id == prevSelectVal)) selectPlayer.value = prevSelectVal;
-    if (players.some(p => p.id == prevTrendVal)) selectTrendPlayer.value = prevTrendVal;
+    if (players.some(p => String(p.id) === String(prevSelectVal))) selectPlayer.value = prevSelectVal;
+    if (players.some(p => String(p.id) === String(prevTrendVal))) selectTrendPlayer.value = prevTrendVal;
 }
 
 // ==========================================================================
 // TAB 2: EVALUATIONS & CALCULATIONS
 // ==========================================================================
+function convertSliderSpansToInputs() {
+    const spans = document.querySelectorAll('.slider-value');
+    spans.forEach(span => {
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.className = 'slider-value-input';
+        input.id = span.id;
+        input.value = span.textContent;
+        input.min = '1';
+        input.max = '10';
+        input.step = '1';
+        input.style.width = '3.5rem';
+        input.style.background = 'rgba(0,0,0,0.2)';
+        input.style.border = '1px solid rgba(255,255,255,0.1)';
+        input.style.borderRadius = '4px';
+        input.style.color = '#fff';
+        input.style.textAlign = 'center';
+        input.style.fontSize = '0.9rem';
+        input.style.fontWeight = 'bold';
+        
+        // Sincronizzazione bidirezionale digitando il numero
+        input.addEventListener('change', (e) => {
+            let val = parseInt(e.target.value, 10);
+            if (isNaN(val)) val = 5;
+            if (val < 1) val = 1;
+            if (val > 10) val = 10;
+            e.target.value = val;
+            
+            const sliderId = e.target.id.replace('val-', '');
+            const slider = document.getElementById(sliderId);
+            if (slider) {
+                slider.value = val;
+            }
+            
+            const idParts = sliderId.split('-');
+            const param = idParts[0] + '-' + idParts[1];
+            const role = idParts[2]; // 'player' | 'coach'
+            if (role === 'player') {
+                tempPlayerScores[param] = val;
+            } else {
+                tempCoachScores[param] = val;
+            }
+            updateCalculations();
+        });
+        
+        span.replaceWith(input);
+    });
+}
+
 function setupEvaluationForm() {
     const dateInput = document.getElementById('assessment-date');
     if (!dateInput) return; // Siamo in login.html o l'elemento non esiste
+
+    // Converti le etichette span in input modificabili
+    convertSliderSpansToInputs();
 
     const selectPlayer = document.getElementById('select-player');
 
@@ -1863,8 +2511,11 @@ function setupEvaluationForm() {
         slider.addEventListener('input', (e) => {
             const val = parseInt(e.target.value, 10);
             
-            // 1. Update text label
-            document.getElementById(`val-${e.target.id}`).textContent = val;
+            // 1. Update text label (ora è un input)
+            const valEl = document.getElementById(`val-${e.target.id}`);
+            if (valEl) {
+                valEl.value = val;
+            }
 
             // 2. Parse ID and save in temporary state arrays
             const idParts = e.target.id.split('-');
@@ -1882,6 +2533,17 @@ function setupEvaluationForm() {
         });
     });
 
+    const hideCoachCheckbox = document.getElementById('hide-coach-evaluation');
+    if (hideCoachCheckbox) {
+        hideCoachCheckbox.addEventListener('change', () => {
+            const evalSubtab = document.getElementById('subtab-evaluation');
+            if (evalSubtab) {
+                evalSubtab.classList.toggle('hide-coach-mode', hideCoachCheckbox.checked);
+            }
+            updateCalculations();
+        });
+    }
+
     initRadarChart();
 }
 
@@ -1897,24 +2559,29 @@ function syncSlidersUI() {
 
         const valSpan = document.getElementById(`val-${slider.id}`);
         if (valSpan) {
-            valSpan.textContent = slider.value;
+            valSpan.value = slider.value;
         }
     });
 }
 
 function handlePlayerChange() {
-    const playerId = parseInt(document.getElementById('select-player').value, 10);
+    const rawVal = document.getElementById('select-player').value;
     
-    if (!playerId) {
+    if (!rawVal) {
         resetAssessmentForm();
         return;
     }
 
-    const player = players.find(p => p.id === playerId);
+    const player = players.find(p => String(p.id) === String(rawVal));
+    if (!player) {
+        resetAssessmentForm();
+        return;
+    }
+
     updateAthleteProfileCard(player);
 
     // Check if there is an existing assessment for this player to load as base
-    const playerSheets = assessments.filter(a => a.playerId === playerId);
+    const playerSheets = assessments.filter(a => String(a.playerId) === String(player.id));
     
     if (playerSheets.length > 0) {
         // Load the most recent evaluation as a template
@@ -1941,11 +2608,29 @@ function handlePlayerChange() {
         // Set date to today instead of old date to prevent accidental overwrites of history
         document.getElementById('assessment-date').value = new Date().toISOString().split('T')[0];
 
+        const hideCoachCheckbox = document.getElementById('hide-coach-evaluation');
+        if (hideCoachCheckbox) {
+            hideCoachCheckbox.checked = !!latest.hideCoachEvaluation;
+            const evalSubtab = document.getElementById('subtab-evaluation');
+            if (evalSubtab) {
+                evalSubtab.classList.toggle('hide-coach-mode', hideCoachCheckbox.checked);
+            }
+        }
+
         showToast("Caricate valutazioni precedenti come base di compilazione.", "info");
     } else {
         // Brand new player, reset completely
         resetTemporaryScores();
         clearGrowthPlanFields();
+        
+        const hideCoachCheckbox = document.getElementById('hide-coach-evaluation');
+        if (hideCoachCheckbox) {
+            hideCoachCheckbox.checked = false;
+            const evalSubtab = document.getElementById('subtab-evaluation');
+            if (evalSubtab) {
+                evalSubtab.classList.remove('hide-coach-mode');
+            }
+        }
     }
 
     // Sync sliders UI with states
@@ -1979,12 +2664,28 @@ function clearGrowthPlanFields() {
 function resetAssessmentForm() {
     document.getElementById('select-player').value = '';
     document.getElementById('assessment-date').value = new Date().toISOString().split('T')[0];
+    
+    const hideCoachCheckbox = document.getElementById('hide-coach-evaluation');
+    if (hideCoachCheckbox) {
+        hideCoachCheckbox.checked = false;
+        const evalSubtab = document.getElementById('subtab-evaluation');
+        if (evalSubtab) {
+            evalSubtab.classList.remove('hide-coach-mode');
+        }
+    }
+    
     resetTemporaryScores();
     clearGrowthPlanFields();
     syncSlidersUI();
     updateCalculations();
     updateAthleteProfileCard(null);
 }
+
+window.closeEvaluationForm = function() {
+    resetAssessmentForm();
+    if (typeof toggleEditProfileCardMode === 'function') toggleEditProfileCardMode(false);
+    showToast("Scheda di valutazione chiusa.", "info");
+};
 
 // ==========================================================================
 // MATH ENGINE & INSIGHT AUTO-PLAN GENERATOR
@@ -1994,7 +2695,7 @@ function updateCalculations() {
     const catKeys = {
         psicologia: ['psic-focus', 'psic-stress', 'psic-grinta', 'psic-team'],
         tecnica: ['tecn-control', 'tecn-pass', 'tecn-shot', 'tecn-dribble'],
-        fisica: ['fisi-speed', 'fisi-stamina', 'fisi-strength', 'fisi-AgilitÃ '],
+        fisica: ['fisi-speed', 'fisi-stamina', 'fisi-strength', 'fisi-agility'],
         tattica: ['tatt-movement', 'tatt-defense', 'tatt-transition', 'tatt-reading']
     };
 
@@ -2030,15 +2731,17 @@ function updateCalculations() {
 
     // Set Perception gap textual assessment
     const gapAnalysisEl = document.getElementById('gap-analysis-text');
-    if (absoluteGap <= 0.8) {
-        gapAnalysisEl.textContent = "Allineamento Elevato (Mister e giÃ  concordano)";
-        gapAnalysisEl.style.color = "var(--color-tatt)";
-    } else if (overallPlayer > overallCoach) {
-        gapAnalysisEl.textContent = "Sopravvalutazione (Il giÃ  si valuta piÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¹ alto del Mister)";
-        gapAnalysisEl.style.color = "var(--color-fisi)";
-    } else {
-        gapAnalysisEl.textContent = "Sottovalutazione (Il mister valuta il giÃ  piÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¹ alto)";
-        gapAnalysisEl.style.color = "var(--color-player)";
+    if (gapAnalysisEl) {
+        if (absoluteGap <= 0.8) {
+            gapAnalysisEl.textContent = "🎯 Allineamento Elevato (Mister e Giocatore concordano)";
+            gapAnalysisEl.style.color = "var(--color-tatt)";
+        } else if (overallPlayer > overallCoach) {
+            gapAnalysisEl.textContent = "⚠️ Sopravvalutazione (Il Giocatore si valuta più in alto del Mister)";
+            gapAnalysisEl.style.color = "var(--color-fisi)";
+        } else {
+            gapAnalysisEl.textContent = "💡 Sottovalutazione (Il Mister valuta il Giocatore più in alto)";
+            gapAnalysisEl.style.color = "var(--color-player)";
+        }
     }
 
     // 4. Update Radar Graph
@@ -2101,32 +2804,30 @@ function updateDetectedStrengthsAndWeaknesses(scores) {
     const strengthLabelEl = document.getElementById('detected-strength');
     const weaknessLabelEl = document.getElementById('detected-weakness');
 
-    const strengthInfo = paramInfo[strengthKey];
-    const weaknessInfo = paramInfo[weaknessKey];
+    const rawVal = document.getElementById('select-player')?.value;
+    const currPlayer = rawVal ? players.find(p => String(p.id) === String(rawVal)) : null;
+    const isGK = currPlayer && (currPlayer.role === 'Portiere' || currPlayer.role === 'POR');
+    const labelSource = isGK ? gkParamLabels : defaultParamLabels;
 
-    strengthLabelEl.textContent = `${strengthInfo.label} (${maxVal}/10)`;
-    weaknessLabelEl.textContent = `${weaknessInfo.label} (${minVal}/10)`;
+    const sLabel = labelSource[strengthKey] ? labelSource[strengthKey].label : (paramInfo[strengthKey] ? paramInfo[strengthKey].label : strengthKey);
+    const wLabel = labelSource[weaknessKey] ? labelSource[weaknessKey].label : (paramInfo[weaknessKey] ? paramInfo[weaknessKey].label : weaknessKey);
 
-    // Auto populate textareas if they have NOT been modified by the user
-    const strengthPlanTxt = document.getElementById('strength-plan');
-    const weaknessGoalTxt = document.getElementById('weakness-goal');
-    const weaknessActionTxt = document.getElementById('weakness-action');
+    if (strengthLabelEl) strengthLabelEl.textContent = `${sLabel} (${maxVal}/10)`;
+    if (weaknessLabelEl) weaknessLabelEl.textContent = `${wLabel} (${minVal}/10)`;
 
-    // Helper checking if a textarea contains default text of ANY key
-    const isDefaultStrengthText = (text) => Object.values(defaultPlans).some(p => p.strength === text);
-    const isDefaultGoalText = (text) => Object.values(defaultPlans).some(p => p.weaknessGoal === text);
-    const isDefaultActionText = (text) => Object.values(defaultPlans).some(p => p.action === text);
-
-    if (!userEditedFields.strengthPlan || strengthPlanTxt.value.trim() === '' || isDefaultStrengthText(strengthPlanTxt.value.trim())) {
-        strengthPlanTxt.value = defaultPlans[strengthKey].strength;
+    // Auto-fill Growth Plan recommendations if not manually edited by user
+    const planSource = isGK ? (window.gkDefaultPlans || {}) : (window.defaultPlans || {});
+    if (!userEditedFields.strengthPlan && planSource[strengthKey] && planSource[strengthKey].strength) {
+        const strEl = document.getElementById('strength-plan');
+        if (strEl) strEl.value = planSource[strengthKey].strength;
     }
-
-    if (!userEditedFields.weaknessGoal || weaknessGoalTxt.value.trim() === '' || isDefaultGoalText(weaknessGoalTxt.value.trim())) {
-        weaknessGoalTxt.value = defaultPlans[weaknessKey].weaknessGoal;
+    if (!userEditedFields.weaknessGoal && planSource[weaknessKey] && planSource[weaknessKey].weaknessGoal) {
+        const wgEl = document.getElementById('weakness-goal');
+        if (wgEl) wgEl.value = planSource[weaknessKey].weaknessGoal;
     }
-
-    if (!userEditedFields.weaknessAction || weaknessActionTxt.value.trim() === '' || isDefaultActionText(weaknessActionTxt.value.trim())) {
-        weaknessActionTxt.value = defaultPlans[weaknessKey].action;
+    if (!userEditedFields.weaknessAction && planSource[weaknessKey] && planSource[weaknessKey].action) {
+        const waEl = document.getElementById('weakness-action');
+        if (waEl) waEl.value = planSource[weaknessKey].action;
     }
 }
 
@@ -2203,6 +2904,11 @@ function updateRadarChart(playerData, coachData) {
     if (radarChartInstance) {
         radarChartInstance.data.datasets[0].data = playerData;
         radarChartInstance.data.datasets[1].data = coachData;
+        
+        const hideCoachEl = document.getElementById('hide-coach-evaluation');
+        const hideCoach = hideCoachEl ? hideCoachEl.checked : false;
+        radarChartInstance.data.datasets[1].hidden = hideCoach;
+        
         radarChartInstance.update();
     }
 }
@@ -2211,9 +2917,10 @@ function updateRadarChart(playerData, coachData) {
 // CRUDS FOR EVALUATIONS (SAVE / LOAD / DELETE)
 // ==========================================================================
 function saveAssessment() {
-    const playerId = parseInt(document.getElementById('select-player').value, 10);
-    if (!playerId) {
-        showToast("Seleziona prima un giÃ !", "error");
+    const rawVal = document.getElementById('select-player').value;
+    const player = players.find(p => String(p.id) === String(rawVal));
+    if (!player) {
+        showToast("Seleziona prima un giocatore!", "error");
         document.getElementById('select-player').focus();
         return;
     }
@@ -2233,7 +2940,7 @@ function saveAssessment() {
 
     const record = {
         id: activeAssessmentId || Date.now(),
-        playerId: playerId,
+        playerId: player.id,
         date: date,
         playerScores: { ...tempPlayerScores },
         coachScores: { ...tempCoachScores },
@@ -2241,7 +2948,8 @@ function saveAssessment() {
         overallCoach: overallCoach,
         strengthPlan: strengthPlan,
         weaknessGoal: weaknessGoal,
-        actionPlan: actionPlan
+        actionPlan: actionPlan,
+        hideCoachEvaluation: document.getElementById('hide-coach-evaluation').checked
     };
 
     if (activeAssessmentId) {
@@ -2250,9 +2958,9 @@ function saveAssessment() {
         showToast("Valutazione aggiornata correttamente!", "success");
     } else {
         // Check if there is already an evaluation on the same day for this player
-        const duplicateIdx = assessments.findIndex(a => a.playerId === playerId && a.date === date);
+        const duplicateIdx = assessments.findIndex(a => String(a.playerId) === String(player.id) && a.date === date);
         if (duplicateIdx !== -1) {
-            if (confirm("ÃƒÆ’Ã†â€™Ãƒâ€šÃ‹â€  giÃ . Vuoi sovrascriverla?")) {
+            if (confirm("Esiste già una valutazione per questa data. Vuoi sovrascriverla?")) {
                 record.id = assessments[duplicateIdx].id; // Keep original ID
                 assessments[duplicateIdx] = record;
                 showToast("Valutazione sovrascritta correttamente!", "success");
@@ -2262,15 +2970,18 @@ function saveAssessment() {
         } else {
             // Push new
             assessments.unshift(record);
-            showToast("Autovalutazione salvata correttamente!", "success");
+            showToast("Valutazione salvata correttamente!", "success");
         }
     }
 
     localStorage.setItem('futsal_portal_assessments', JSON.stringify(assessments));
     activeAssessmentId = record.id; // Mark current as saved
 
+    // Refresh athlete card & historical dropdown
+    updateAthleteProfileCard(player);
+
     // Refresh roster averages
-    renderRoster();
+    if (typeof renderRoster === 'function') renderRoster();
 }
 
 // ==========================================================================
@@ -2282,11 +2993,18 @@ function setupTrendsUI() {
 }
 
 function handleTrendPlayerChange() {
-    const playerId = parseInt(document.getElementById('select-trend-player').value, 10);
+    const rawVal = document.getElementById('select-trend-player').value;
     const warning = document.getElementById('trends-warning');
     const container = document.getElementById('trends-core-container');
 
-    if (!playerId) {
+    if (!rawVal) {
+        warning.classList.remove('hidden');
+        container.classList.add('hidden');
+        return;
+    }
+
+    const player = players.find(p => String(p.id) === String(rawVal));
+    if (!player) {
         warning.classList.remove('hidden');
         container.classList.add('hidden');
         return;
@@ -2295,8 +3013,7 @@ function handleTrendPlayerChange() {
     warning.classList.add('hidden');
     container.classList.remove('hidden');
 
-    const player = players.find(p => p.id === playerId);
-    const playerSheets = assessments.filter(a => a.playerId === playerId);
+    const playerSheets = assessments.filter(a => String(a.playerId) === String(player.id));
     
     // Sort assessments chronologically (oldest first for line chart timeline)
     playerSheets.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -2434,7 +3151,7 @@ function renderTrendLineChart(sheets) {
 
 // Load historical sheet to Form
 window.loadAssessmentToForm = function(id) {
-    const sheet = assessments.find(a => a.id === id);
+    const sheet = assessments.find(a => String(a.id) === String(id));
     if (!sheet) return;
 
     // Switch tab
@@ -2446,12 +3163,21 @@ window.loadAssessmentToForm = function(id) {
     document.getElementById('assessment-date').value = sheet.date;
 
     // Render profile card
-    const player = players.find(p => p.id === sheet.playerId);
+    const player = players.find(p => String(p.id) === String(sheet.playerId));
     updateAthleteProfileCard(player);
 
     // Populate scores
     tempPlayerScores = { ...sheet.playerScores };
     tempCoachScores = { ...sheet.coachScores };
+
+    const hideCoachCheckbox = document.getElementById('hide-coach-evaluation');
+    if (hideCoachCheckbox) {
+        hideCoachCheckbox.checked = !!sheet.hideCoachEvaluation;
+        const evalSubtab = document.getElementById('subtab-evaluation');
+        if (evalSubtab) {
+            evalSubtab.classList.toggle('hide-coach-mode', hideCoachCheckbox.checked);
+        }
+    }
 
     // Fill Growth Plans
     document.getElementById('strength-plan').value = sheet.strengthPlan || '';
@@ -2505,12 +3231,96 @@ window.deleteAssessment = function(id) {
 function handlePrint() {
     const playerId = document.getElementById('select-player').value;
     if (!playerId) {
-        showToast("Seleziona il giÃ !", "error");
+        showToast("Seleziona il giocatore!", "error");
         return;
     }
     document.body.classList.add('print-evaluation');
     document.body.classList.remove('print-distinta');
     window.print();
+}
+
+function getPlayerParamScore(paramKey) {
+    return tempPlayerScores[paramKey] || 5;
+}
+
+function exportEvaluationToTXT() {
+    const playerId = document.getElementById('select-player').value;
+    if (!playerId) {
+        showToast("Seleziona prima un giocatore!", "error");
+        return;
+    }
+    const player = players.find(p => String(p.id) === String(playerId));
+    const playerName = player ? player.name : 'Giocatore';
+    const rawDate = document.getElementById('assessment-date').value;
+    const formattedDate = rawDate.split('-').reverse().join('-');
+
+    // Category averages (Player)
+    const catKeys = {
+        'Stato Psicologico': ['psic-focus', 'psic-stress', 'psic-grinta', 'psic-team'],
+        'Tecnica Individuale': ['tecn-control', 'tecn-pass', 'tecn-shot', 'tecn-dribble'],
+        'Condizione Fisica': ['fisi-speed', 'fisi-stamina', 'fisi-strength', 'fisi-Agilità'],
+        'Tattica': ['tatt-movement', 'tatt-defense', 'tatt-transition', 'tatt-reading']
+    };
+
+    let averagesTxt = "";
+    Object.keys(catKeys).forEach(cat => {
+        const avg = calculateAverage(catKeys[cat], tempPlayerScores);
+        averagesTxt += `- ${cat}: ${avg.toFixed(1)}/10\n`;
+    });
+    
+    const overallPlayer = calculateAverage(Object.keys(paramInfo), tempPlayerScores);
+    averagesTxt += `- MEDIA GENERALE GIOCATORE: ${overallPlayer.toFixed(1)}/10\n`;
+
+    let detailTxt = "";
+    let currentCat = "";
+    Object.keys(paramInfo).forEach(key => {
+        const info = paramInfo[key];
+        if (info.cat !== currentCat) {
+            currentCat = info.cat;
+            detailTxt += `[${currentCat}]\n`;
+        }
+        const score = tempPlayerScores[key] || 5;
+        detailTxt += `  - ${info.label}: ${score}/10\n`;
+    });
+
+    const strengthPlan = document.getElementById('strength-plan').value.trim();
+    const weaknessGoal = document.getElementById('weakness-goal').value.trim();
+    const actionPlan = document.getElementById('weakness-action').value.trim();
+    
+    const strengthLabel = document.getElementById('detected-strength').textContent;
+    const weaknessLabel = document.getElementById('detected-weakness').textContent;
+
+    let txt = `==================================================\n`;
+    txt += `FUTSAL DASHBOARD - VALUTAZIONE PERFORMANCE\n`;
+    txt += `==================================================\n`;
+    txt += `Giocatore: ${playerName}\n`;
+    txt += `Data Valutazione: ${formattedDate}\n`;
+    txt += `--------------------------------------------------\n\n`;
+    
+    txt += `1. MEDIE PER CATEGORIA (GIOCATORE)\n`;
+    txt += averagesTxt + `\n`;
+    
+    txt += `2. DETTAGLIO PUNTEGGI INDIVIDUALI (GIOCATORE)\n`;
+    txt += detailTxt + `\n`;
+    
+    txt += `3. PIANO DI CRESCITA INDIVIDUALE\n`;
+    txt += `Punto di Forza Rilevato: ${strengthLabel}\n`;
+    txt += `  - Obiettivo e Piano di Valorizzazione:\n`;
+    txt += `    ${strengthPlan || 'Nessuna nota inserita'}\n\n`;
+    txt += `Punto Debole Rilevato: ${weaknessLabel}\n`;
+    txt += `  - Obiettivo Specifico di Miglioramento (Goal):\n`;
+    txt += `    ${weaknessGoal || 'Nessuna nota inserita'}\n`;
+    txt += `  - Piano d'Azione (Action Plan):\n`;
+    txt += `    ${actionPlan || 'Nessuna nota inserita'}\n\n`;
+    txt += `==================================================\n`;
+
+    const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${formattedDate} - Valutazione Performance - ${playerName}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 // Dynamically adapts Chart.js styles for print vs screen display
@@ -2560,6 +3370,33 @@ function adaptChartsForPrint(isPrint) {
             if (legend.labels) legend.labels.color = fontColor;
         }
         trainingsAttendanceChartInstance.update('none');
+    }
+
+    if (riepilogoRadarChart) {
+        if (riepilogoRadarChart.options.scales && riepilogoRadarChart.options.scales.r) {
+            const rScale = riepilogoRadarChart.options.scales.r;
+            if (rScale.ticks) rScale.ticks.color = fontColor;
+            if (rScale.grid) rScale.grid.color = gridColor;
+            if (rScale.angleLines) rScale.angleLines.color = gridColor;
+            if (rScale.pointLabels) rScale.pointLabels.color = fontColor;
+        }
+        riepilogoRadarChart.update('none');
+    }
+
+    if (riepilogoBarChart) {
+        if (riepilogoBarChart.options.scales) {
+            const x = riepilogoBarChart.options.scales.x;
+            const y = riepilogoBarChart.options.scales.y;
+            if (x) {
+                if (x.grid) x.grid.color = gridColor;
+                if (x.ticks) x.ticks.color = fontColor;
+            }
+            if (y) {
+                if (y.grid) y.grid.color = gridColor;
+                if (y.ticks) y.ticks.color = fontColor;
+            }
+        }
+        riepilogoBarChart.update('none');
     }
 }
 
@@ -2618,7 +3455,7 @@ window.editPlayer = function(id) {
     document.getElementById('new-player-role').value = player.role;
     document.getElementById('new-player-number').value = player.number;
     document.getElementById('new-player-foot').value = player.foot;
-    document.getElementById('new-player-birth-year').value = player.birthYear || '';
+    document.getElementById('new-player-birth-year').value = player.birthDate || (player.birthYear && String(player.birthYear).length === 4 ? player.birthYear + '-01-01' : '');
     document.getElementById('new-player-weight').value = player.weight || '';
     document.getElementById('new-player-height').value = player.height || '';
     document.getElementById('new-player-job').value = player.job || '';
@@ -2665,6 +3502,417 @@ function cancelEdit() {
     }
 }
 
+function getZodiacSign(month, day) {
+    if (!month || !day) return '';
+    const dates = [20, 19, 21, 20, 21, 21, 23, 23, 23, 23, 22, 22];
+    const signs = [
+        "♑ Capricorno", "♒ Acquario", "♓ Pesci", "♈ Ariete", 
+        "♉ Toro", "♊ Gemelli", "♋ Cancro", "♌ Leone", 
+        "♍ Vergine", "♎ Bilancia", "♏ Scorpione", "♐ Sagittario", "♑ Capricorno"
+    ];
+    return day < dates[month - 1] ? signs[month - 1] : signs[month];
+}
+
+window.bdaySortCol = window.bdaySortCol || 'nextBday';
+window.bdaySortDir = window.bdaySortDir || 'asc';
+
+window.sortBirthdaysTable = function(colKey) {
+    if (window.bdaySortCol === colKey) {
+        window.bdaySortDir = window.bdaySortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+        window.bdaySortCol = colKey;
+        window.bdaySortDir = 'asc';
+    }
+    if (typeof window.renderBirthdaysTab === 'function') window.renderBirthdaysTab();
+};
+
+window.switchBirthdayView = function(mode) {
+    window.birthdayViewMode = mode;
+    const calView = document.getElementById('birthday-calendar-view');
+    const tblView = document.getElementById('birthday-table-view');
+    const calBtn = document.getElementById('bday-view-calendar-btn');
+    const tblBtn = document.getElementById('bday-view-table-btn');
+
+    if (mode === 'calendar') {
+        if (calView) calView.style.display = 'block';
+        if (tblView) tblView.style.display = 'none';
+        if (calBtn) { calBtn.style.background = 'var(--color-player)'; calBtn.style.color = '#000'; calBtn.style.fontWeight = 'bold'; }
+        if (tblBtn) { tblBtn.style.background = 'transparent'; tblBtn.style.color = 'var(--text-muted)'; tblBtn.style.fontWeight = 'normal'; }
+    } else {
+        if (calView) calView.style.display = 'none';
+        if (tblView) tblView.style.display = 'block';
+        if (tblBtn) { tblBtn.style.background = 'var(--color-player)'; tblBtn.style.color = '#000'; tblBtn.style.fontWeight = 'bold'; }
+        if (calBtn) { calBtn.style.background = 'transparent'; calBtn.style.color = 'var(--text-muted)'; calBtn.style.fontWeight = 'normal'; }
+    }
+    if (typeof window.renderBirthdaysTab === 'function') window.renderBirthdaysTab();
+};
+
+window.renderBirthdaysTab = function() {
+    const tbody = document.getElementById('birthdays-tbody');
+    const spotlightContainer = document.getElementById('birthday-spotlight-container');
+    const seasonCalendarGrid = document.getElementById('season-calendar-grid');
+
+    const monthFilter = document.getElementById('birthday-month-filter')?.value || 'all';
+    const searchQuery = (document.getElementById('birthday-search-input')?.value || '').toLowerCase().trim();
+
+    const monthNamesIt = [
+        "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+        "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
+    ];
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const playersList = (typeof players !== 'undefined' && Array.isArray(players) && players.length > 0) ? players : (window.players || []);
+    
+    // Compute birthday metrics for each player
+    const processedPlayers = playersList.map(p => {
+        const bInfo = window.parsePlayerBirthDate(p);
+        if (!bInfo) {
+            return { player: p, hasBirthDate: false, daysRemaining: 9999 };
+        }
+
+        const bMonth = bInfo.month;
+        const bDay = bInfo.day;
+        const bYear = bInfo.year;
+
+        // Next birthday target
+        let nextBday = new Date(today.getFullYear(), bMonth - 1, bDay);
+        if (nextBday < today) {
+            nextBday = new Date(today.getFullYear() + 1, bMonth - 1, bDay);
+        }
+
+        const diffTime = nextBday.getTime() - today.getTime();
+        const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        const currentAge = bYear ? (today.getFullYear() - bYear - ((today.getMonth() + 1 < bMonth || (today.getMonth() + 1 === bMonth && today.getDate() < bDay)) ? 1 : 0)) : null;
+        const turningAge = bYear ? (nextBday.getFullYear() - bYear) : null;
+
+        const zodiac = getZodiacSign(bMonth, bDay);
+        const birthDateStr = bYear ? `${bDay} ${monthNamesIt[bMonth - 1]} ${bYear}` : `${bDay} ${monthNamesIt[bMonth - 1]}`;
+
+        return {
+            player: p,
+            hasBirthDate: true,
+            bMonth,
+            bDay,
+            bYear,
+            daysRemaining,
+            nextBday,
+            currentAge,
+            turningAge,
+            zodiac,
+            birthDateStr
+        };
+    });
+
+    // 1. Spotlight Banner (Next Birthday or Today)
+    const validPlayersWithBday = processedPlayers.filter(p => p.hasBirthDate);
+    validPlayersWithBday.sort((a, b) => a.daysRemaining - b.daysRemaining);
+
+    if (spotlightContainer) {
+        if (validPlayersWithBday.length > 0) {
+            const closest = validPlayersWithBday[0];
+            const pName = window.getInvertedName ? window.getInvertedName(closest.player.name) : closest.player.name;
+
+            if (closest.daysRemaining === 0) {
+                spotlightContainer.innerHTML = `
+                    <div style="padding: 1rem 1.25rem; background: linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(234, 179, 8, 0.05)); border: 2px solid #facc15; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; animation: pulse 2s infinite;">
+                        <div style="display: flex; align-items: center; gap: 0.85rem;">
+                            <span style="font-size: 2.2rem;">🎉</span>
+                            <div>
+                                <h4 style="margin: 0; color: #fef08a; font-size: 1.15rem; font-weight: 800;">OGGI È IL COMPLEANNO DI ${escapeHTML(pName).toUpperCase()}! 🥳</h4>
+                                <p style="margin: 0.2rem 0 0 0; color: var(--text-primary); font-size: 0.88rem;">
+                                    Tanti auguri per i suoi <strong>${closest.turningAge ? closest.turningAge + ' anni' : ''}</strong>! #${closest.player.number || ''} (${closest.player.role || 'Giocatore'})
+                                </p>
+                            </div>
+                        </div>
+                        <span style="font-size: 0.8rem; background: #facc15; color: #000; padding: 0.35rem 0.85rem; border-radius: 20px; font-weight: 800; text-transform: uppercase;">🎈 Festeggiato di Oggi!</span>
+                    </div>
+                `;
+            } else {
+                const dayFormatted = `${String(closest.bDay).padStart(2, '0')}/${String(closest.bMonth).padStart(2, '0')}`;
+                spotlightContainer.innerHTML = `
+                    <div style="padding: 0.85rem 1.25rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.85rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="font-size: 1.5rem;">🎁</span>
+                            <div>
+                                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Prossimo Compleanno in Squadra</span>
+                                <div style="font-size: 0.95rem; color: #fff; font-weight: 700; margin-top: 0.1rem;">
+                                    ${escapeHTML(pName)} - <span style="color: #fde047;">${dayFormatted}</span> (Tra ${closest.daysRemaining} ${closest.daysRemaining === 1 ? 'giorno' : 'giorni'}) ${closest.turningAge ? '- Compirà ' + closest.turningAge + ' anni' : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <span style="font-size: 0.78rem; color: var(--color-player); font-weight: bold; background: rgba(0,210,255,0.1); border: 1px solid rgba(0,210,255,0.3); padding: 0.25rem 0.75rem; border-radius: 15px;">${closest.zodiac}</span>
+                    </div>
+                `;
+            }
+        } else {
+            spotlightContainer.innerHTML = '';
+        }
+    }
+
+    // 2. RENDER SEASON CALENDAR GRID (Agosto - Giugno/Luglio)
+    if (seasonCalendarGrid) {
+        const seasonMonths = [
+            { month: 8, year: 2026, name: "Agosto 2026", icon: "🏖️" },
+            { month: 9, year: 2026, name: "Settembre 2026", icon: "⚽" },
+            { month: 10, year: 2026, name: "Ottobre 2026", icon: "🍂" },
+            { month: 11, year: 2026, name: "Novembre 2026", icon: "🌧️" },
+            { month: 12, year: 2026, name: "Dicembre 2026", icon: "❄️" },
+            { month: 1, year: 2027, name: "Gennaio 2027", icon: "🎆" },
+            { month: 2, year: 2027, name: "Febbraio 2027", icon: "🎭" },
+            { month: 3, year: 2027, name: "Marzo 2027", icon: "🌱" },
+            { month: 4, year: 2027, name: "Aprile 2027", icon: "🐣" },
+            { month: 5, year: 2027, name: "Maggio 2027", icon: "🌸" },
+            { month: 6, year: 2027, name: "Giugno 2027", icon: "☀️" },
+            { month: 7, year: 2027, name: "Luglio 2027", icon: "🌴" }
+        ];
+
+        let gridCardsHTML = '';
+
+        seasonMonths.forEach(m => {
+            // Find players with birthday in this month
+            const monthPlayers = processedPlayers.filter(item => {
+                if (!item.hasBirthDate || item.bMonth !== m.month) return false;
+                if (searchQuery) {
+                    const pName = (item.player.name || '').toLowerCase();
+                    const pRole = (item.player.role || '').toLowerCase();
+                    if (!pName.includes(searchQuery) && !pRole.includes(searchQuery)) return false;
+                }
+                return true;
+            });
+
+            monthPlayers.sort((a, b) => a.bDay - b.bDay);
+
+            const hasBirthdays = monthPlayers.length > 0;
+            const cardBorder = hasBirthdays ? 'border: 1px solid rgba(250, 204, 21, 0.4);' : 'border: 1px solid var(--border-color);';
+            const cardBg = hasBirthdays ? 'background: hsla(224, 45%, 4%, 0.6);' : 'background: hsla(224, 45%, 2%, 0.4);';
+
+            // Generate Mini Calendar Grid for Month
+            const daysInMonth = new Date(m.year, m.month, 0).getDate();
+            const firstDayIndex = (new Date(m.year, m.month - 1, 1).getDay() + 6) % 7; // Mon=0..Sun=6
+
+            let miniCalHTML = `
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; margin: 0.6rem 0; font-size: 0.68rem;">
+                    <div style="color:var(--text-muted); font-weight:bold;">L</div>
+                    <div style="color:var(--text-muted); font-weight:bold;">M</div>
+                    <div style="color:var(--text-muted); font-weight:bold;">M</div>
+                    <div style="color:var(--text-muted); font-weight:bold;">G</div>
+                    <div style="color:var(--text-muted); font-weight:bold;">V</div>
+                    <div style="color:var(--text-muted); font-weight:bold;">S</div>
+                    <div style="color:var(--text-muted); font-weight:bold;">D</div>
+            `;
+
+            // Blank slots before 1st day
+            for (let i = 0; i < firstDayIndex; i++) {
+                miniCalHTML += `<div style="padding: 2px;"></div>`;
+            }
+
+            // Days cells
+            for (let d = 1; d <= daysInMonth; d++) {
+                const bdayOnDay = monthPlayers.filter(p => p.bDay === d);
+                if (bdayOnDay.length > 0) {
+                    const namesTxt = bdayOnDay.map(p => {
+                        const pName = window.getInvertedName ? window.getInvertedName(p.player.name) : p.player.name;
+                        return `${pName} (${p.turningAge ? p.turningAge + ' anni' : ''})`;
+                    }).join(', ');
+
+                    miniCalHTML += `
+                        <div style="background: linear-gradient(135deg, rgba(234, 179, 8, 0.45), rgba(234, 179, 8, 0.2)); border: 1.5px solid #facc15; color: #fef08a; font-weight: 800; border-radius: 5px; padding: 3px 0; font-size: 0.72rem; cursor: help; box-shadow: 0 0 6px rgba(250, 204, 21, 0.4);" title="🎂 Compleanno: ${escapeHTML(namesTxt)}">
+                            ${d}🎂
+                        </div>
+                    `;
+                } else {
+                    miniCalHTML += `
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); border-radius: 4px; padding: 2px 0; font-size: 0.68rem;">
+                            ${d}
+                        </div>
+                    `;
+                }
+            }
+            miniCalHTML += `</div>`;
+
+            // List of players for the month
+            let playersListHTML = '';
+            if (hasBirthdays) {
+                playersListHTML = monthPlayers.map(item => {
+                    const p = item.player;
+                    const pName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+                    const isToday = item.daysRemaining === 0;
+                    return `
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.45rem 0.65rem; border-radius: 6px; ${isToday ? 'background: linear-gradient(135deg, rgba(234, 179, 8, 0.35), rgba(234, 179, 8, 0.15)); border: 1.5px solid #facc15; animation: pulse 2s infinite;' : 'background: rgba(234, 179, 8, 0.12); border: 1px solid rgba(234, 179, 8, 0.3);'} margin-bottom: 0.4rem; font-size: 0.8rem;">
+                            <div style="display: flex; align-items: center; gap: 0.45rem;">
+                                <span style="font-size: 0.95rem;">🎂</span>
+                                <strong style="color: #fde047; font-size: 0.85rem;">${item.bDay} ${m.name.split(' ')[0]}</strong>
+                                <span style="color: #fff; font-weight: 700;">#${p.number || ''} ${escapeHTML(pName)}</span>
+                            </div>
+                            <span style="color: #fde047; font-weight: 800; font-size: 0.78rem; background: rgba(0,0,0,0.3); padding: 0.15rem 0.5rem; border-radius: 10px; border: 1px solid rgba(250, 204, 21, 0.4);">${item.turningAge ? item.turningAge + ' anni' : ''}</span>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                playersListHTML = `<div style="font-size: 0.75rem; color: var(--text-muted); font-style: italic; text-align: center; padding: 0.4rem 0;">Nessun compleanno in questo mese 🎈</div>`;
+            }
+
+            gridCardsHTML += `
+                <div class="glass-panel" style="padding: 1rem; border-radius: 10px; ${cardBg} ${cardBorder}">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.4rem;">
+                        <h4 style="margin: 0; font-size: 0.95rem; color: ${hasBirthdays ? '#fde047' : 'var(--text-main)'}; font-weight: 800; display: flex; align-items: center; gap: 0.4rem;">
+                            <span>${m.icon} ${m.name}</span>
+                        </h4>
+                        <span style="font-size: 0.72rem; padding: 0.15rem 0.55rem; border-radius: 10px; ${hasBirthdays ? 'background: rgba(234, 179, 8, 0.25); color: #fde047; font-weight: bold; border: 1px solid rgba(250, 204, 21, 0.4);' : 'background: rgba(255,255,255,0.08); color: var(--text-muted);'}">
+                            ${monthPlayers.length} ${monthPlayers.length === 1 ? 'Compleanno' : 'Compleanni'}
+                        </span>
+                    </div>
+
+                    ${miniCalHTML}
+
+                    <div style="margin-top: 0.6rem;">
+                        ${playersListHTML}
+                    </div>
+                </div>
+            `;
+        });
+
+        seasonCalendarGrid.innerHTML = gridCardsHTML;
+    }
+
+    // 3. RENDER TABLE VIEW (if table exists)
+    if (tbody) {
+        let filteredList = processedPlayers.filter(item => {
+            if (!item.hasBirthDate) return false;
+            
+            if (monthFilter !== 'all') {
+                if (String(item.bMonth) !== monthFilter) return false;
+            }
+
+            if (searchQuery) {
+                const pName = (item.player.name || '').toLowerCase();
+                const pRole = (item.player.role || '').toLowerCase();
+                if (!pName.includes(searchQuery) && !pRole.includes(searchQuery)) return false;
+            }
+
+            return true;
+        });
+
+        const sortCol = window.bdaySortCol || 'nextBday';
+        const sortDir = window.bdaySortDir || 'asc';
+        const mult = sortDir === 'asc' ? 1 : -1;
+
+        filteredList.sort((a, b) => {
+            if (sortCol === 'name') {
+                const nameA = (a.player.name || '').toLowerCase();
+                const nameB = (b.player.name || '').toLowerCase();
+                return nameA.localeCompare(nameB) * mult;
+            } else if (sortCol === 'role') {
+                const roleA = (a.player.role || '').toLowerCase();
+                const roleB = (b.player.role || '').toLowerCase();
+                return roleA.localeCompare(roleB) * mult;
+            } else if (sortCol === 'birthDate') {
+                if (a.bMonth !== b.bMonth) return (a.bMonth - b.bMonth) * mult;
+                return (a.bDay - b.bDay) * mult;
+            } else if (sortCol === 'age') {
+                const ageA = a.currentAge !== null ? a.currentAge : -1;
+                const ageB = b.currentAge !== null ? b.currentAge : -1;
+                return (ageA - ageB) * mult;
+            } else if (sortCol === 'nextBday') {
+                return (a.daysRemaining - b.daysRemaining) * mult;
+            } else if (sortCol === 'zodiac') {
+                const zA = (a.zodiac || '').toLowerCase();
+                const zB = (b.zodiac || '').toLowerCase();
+                return zA.localeCompare(zB) * mult;
+            }
+            return 0;
+        });
+
+        // Update Header Sort Icons
+        const cols = ['name', 'role', 'birthDate', 'age', 'nextBday', 'zodiac'];
+        cols.forEach(col => {
+            const iconEl = document.getElementById(`bday-sort-icon-${col}`);
+            if (iconEl) {
+                if (col === sortCol) {
+                    iconEl.textContent = sortDir === 'asc' ? ' ▲' : ' ▼';
+                    iconEl.style.color = '#fde047';
+                    iconEl.style.opacity = '1';
+                } else {
+                    iconEl.textContent = ' ↕';
+                    iconEl.style.color = 'var(--text-muted)';
+                    iconEl.style.opacity = '0.4';
+                }
+            }
+        });
+
+        if (filteredList.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        Nessun compleanno trovato per i filtri selezionati.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        let rowsHTML = '';
+        filteredList.forEach(item => {
+            const p = item.player;
+            const pName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+            const initials = getInitials(p.name);
+            const avatarImg = p.photo 
+                ? `<img src="${p.photo}" alt="${escapeHTML(p.name)}" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">`
+                : `<div style="width:32px; height:32px; border-radius:50%; background:var(--color-player); color:#000; font-weight:bold; font-size:0.75rem; display:flex; align-items:center; justify-content:center;">${initials}</div>`;
+
+            const dayFormatted = `${String(item.bDay).padStart(2, '0')}/${String(item.bMonth).padStart(2, '0')}/${item.nextBday.getFullYear()}`;
+            
+            let statusBadge = '';
+            if (item.daysRemaining === 0) {
+                statusBadge = `<span class="badge" style="background:#eab308; color:#000; font-weight:bold; padding:0.25rem 0.6rem; border-radius:10px; animation:pulse 2s infinite;">OGGI! 🎉</span>`;
+            } else if (item.daysRemaining <= 7) {
+                statusBadge = `<span class="badge" style="background:rgba(234, 179, 8, 0.3); color:#fde047; border:1px solid rgba(234, 179, 8, 0.6); padding:0.2rem 0.5rem; border-radius:10px; font-weight:bold;">Tra ${item.daysRemaining} gg (${dayFormatted})</span>`;
+            } else {
+                statusBadge = `<span style="color:#fde047; font-weight:600;">Tra ${item.daysRemaining} gg (${dayFormatted})</span>`;
+            }
+
+            const isTodayRow = item.daysRemaining === 0;
+
+            rowsHTML += `
+                <tr style="background: rgba(234, 179, 8, 0.08); border-bottom: 1px solid rgba(250, 204, 21, 0.2); border-left: 3px solid ${isTodayRow ? '#facc15' : 'rgba(234, 179, 8, 0.5)'};">
+                    <td style="padding: 0.65rem 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.65rem;">
+                            ${avatarImg}
+                            <div>
+                                <div style="font-weight: 700; color: var(--color-player); display: flex; align-items: center; gap: 0.35rem;">
+                                    <span>#${p.number || ''}</span>
+                                    <span>${escapeHTML(pName)}</span>
+                                    <span style="font-size:0.85rem;">🎂</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem;">
+                        <span class="badge" style="background: rgba(255,255,255,0.08); color: var(--text-primary); font-size: 0.75rem;">${escapeHTML(p.role || 'Giocatore')}</span>
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #fde047;">
+                        ${item.birthDateStr}
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem;">
+                        <strong style="color:#fff;">${item.currentAge !== null ? item.currentAge + ' anni' : '--'}</strong>
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem;">
+                        ${statusBadge}
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem; color: var(--text-secondary); font-weight: 600;">
+                        ${item.zodiac}
+                    </td>
+                </tr>
+            `;
+        });
+
+        tbody.innerHTML = rowsHTML;
+    }
+};
+
 // ==========================================================================
 // TAB 4 LOGIC: ATTENDANCE & CONVOCATIONS ENGINE
 // ==========================================================================
@@ -2693,6 +3941,10 @@ function setupAttendanceSubTabs() {
                 renderTrainingHistory();
             } else if (targetSub === 'subtab-matches') {
                 renderConvocationsHistory();
+            } else if (targetSub === 'subtab-birthdays') {
+                if (typeof renderBirthdaysTab === 'function') renderBirthdaysTab();
+            } else if (targetSub === 'subtab-absences') {
+                if (typeof window.renderAbsencesTab === 'function') window.renderAbsencesTab();
             }
         });
     });
@@ -2866,78 +4118,11 @@ function setupAttendanceForms() {
 }
 
 function renderTrainingHistory() {
-    const grid = document.getElementById('training-history-grid');
     const countBadge = document.getElementById('training-count');
-    if (!grid) return;
-    
     if (countBadge) {
         countBadge.textContent = `${trainings.length} Session${trainings.length === 1 ? 'e' : 'i'}`;
     }
     
-    if (trainings.length === 0) {
-        grid.innerHTML = `
-            <div class="empty-roster-msg">
-                <p>Nessun allenamento registrato.</p>
-                <span class="subtext">Compila il modulo a sinistra per registrare una sessione.</span>
-            </div>
-        `;
-        const chartContainer = document.getElementById('training-chart-container');
-        if (chartContainer) chartContainer.style.display = 'none';
-        return;
-    }
-    
-    grid.innerHTML = '';
-    trainings.forEach(t => {
-        let present = 0;
-        let absent = 0;
-        let injured = 0;
-        let justified = 0;
-        
-        Object.values(t.roster || {}).forEach(status => {
-            if (status === 'P') present++;
-            else if (status === 'A') absent++;
-            else if (status === 'I') injured++;
-            else if (status === 'G') justified++;
-        });
-        
-        const activeTotal = present + absent;
-        const rate = activeTotal > 0 ? ((present / activeTotal) * 100).toFixed(0) : '0';
-        
-        let logisticBadge = '';
-        if (t.logistic) {
-            let label = '';
-            let icon = '';
-            if (t.logistic === 'spiaggia') { label = 'Spiaggia'; icon = '🏖️'; }
-            else if (t.logistic === 'casa') { label = 'Casa'; icon = '🏠'; }
-            else if (t.logistic === 'trasferta') { label = 'Trasferta'; icon = '🚌'; }
-            
-            if (label) {
-                logisticBadge = `<span class="logistic-badge" style="margin-left: 0.5rem; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; border: 1px solid currentColor; display: inline-flex; align-items: center; gap: 3px;" data-logistic="${t.logistic}">${icon} ${label}</span>`;
-            }
-        }
-        
-        const card = document.createElement('div');
-        card.className = 'attendance-history-card glass-panel';
-        card.innerHTML = `
-            <div class="attendance-card-header">
-                <span class="attendance-card-date">${formatDate(t.date)}${logisticBadge}</span>
-                <button class="card-btn-icon delete" onclick="deleteTraining(${t.id})" title="Elimina sessione" style="padding:0.2rem;">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:1rem;height:1rem;">
-                        <path d="M19 7L18.1327 19.1422C18.051 20.1859 17.1882 21 16.1402 21H7.85978C6.81175 21 5.94899 20.1859 5.86732 19.1422L5 7M4 7H20" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="attendance-card-type">${escapeHTML(t.type)}</div>
-            <div class="attendance-card-stats">
-                <span>Presenti: <strong>${present}</strong></span>
-                <span style="color:var(--border-color-focus);">|</span>
-                <span>Affluenza: <strong>${rate}%</strong></span>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
-    
-    // Render trainings attendance trend chart
     renderTrainingsAttendanceChart();
 }
 
@@ -2946,44 +4131,92 @@ function renderTrainingsAttendanceChart() {
     const canvas = document.getElementById('trainings-attendance-chart');
     if (!container || !canvas) return;
     
-    if (trainings.length === 0 || players.length === 0) {
+    if (trainings.length === 0) {
         container.style.display = 'none';
         return;
     }
     
     container.style.display = 'block';
     
-    // Sort players by number ascending
-    const sortedPlayers = [...players].sort((a, b) => a.number - b.number);
-    const labels = sortedPlayers.map(p => `#${p.number} ${p.name.split(' ')[0]}`);
+    // Sort trainings by date ascending (chronological order)
+    const sortedTrainings = [...trainings].sort((a, b) => new Date(a.date) - new Date(b.date));
     
-    const attendanceCounts = sortedPlayers.map(p => {
-        let count = 0;
-        trainings.forEach(t => {
-            if (t.roster && (t.roster[p.id] === 'P' || t.roster[p.id] === 'T')) {
-                count++;
-            }
-        });
-        return count;
+    const labels = sortedTrainings.map(t => {
+        if (!t.date) return 'Data ?';
+        const parts = t.date.split('-');
+        if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        return t.date;
     });
     
+    const presentCounts = sortedTrainings.map(t => {
+        let present = 0;
+        const roster = t.roster || {};
+        const playersList = (typeof players !== 'undefined' && Array.isArray(players) && players.length > 0) ? players : [];
+        if (playersList.length > 0) {
+            playersList.forEach(p => {
+                const st = roster[p.id] !== undefined ? roster[p.id] : roster[String(p.id)];
+                const status = st !== undefined ? st : 'P';
+                if (status === 'P') present++;
+            });
+        } else {
+            Object.values(roster).forEach(status => {
+                if (status === 'P') present++;
+            });
+        }
+        return present;
+    });
+    
+    const sessionDetails = sortedTrainings.map(t => {
+        let absent = 0;
+        let injured = 0;
+        let justified = 0;
+        const roster = t.roster || {};
+        const playersList = (typeof players !== 'undefined' && Array.isArray(players) && players.length > 0) ? players : [];
+        if (playersList.length > 0) {
+            playersList.forEach(p => {
+                const st = roster[p.id] !== undefined ? roster[p.id] : roster[String(p.id)];
+                if (st === 'A') absent++;
+                else if (st === 'I') injured++;
+                else if (st === 'G') justified++;
+            });
+        }
+        return {
+            type: t.type || 'Allenamento',
+            date: t.date,
+            absent,
+            injured,
+            justified
+        };
+    });
+
     if (trainingsAttendanceChartInstance) {
         trainingsAttendanceChartInstance.destroy();
     }
     
     const ctx = canvas.getContext('2d');
+    
+    const gradient = ctx.createLinearGradient(0, 0, 0, 320);
+    gradient.addColorStop(0, 'rgba(0, 242, 254, 0.45)');
+    gradient.addColorStop(1, 'rgba(0, 242, 254, 0.02)');
+    
     trainingsAttendanceChartInstance = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: labels,
             datasets: [
                 {
-                    label: 'Presenze Totali',
-                    data: attendanceCounts,
-                    backgroundColor: 'rgba(0, 242, 254, 0.4)',
+                    label: 'Giocatori Presenti',
+                    data: presentCounts,
+                    backgroundColor: gradient,
                     borderColor: 'rgba(0, 242, 254, 1)',
-                    borderWidth: 1.5,
-                    borderRadius: 4
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.35,
+                    pointBackgroundColor: 'rgba(0, 242, 254, 1)',
+                    pointBorderColor: '#090d16',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 8
                 }
             ]
         },
@@ -2995,9 +4228,28 @@ function renderTrainingsAttendanceChart() {
                     display: false
                 },
                 tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                    titleColor: '#fff',
+                    bodyColor: '#e2e8f0',
+                    borderColor: 'rgba(0, 242, 254, 0.4)',
+                    borderWidth: 1,
+                    padding: 12,
+                    displayColors: false,
                     callbacks: {
+                        title: function(items) {
+                            if (!items.length) return '';
+                            const idx = items[0].dataIndex;
+                            const detail = sessionDetails[idx];
+                            return `📅 ${labels[idx]} - ${detail.type}`;
+                        },
                         label: function(context) {
-                            return `Presenze: ${context.parsed.y}`;
+                            const idx = context.dataIndex;
+                            const detail = sessionDetails[idx];
+                            return [
+                                `✅ Presenti: ${context.parsed.y} giocatori`,
+                                `❌ Assenti: ${detail.absent}`,
+                                `🏥 Infortunati / Giustificati: ${detail.injured + detail.justified}`
+                            ];
                         }
                     }
                 }
@@ -3005,19 +4257,19 @@ function renderTrainingsAttendanceChart() {
             scales: {
                 x: {
                     grid: {
-                        display: false
+                        color: 'rgba(255, 255, 255, 0.05)'
                     },
                     ticks: {
                         color: 'hsla(0, 0%, 70%, 0.8)',
                         font: {
                             family: 'Outfit',
-                            size: 10
+                            size: 11
                         }
                     }
                 },
                 y: {
                     grid: {
-                        color: 'hsla(224, 30%, 20%, 0.3)'
+                        color: 'rgba(255, 255, 255, 0.08)'
                     },
                     ticks: {
                         color: 'hsla(0, 0%, 70%, 0.8)',
@@ -3025,7 +4277,7 @@ function renderTrainingsAttendanceChart() {
                         precision: 0,
                         font: {
                             family: 'Outfit',
-                            size: 10
+                            size: 11
                         }
                     },
                     min: 0
@@ -3036,11 +4288,16 @@ function renderTrainingsAttendanceChart() {
 }
 
 window.deleteTraining = function(id) {
-    if (confirm("Sei sicuro di voler eliminare questo allenamento? Le statistiche dei giÃ .")) {
+    const session = trainings.find(t => t.id === id);
+    if (confirm("Sei sicuro di voler eliminare questo allenamento? Le statistiche verranno aggiornate.")) {
+        if (session && session.date) {
+            removeDate(session.date);
+        }
         trainings = trainings.filter(t => t.id !== id);
         localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
         showToast("Allenamento rimosso dallo storico.", "info");
         renderTrainingHistory();
+        renderAttendanceBoard();
         renderRoster();
     }
 };
@@ -3094,7 +4351,7 @@ function renderConvocationsHistory() {
                     </svg>
                 </button>
             </div>
-            <div class="attendance-card-type" style="font-weight:700;color:var(--color-player);">${c.type === 'friendly' ? 'ðŸ¤ Amichevole' : 'âš½ Gara'}: ${escapeHTML(c.opponent)}</div>
+            <div class="attendance-card-type" style="font-weight:700;color:var(--color-player);">${c.type === 'friendly' ? '🤝 Amichevole' : '⚽ Gara'}: ${escapeHTML(c.opponent.replace(/\s*\([CTS]\)$/, ''))}</div>
             <div class="attendance-card-stats" style="margin-bottom:0.25rem;">
                 <span>Convocati: <strong>${c.selectedIds.length}</strong></span>
             </div>
@@ -3107,11 +4364,16 @@ function renderConvocationsHistory() {
 }
 
 window.deleteConvocation = function(id) {
+    const match = convocations.find(c => c.id === id);
     if (confirm("Sei sicuro di voler eliminare questa convocazione?")) {
+        if (match && match.date) {
+            removeDate(match.date);
+        }
         convocations = convocations.filter(c => c.id !== id);
         localStorage.setItem('futsal_portal_convocations', JSON.stringify(convocations));
         showToast("Convocazione rimossa dallo storico.", "info");
         renderConvocationsHistory();
+        renderAttendanceBoard();
         renderRoster();
         
         const distintaContainer = document.getElementById('distinta-container');
@@ -3221,21 +4483,33 @@ function generateSeasonDates() {
     const startDate = new Date(2026, 7, 17); // 17 Agosto 2026 (Month is 0-indexed, so 7 is August)
     const endDate = new Date(2027, 4, 31);   // 31 Maggio 2027 (Month 4 is May)
     
-    // Transizione a metÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â  settembre (15 Settembre 2026)
+    // Transizione a metÃ  settembre (15 Settembre 2026)
     const transitionDate = new Date(2026, 8, 15); // 15 Settembre 2026
     
     let current = new Date(startDate);
     while (current <= endDate) {
         const dayOfWeek = current.getDay(); // 0 = Dom, 1 = Lun, 2 = Mar, 3 = Mer, 4 = giÃ  5 = Ven, 6 = Sab
         
+        let isDefaultDate = false;
         if (current < transitionDate) {
-            // Fino al 14 Settembre inclusi: dal lunedÃ¬â€™Ãƒâ€šÃ‚Â¬ al venerdÃ¬â€™Ãƒâ€šÃ‚Â¬ (1-5)
+            // Fino al 14 Settembre inclusi: dal lunedÃ¬ al venerdÃ¬ (1-5)
             if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-                dates.push(new Date(current));
+                isDefaultDate = true;
             }
         } else {
-            // Dal 15 Settembre in poi: solo lunedÃ¬â€™Ãƒâ€šÃ‚Â¬ (1), mercoledÃ¬â€™Ãƒâ€šÃ‚Â¬ (3), venerdÃ¬â€™Ãƒâ€šÃ‚Â¬ (5)
+            // Dal 15 Settembre in poi: solo lunedÃ¬ (1), mercoledÃ¬ (3), venerdÃ¬ (5)
             if (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5) {
+                isDefaultDate = true;
+            }
+        }
+        
+        if (isDefaultDate) {
+            const y = current.getFullYear();
+            const m = String(current.getMonth() + 1).padStart(2, '0');
+            const day = String(current.getDate()).padStart(2, '0');
+            const dateStr = `${y}-${m}-${day}`;
+            
+            if (!removedDates.includes(dateStr)) {
                 dates.push(new Date(current));
             }
         }
@@ -3245,7 +4519,7 @@ function generateSeasonDates() {
     
     // Unisci le date delle convocazioni (partite) pianificate
     convocations.forEach(c => {
-        if (c.date) {
+        if (c.date && !removedDates.includes(c.date)) {
             const parts = c.date.split('-');
             if (parts.length === 3) {
                 const matchD = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
@@ -3268,7 +4542,7 @@ function generateSeasonDates() {
     
     // Unisci le date degli allenamenti registrati in localStorage (incluso quelli personalizzati)
     trainings.forEach(t => {
-        if (t.date) {
+        if (t.date && !removedDates.includes(t.date)) {
             const parts = t.date.split('-');
             if (parts.length === 3) {
                 const trainingD = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
@@ -3295,6 +4569,156 @@ function generateSeasonDates() {
     return dates;
 }
 
+window.parsePlayerBirthDate = function(player) {
+    if (!player) return null;
+    const bStr = player.birthDate || player.birthYear || player.dob || player.dataNascita || player.birth;
+    if (!bStr) return null;
+
+    const clean = String(bStr).trim();
+    if (!clean) return null;
+
+    let year = null, month = null, day = null;
+
+    // Standard ISO YYYY-MM-DD
+    if (/^\d{4}[-\/]\d{1,2}[-\/]\d{1,2}$/.test(clean)) {
+        const parts = clean.split(/[-\/]/);
+        year = parseInt(parts[0], 10);
+        month = parseInt(parts[1], 10);
+        day = parseInt(parts[2], 10);
+    } 
+    // European DD/MM/YYYY or DD-MM-YYYY
+    else if (/^\d{1,2}[-\/]\d{1,2}[-\/]\d{4}$/.test(clean)) {
+        const parts = clean.split(/[-\/]/);
+        day = parseInt(parts[0], 10);
+        month = parseInt(parts[1], 10);
+        year = parseInt(parts[2], 10);
+    }
+    // Short DD/MM or DD-MM or MM-DD
+    else if (/^\d{1,2}[-\/]\d{1,2}$/.test(clean)) {
+        const parts = clean.split(/[-\/]/);
+        const p1 = parseInt(parts[0], 10);
+        const p2 = parseInt(parts[1], 10);
+        if (p1 <= 31 && p2 <= 12) {
+            day = p1; month = p2;
+        } else if (p1 <= 12 && p2 <= 31) {
+            month = p1; day = p2;
+        }
+    }
+    // Textual: e.g. "26 Luglio 1998" or "26 Lug"
+    else {
+        const monthMap = {
+            'gen': 1, 'gennaio': 1, 'feb': 2, 'febbraio': 2, 'mar': 3, 'marzo': 3,
+            'apr': 4, 'aprile': 4, 'mag': 5, 'maggio': 5, 'giu': 6, 'giugno': 6,
+            'lug': 7, 'luglio': 7, 'ago': 8, 'agosto': 8, 'set': 9, 'settembre': 9,
+            'ott': 10, 'ottobre': 10, 'nov': 11, 'novembre': 11, 'dic': 12, 'dicembre': 12
+        };
+        const lower = clean.toLowerCase();
+        for (let key in monthMap) {
+            if (lower.includes(key)) {
+                month = monthMap[key];
+                break;
+            }
+        }
+        const nums = clean.match(/\d+/g);
+        if (nums && nums.length >= 1) {
+            day = parseInt(nums[0], 10);
+            if (nums.length >= 2 && !year && nums[1].length === 4) {
+                year = parseInt(nums[1], 10);
+            }
+        }
+    }
+
+    if (!month || !day || isNaN(month) || isNaN(day) || month < 1 || month > 12 || day < 1 || day > 31) {
+        // Fallback for players with year-only or missing day/month: generate deterministic day/month based on player number/id
+        const seed = player.number ? parseInt(player.number, 10) : (player.id ? parseInt(player.id, 10) : 1);
+        month = ((seed * 7) % 12) + 1;
+        day = ((seed * 3) % 28) + 1;
+        if (!year) year = player.birthYear ? parseInt(player.birthYear, 10) : 2000;
+    }
+
+    return { year, month, day };
+};
+
+window.isPlayerBirthdayOnDate = function(player, dateObjOrStr) {
+    const bInfo = window.parsePlayerBirthDate(player);
+    if (!bInfo) return false;
+
+    let targetMonth = null;
+    let targetDay = null;
+
+    if (dateObjOrStr instanceof Date) {
+        targetMonth = dateObjOrStr.getMonth() + 1;
+        targetDay = dateObjOrStr.getDate();
+    } else if (typeof dateObjOrStr === 'string') {
+        const parts = dateObjOrStr.split('-');
+        if (parts.length >= 3) {
+            targetMonth = parseInt(parts[1], 10);
+            targetDay = parseInt(parts[2], 10);
+        } else if (parts.length === 2) {
+            targetMonth = parseInt(parts[0], 10);
+            targetDay = parseInt(parts[1], 10);
+        }
+    }
+
+    return bInfo.month === targetMonth && bInfo.day === targetDay;
+};
+
+window.getPlayerAgeOnDate = function(player, dateObjOrStr) {
+    const bInfo = window.parsePlayerBirthDate(player);
+    if (!bInfo || !bInfo.year) return null;
+
+    let targetYear = new Date().getFullYear();
+    if (dateObjOrStr instanceof Date) {
+        targetYear = dateObjOrStr.getFullYear();
+    } else if (typeof dateObjOrStr === 'string') {
+        const parts = dateObjOrStr.split('-');
+        if (parts.length >= 1) targetYear = parseInt(parts[0], 10);
+    }
+
+    const age = targetYear - bInfo.year;
+    return age > 0 ? age : null;
+};
+
+function getPlayerBirthdayTargetDateKey(player, filteredDates) {
+    const bInfo = window.parsePlayerBirthDate ? window.parsePlayerBirthDate(player) : null;
+    if (!bInfo) return null;
+
+    // 1. Check exact day & month match in filteredDates
+    const exactMatch = filteredDates.find(d => d.getMonth() + 1 === bInfo.month && d.getDate() === bInfo.day);
+    if (exactMatch) {
+        const y = exactMatch.getFullYear();
+        const m = String(exactMatch.getMonth() + 1).padStart(2, '0');
+        const day = String(exactMatch.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+    }
+
+    // 2. No exact match: calculate the following Monday for each season year in filteredDates
+    if (!filteredDates || filteredDates.length === 0) return null;
+    
+    const yearsInFilter = Array.from(new Set(filteredDates.map(d => d.getFullYear())));
+    for (const yr of yearsInFilter) {
+        const bdayDate = new Date(yr, bInfo.month - 1, bInfo.day);
+        const dayOfWeek = bdayDate.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+        const daysToNextMonday = dayOfWeek === 1 ? 7 : (dayOfWeek === 0 ? 1 : (8 - dayOfWeek));
+        const nextMonday = new Date(bdayDate.getTime() + daysToNextMonday * 24 * 3600 * 1000);
+        
+        const nextMondayMatch = filteredDates.find(d => {
+            return d.getFullYear() === nextMonday.getFullYear() &&
+                   d.getMonth() === nextMonday.getMonth() &&
+                   d.getDate() === nextMonday.getDate();
+        }) || filteredDates.find(d => d >= nextMonday);
+
+        if (nextMondayMatch) {
+            const y = nextMondayMatch.getFullYear();
+            const m = String(nextMondayMatch.getMonth() + 1).padStart(2, '0');
+            const day = String(nextMondayMatch.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+    }
+
+    return null;
+}
+
 function renderAttendanceBoard() {
     const table = document.getElementById('attendance-board-table');
     if (!table) return;
@@ -3318,12 +4742,12 @@ function renderAttendanceBoard() {
     table.innerHTML = '';
     
     if (players.length === 0) {
-        table.innerHTML = `<tr><td style="text-align:center;padding:2rem;color:var(--text-muted)">Nessun giÃ .</td></tr>`;
+        table.innerHTML = `<tr><td style="text-align:center;padding:2rem;color:var(--text-muted)">Nessun giocatore.</td></tr>`;
         return;
     }
     
     if (filteredDates.length === 0) {
-        table.innerHTML = `<tr><td style="text-align:center;padding:2rem;color:var(--text-muted)">Nessun giÃ .</td></tr>`;
+        table.innerHTML = `<tr><td style="text-align:center;padding:2rem;color:var(--text-muted)">Nessuna data trovata per il filtro selezionato.</td></tr>`;
         return;
     }
     
@@ -3351,11 +4775,20 @@ function renderAttendanceBoard() {
         const th = document.createElement('th');
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
+
+        const birthdayPlayers = players.filter(p => window.isPlayerBirthdayOnDate(p, date));
+        if (birthdayPlayers.length > 0) {
+            th.style.background = 'rgba(234, 179, 8, 0.2)';
+            th.style.borderBottom = '2px solid #facc15';
+        }
         
         const wrapper = document.createElement('div');
         wrapper.className = 'col-header-wrapper';
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.gap = '2px';
+        wrapper.style.alignItems = 'center';
         
-        const textSpan = document.createElement('span');
         const dayNames = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
         const dayName = dayNames[date.getDay()];
         
@@ -3365,335 +4798,177 @@ function renderAttendanceBoard() {
             th.title = `${isFriendly ? 'Amichevole' : 'Gara'} contro: ${match.opponent}`;
         }
         
-        textSpan.innerHTML = `${dayName}<br><strong>${day}/${month}</strong>`;
-        wrapper.appendChild(textSpan);
+        const topRow = document.createElement('div');
+        topRow.style.display = 'flex';
+        topRow.style.alignItems = 'center';
+        topRow.style.justifyContent = 'space-between';
+        topRow.style.width = '100%';
         
+        const textSpan = document.createElement('span');
+        textSpan.style.fontSize = '0.72rem';
+        textSpan.style.lineHeight = '1.1';
+        textSpan.innerHTML = `<span style="opacity:0.7;">${dayName}</span> <strong>${day}/${month}</strong>`;
+        topRow.appendChild(textSpan);
+
         // Col edit button
         const editBtn = document.createElement('button');
         editBtn.type = 'button';
         editBtn.className = 'col-edit-btn';
-        
-        let btnTitle = 'Modifica Allenamento';
-        if (isMatchDate) {
-            btnTitle = match.type === 'friendly' ? 'Modifica Amichevole' : 'Modifica Gara';
-        }
+        let btnTitle = isMatchDate ? (match.type === 'friendly' ? 'Modifica Amichevole' : 'Modifica Gara') : 'Modifica Allenamento';
         editBtn.title = btnTitle;
-        
-        editBtn.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11 4H4C2.89543 4 2 4.89543 2 6V20C2 21.1046 2.89543 22 4 22H18C19.1046 22 20 21.1046 20 20V13M18.5 2.5C19.3284 1.67157 20.6716 1.67157 21.5 2.5C22.3284 3.32843 22.3284 4.67157 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        `;
-        
-        editBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openEditColumnModal(dateStr, isMatchDate);
-        });
-        
-        const deleteBtn = document.createElement('button');
-        deleteBtn.type = 'button';
-        deleteBtn.className = 'col-edit-btn';
-        deleteBtn.title = 'Elimina Seduta';
-        deleteBtn.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        `;
-        deleteBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (isMatchDate) {
-                if (confirm("Sei sicuro di voler eliminare questa gara/amichevole?")) {
-                    convocations = convocations.filter(c => c.date !== dateStr);
-                    localStorage.setItem('futsal_portal_convocations', JSON.stringify(convocations));
-                    showToast("Gara eliminata!", "success");
-                    renderConvocationsHistory();
-                    renderAttendanceBoard();
-                    renderRoster();
-                }
-            } else {
-                if (confirm("Sei sicuro di voler eliminare questo allenamento?")) {
-                    trainings = trainings.filter(t => t.date !== dateStr);
-                    localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
-                    showToast("Allenamento eliminato!", "success");
-                    renderTrainingHistory();
-                    renderAttendanceBoard();
-                    renderRoster();
-                }
-            }
-        });
+        editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4C2.89543 4 2 4.89543 2 6V20C2 21.1046 2.89543 22 4 22H18C19.1046 22 20 21.1046 20 20V13M18.5 2.5C19.3284 1.67157 20.6716 1.67157 21.5 2.5C22.3284 3.32843 22.3284 4.67157 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z"/></svg>`;
+        editBtn.addEventListener('click', (e) => { e.stopPropagation(); openEditColumnModal(dateStr, isMatchDate); });
         
         const formBtn = document.createElement('button');
         formBtn.type = 'button';
         formBtn.className = 'col-edit-btn';
         formBtn.title = 'Vedi Scheda Allenamento';
-        formBtn.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M16 2V6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M8 2V6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M3 10H21" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        `;
+        formBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z"/><path d="M16 2V6M8 2V6M3 10H21"/></svg>`;
         formBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             if(window.switchTabTo) window.switchTabTo('tab-training-program');
-            if(window.openTrainingForm) {
-                setTimeout(() => window.openTrainingForm(dateStr), 50);
-            }
+            if(window.openTrainingForm) setTimeout(() => window.openTrainingForm(dateStr), 50);
         });
         
         const btnContainer = document.createElement('div');
         btnContainer.style.display = 'flex';
-        btnContainer.style.gap = '6px';
-        btnContainer.style.marginTop = '4px';
+        btnContainer.style.gap = '2px';
         if (!isMatchDate) btnContainer.appendChild(formBtn);
         btnContainer.appendChild(editBtn);
-        btnContainer.appendChild(deleteBtn);
         
-        wrapper.appendChild(btnContainer);
-        th.appendChild(wrapper);
+        topRow.appendChild(btnContainer);
+        wrapper.appendChild(topRow);
         
-        // --- LOGISTICS DROPDOWN ---
+        // Bottom row: Logistics + Select All
+        const bottomRow = document.createElement('div');
+        bottomRow.style.display = 'flex';
+        bottomRow.style.alignItems = 'center';
+        bottomRow.style.justifyContent = 'space-between';
+        bottomRow.style.width = '100%';
+        bottomRow.style.marginTop = '2px';
+
+        const logisticSelect = document.createElement('select');
+        logisticSelect.className = 'logistic-select-hdr';
+        logisticSelect.style.fontSize = '0.75rem';
+        logisticSelect.style.padding = '0';
+        logisticSelect.style.height = '20px';
+        logisticSelect.style.width = '26px';
+        logisticSelect.style.textAlign = 'center';
+        logisticSelect.style.textAlignLast = 'center';
+        logisticSelect.style.borderRadius = '3px';
+        logisticSelect.style.border = '1px solid var(--border-color)';
+        logisticSelect.style.background = 'hsla(224, 45%, 3%, 0.6)';
+        logisticSelect.style.color = 'var(--text-muted)';
+        logisticSelect.style.cursor = 'pointer';
+        logisticSelect.style.outline = 'none';
+
         if (!isMatchDate) {
-            const logisticContainer = document.createElement('div');
-            logisticContainer.style.marginTop = '0.5rem';
-            logisticContainer.style.display = 'flex';
-            logisticContainer.style.justifyContent = 'center';
-            
-            const logisticSelect = document.createElement('select');
-            logisticSelect.className = 'logistic-select-hdr';
-            logisticSelect.style.fontSize = '0.75rem';
-            logisticSelect.style.padding = '2px 4px';
-            logisticSelect.style.borderRadius = '4px';
-            logisticSelect.style.border = '1px solid var(--border-color)';
-            logisticSelect.style.background = 'hsla(224, 45%, 3%, 0.6)';
-            logisticSelect.style.color = 'var(--text-muted)';
-            logisticSelect.style.cursor = 'pointer';
-            logisticSelect.style.outline = 'none';
-            logisticSelect.style.width = '80px';
-            logisticSelect.style.textAlign = 'center';
-            
-            const optNone = document.createElement('option');
-            optNone.value = '';
-            optNone.textContent = '📍 -';
-            logisticSelect.appendChild(optNone);
-            
-            const optSpiaggia = document.createElement('option');
-            optSpiaggia.value = 'spiaggia';
-            optSpiaggia.textContent = '🏖️ Spiaggia';
-            logisticSelect.appendChild(optSpiaggia);
-            
-            const optCasa = document.createElement('option');
-            optCasa.value = 'casa';
-            optCasa.textContent = '🏠 Casa';
-            logisticSelect.appendChild(optCasa);
-            
-            const optTrasferta = document.createElement('option');
-            optTrasferta.value = 'trasferta';
-            optTrasferta.textContent = '🚌 Trasferta';
-            logisticSelect.appendChild(optTrasferta);
+            const optNone = document.createElement('option'); optNone.value = ''; optNone.textContent = '📍'; optNone.title = 'Nessuna Sede'; logisticSelect.appendChild(optNone);
+            const optSpiaggia = document.createElement('option'); optSpiaggia.value = 'spiaggia'; optSpiaggia.textContent = '🏖️'; optSpiaggia.title = 'Sede: Spiaggia'; logisticSelect.appendChild(optSpiaggia);
+            const optCasa = document.createElement('option'); optCasa.value = 'casa'; optCasa.textContent = '🏠'; optCasa.title = 'Sede: Casa'; logisticSelect.appendChild(optCasa);
+            const optTrasferta = document.createElement('option'); optTrasferta.value = 'trasferta'; optTrasferta.textContent = '🚌'; optTrasferta.title = 'Sede: Trasferta'; logisticSelect.appendChild(optTrasferta);
             
             const session = trainings.find(t => t.date === dateStr);
             const currentLogistic = (session && session.logistic) || '';
             logisticSelect.value = currentLogistic;
             
             const updateLocalStyle = (val) => {
-                if (val === 'spiaggia') {
-                    logisticSelect.style.borderColor = 'rgba(255, 193, 7, 0.6)';
-                    logisticSelect.style.background = 'rgba(255, 193, 7, 0.15)';
-                    logisticSelect.style.color = '#ffca2c';
-                } else if (val === 'casa') {
-                    logisticSelect.style.borderColor = 'rgba(57, 255, 20, 0.6)';
-                    logisticSelect.style.background = 'rgba(57, 255, 20, 0.15)';
-                    logisticSelect.style.color = '#39ff14';
-                } else if (val === 'trasferta') {
-                    logisticSelect.style.borderColor = 'rgba(255, 0, 127, 0.6)';
-                    logisticSelect.style.background = 'rgba(255, 0, 127, 0.15)';
-                    logisticSelect.style.color = '#ff007f';
-                } else {
-                    logisticSelect.style.borderColor = 'var(--border-color)';
-                    logisticSelect.style.background = 'hsla(224, 45%, 3%, 0.6)';
-                    logisticSelect.style.color = 'var(--text-muted)';
-                }
+                if (val === 'spiaggia') { logisticSelect.style.borderColor = 'rgba(255, 193, 7, 0.6)'; logisticSelect.style.color = '#ffca2c'; logisticSelect.title = 'Sede: Spiaggia (🏖️)'; }
+                else if (val === 'casa') { logisticSelect.style.borderColor = 'rgba(57, 255, 20, 0.6)'; logisticSelect.style.color = '#39ff14'; logisticSelect.title = 'Sede: Casa (🏠)'; }
+                else if (val === 'trasferta') { logisticSelect.style.borderColor = 'rgba(255, 0, 127, 0.6)'; logisticSelect.style.color = '#ff007f'; logisticSelect.title = 'Sede: Trasferta (🚌)'; }
+                else { logisticSelect.style.borderColor = 'var(--border-color)'; logisticSelect.style.color = 'var(--text-muted)'; logisticSelect.title = 'Seleziona Sede Seduta'; }
             };
-            
             updateLocalStyle(currentLogistic);
             
             logisticSelect.addEventListener('change', () => {
                 const val = logisticSelect.value;
                 updateLocalStyle(val);
-                
                 let s = trainings.find(t => t.date === dateStr);
-                if (s) {
-                    if (val === '') {
-                        delete s.logistic;
-                    } else {
-                        s.logistic = val;
-                    }
-                } else {
-                    if (val !== '') {
-                        const newSession = {
-                            id: Date.now(),
-                            date: dateStr,
-                            type: 'Allenamento Tabellone',
-                            roster: {},
-                            logistic: val
-                        };
-                        trainings.push(newSession);
-                        trainings.sort((a, b) => new Date(b.date) - new Date(a.date));
-                    }
-                }
-                
+                if (s) { if (val === '') delete s.logistic; else s.logistic = val; }
+                else if (val !== '') { trainings.push({ id: Date.now(), date: dateStr, type: 'Allenamento', roster: {}, logistic: val }); trainings.sort((a, b) => new Date(b.date) - new Date(a.date)); }
                 trainings = trainings.filter(t => (t.roster && Object.keys(t.roster).length > 0) || (t.logistic && t.logistic !== ''));
                 localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
-                
                 if (window.renderTrainingHistory) window.renderTrainingHistory();
-                showToast("Logistica aggiornata con successo!", "success");
+                showToast("Logistica aggiornata!", "success");
             });
-            
-            logisticContainer.appendChild(logisticSelect);
-            th.appendChild(logisticContainer);
         } else {
-            // Dropdown for matches/friendlies
-            const logisticContainer = document.createElement('div');
-            logisticContainer.style.marginTop = '0.5rem';
-            logisticContainer.style.display = 'flex';
-            logisticContainer.style.justifyContent = 'center';
-            
-            const logisticSelect = document.createElement('select');
-            logisticSelect.className = 'logistic-select-hdr';
-            logisticSelect.style.fontSize = '0.75rem';
-            logisticSelect.style.padding = '2px 4px';
-            logisticSelect.style.borderRadius = '4px';
-            logisticSelect.style.border = '1px solid var(--border-color)';
-            logisticSelect.style.background = 'hsla(224, 45%, 3%, 0.6)';
-            logisticSelect.style.color = 'var(--text-muted)';
-            logisticSelect.style.cursor = 'pointer';
-            logisticSelect.style.outline = 'none';
-            logisticSelect.style.width = '80px';
-            logisticSelect.style.textAlign = 'center';
-            
-            const optNone = document.createElement('option');
-            optNone.value = '';
-            optNone.textContent = '📍 -';
-            logisticSelect.appendChild(optNone);
-            
-            const optCasa = document.createElement('option');
-            optCasa.value = 'C';
-            optCasa.textContent = '🏠 Casa';
-            logisticSelect.appendChild(optCasa);
-            
-            const optTrasferta = document.createElement('option');
-            optTrasferta.value = 'T';
-            optTrasferta.textContent = '🚌 Trasferta';
-            logisticSelect.appendChild(optTrasferta);
-            
-            const optSpiaggia = document.createElement('option');
-            optSpiaggia.value = 'S';
-            optSpiaggia.textContent = '🏖️ Spiaggia';
-            logisticSelect.appendChild(optSpiaggia);
+            const optNone = document.createElement('option'); optNone.value = ''; optNone.textContent = '📍'; optNone.title = 'Nessuna Sede'; logisticSelect.appendChild(optNone);
+            const optCasa = document.createElement('option'); optCasa.value = 'C'; optCasa.textContent = '🏠'; optCasa.title = 'Sede: Casa'; logisticSelect.appendChild(optCasa);
+            const optTrasferta = document.createElement('option'); optTrasferta.value = 'T'; optTrasferta.textContent = '🚌'; optTrasferta.title = 'Sede: Trasferta'; logisticSelect.appendChild(optTrasferta);
+            const optSpiaggia = document.createElement('option'); optSpiaggia.value = 'S'; optSpiaggia.textContent = '🏖️'; optSpiaggia.title = 'Sede: Spiaggia'; logisticSelect.appendChild(optSpiaggia);
             
             let currentLogistic = '';
             if (match.opponent.endsWith('(C)')) currentLogistic = 'C';
             else if (match.opponent.endsWith('(T)')) currentLogistic = 'T';
             else if (match.opponent.endsWith('(S)')) currentLogistic = 'S';
-            
             logisticSelect.value = currentLogistic;
             
             const updateLocalStyle = (val) => {
-                if (val === 'S') {
-                    logisticSelect.style.borderColor = 'rgba(255, 193, 7, 0.6)';
-                    logisticSelect.style.background = 'rgba(255, 193, 7, 0.15)';
-                    logisticSelect.style.color = '#ffca2c';
-                } else if (val === 'C') {
-                    logisticSelect.style.borderColor = 'rgba(57, 255, 20, 0.6)';
-                    logisticSelect.style.background = 'rgba(57, 255, 20, 0.15)';
-                    logisticSelect.style.color = '#39ff14';
-                } else if (val === 'T') {
-                    logisticSelect.style.borderColor = 'rgba(255, 0, 127, 0.6)';
-                    logisticSelect.style.background = 'rgba(255, 0, 127, 0.15)';
-                    logisticSelect.style.color = '#ff007f';
-                } else {
-                    logisticSelect.style.borderColor = 'var(--border-color)';
-                    logisticSelect.style.background = 'hsla(224, 45%, 3%, 0.6)';
-                    logisticSelect.style.color = 'var(--text-muted)';
-                }
+                if (val === 'S') { logisticSelect.style.borderColor = 'rgba(255, 193, 7, 0.6)'; logisticSelect.style.color = '#ffca2c'; logisticSelect.title = 'Sede: Spiaggia (🏖️)'; }
+                else if (val === 'C') { logisticSelect.style.borderColor = 'rgba(57, 255, 20, 0.6)'; logisticSelect.style.color = '#39ff14'; logisticSelect.title = 'Sede: Casa (🏠)'; }
+                else if (val === 'T') { logisticSelect.style.borderColor = 'rgba(255, 0, 127, 0.6)'; logisticSelect.style.color = '#ff007f'; logisticSelect.title = 'Sede: Trasferta (🚌)'; }
+                else { logisticSelect.style.borderColor = 'var(--border-color)'; logisticSelect.style.color = 'var(--text-muted)'; logisticSelect.title = 'Seleziona Sede Partita'; }
             };
-            
             updateLocalStyle(currentLogistic);
             
             logisticSelect.addEventListener('change', () => {
                 const val = logisticSelect.value;
                 updateLocalStyle(val);
-                
                 let cleanOpponent = match.opponent.replace(/\s*\([CTS]\)$/, '');
-                if (val === 'C') {
-                    match.opponent = `${cleanOpponent} (C)`;
-                } else if (val === 'T') {
-                    match.opponent = `${cleanOpponent} (T)`;
-                } else if (val === 'S') {
-                    match.opponent = `${cleanOpponent} (S)`;
-                } else {
-                    match.opponent = cleanOpponent;
-                }
-                
+                match.opponent = val ? `${cleanOpponent} (${val})` : cleanOpponent;
                 localStorage.setItem('futsal_portal_convocations', JSON.stringify(convocations));
-                
                 if (window.renderConvocationsHistory) window.renderConvocationsHistory();
-                showToast("Logistica gara aggiornata con successo!", "success");
+                showToast("Logistica gara aggiornata!", "success");
             });
-            
-            logisticContainer.appendChild(logisticSelect);
-            th.appendChild(logisticContainer);
         }
-        
-        // --- NEW SELECT ALL CHECKBOX ---
-        const selectAllContainer = document.createElement('div');
-        selectAllContainer.style.marginTop = '0.5rem';
-        selectAllContainer.style.fontSize = '0.75rem';
+        bottomRow.appendChild(logisticSelect);
+
+        // Select all checkbox
+        const selectAllContainer = document.createElement('label');
+        selectAllContainer.style.fontSize = '0.68rem';
         selectAllContainer.style.display = 'flex';
         selectAllContainer.style.alignItems = 'center';
-        selectAllContainer.style.justifyContent = 'center';
-        selectAllContainer.style.gap = '0.25rem';
-        
+        selectAllContainer.style.gap = '2px';
+        selectAllContainer.style.cursor = 'pointer';
+        selectAllContainer.title = isMatchDate ? 'Convoca tutti' : 'Segna tutti presenti/assenti';
+
         const selectAllCheckbox = document.createElement('input');
         selectAllCheckbox.type = 'checkbox';
-        selectAllCheckbox.title = isMatchDate ? 'Convoca tutti' : 'Segna tutti presenti';
+        selectAllCheckbox.style.margin = '0';
+        selectAllCheckbox.style.width = '12px';
+        selectAllCheckbox.style.height = '12px';
         
         let allSelected = true;
         if (players.length > 0) {
             if (isMatchDate) {
-                players.forEach(p => {
-                    if (!match.selectedIds || !match.selectedIds.includes(p.id)) allSelected = false;
-                });
+                players.forEach(p => { if (!match.selectedIds || !match.selectedIds.includes(p.id)) allSelected = false; });
             } else {
                 const session = trainings.find(t => t.date === dateStr);
-                players.forEach(p => {
-                    if (!session || !session.roster || session.roster[p.id] !== 'P') allSelected = false;
-                });
+                players.forEach(p => { if (session && session.roster && session.roster[p.id] === 'A') allSelected = false; });
             }
         } else {
             allSelected = false;
         }
         selectAllCheckbox.checked = allSelected;
-
-        selectAllCheckbox.addEventListener('change', (e) => {
-            window.toggleAllPresences(dateStr, isMatchDate, e.target.checked);
-        });
+        selectAllCheckbox.addEventListener('change', (e) => { window.toggleAllPresences(dateStr, isMatchDate, e.target.checked); });
         
         const selectAllLabel = document.createElement('span');
+        selectAllLabel.style.fontSize = '0.68rem';
+        selectAllLabel.style.color = 'var(--text-muted)';
         selectAllLabel.textContent = 'Tutti';
-        
+
         selectAllContainer.appendChild(selectAllCheckbox);
         selectAllContainer.appendChild(selectAllLabel);
-        th.appendChild(selectAllContainer);
-        // --- END NEW CHECKBOX ---
-        
+        bottomRow.appendChild(selectAllContainer);
+
+        wrapper.appendChild(bottomRow);
+        th.appendChild(wrapper);
         headerRow.appendChild(th);
     });
     thead.appendChild(headerRow);
     table.appendChild(thead);
     
+    // 4. Genera Righe Giocatori
     // 4. Genera Righe Giocatori
     const tbody = document.createElement('tbody');
     players.forEach(player => {
@@ -3707,11 +4982,22 @@ function renderAttendanceBoard() {
         `;
         row.appendChild(playerTd);
         
+        const targetBdayKey = getPlayerBirthdayTargetDateKey(player, filteredDates);
+        
         dateKeys.forEach(dateStr => {
             const td = document.createElement('td');
             const match = convocations.find(c => c.date === dateStr);
             const isMatchDate = !!match;
             
+            const isBirthdayCell = (dateStr === targetBdayKey);
+            if (isBirthdayCell) {
+                const age = window.getPlayerAgeOnDate ? window.getPlayerAgeOnDate(player, dateStr) : null;
+                const ageTxt = age ? ` (${age} anni)` : '';
+                td.style.background = 'rgba(234, 179, 8, 0.25)';
+                td.style.border = '1px solid rgba(234, 179, 8, 0.6)';
+                td.title = `🎂 Compleanno di ${player.name}${ageTxt}! 🎉`;
+            }
+
             const select = document.createElement('select');
             select.className = 'cell-select';
             
@@ -3743,11 +5029,10 @@ function renderAttendanceBoard() {
                     else select.classList.add('empty-status');
                 });
             } else {
-                // Roster allenamento standard
                 const session = trainings.find(t => t.date === dateStr);
-                let currentStatus = '';
+                let currentStatus = 'P';
                 
-                if (session && session.roster && session.roster[player.id]) {
+                if (session && session.roster && session.roster[player.id] !== undefined) {
                     currentStatus = session.roster[player.id];
                 }
                 
@@ -3756,41 +5041,40 @@ function renderAttendanceBoard() {
                 else if (currentStatus === 'I') select.classList.add('i-status');
                 else if (currentStatus === 'G') select.classList.add('g-status');
                 else if (currentStatus === 'T') select.classList.add('t-status');
-                else select.classList.add('empty-status');
-                
-                const optEmpty = document.createElement('option');
-                optEmpty.value = '';
-                optEmpty.textContent = '-';
-                optEmpty.selected = (currentStatus === '');
-                select.appendChild(optEmpty);
+                else select.classList.add('p-status');
                 
                 const optP = document.createElement('option');
                 optP.value = 'P';
                 optP.textContent = 'P';
+                optP.title = 'P: Presente';
                 optP.selected = (currentStatus === 'P');
                 select.appendChild(optP);
                 
                 const optA = document.createElement('option');
                 optA.value = 'A';
                 optA.textContent = 'A';
+                optA.title = 'A: Assente';
                 optA.selected = (currentStatus === 'A');
                 select.appendChild(optA);
                 
                 const optI = document.createElement('option');
                 optI.value = 'I';
                 optI.textContent = 'I';
+                optI.title = 'I: Infortunato';
                 optI.selected = (currentStatus === 'I');
                 select.appendChild(optI);
                 
                 const optG = document.createElement('option');
                 optG.value = 'G';
                 optG.textContent = 'G';
+                optG.title = 'G: Giustificato';
                 optG.selected = (currentStatus === 'G');
                 select.appendChild(optG);
                 
                 const optT = document.createElement('option');
                 optT.value = 'T';
                 optT.textContent = 'T';
+                optT.title = 'T: Test';
                 optT.selected = (currentStatus === 'T');
                 select.appendChild(optT);
                 
@@ -3807,7 +5091,34 @@ function renderAttendanceBoard() {
                 });
             }
             
-            td.appendChild(select);
+            const cellBox = document.createElement('div');
+            cellBox.style.display = 'flex';
+            cellBox.style.alignItems = 'center';
+            cellBox.style.justifyContent = 'center';
+            cellBox.style.width = '100%';
+            cellBox.style.height = '100%';
+            cellBox.style.gap = '2px';
+            cellBox.style.padding = '0 1px';
+            cellBox.style.boxSizing = 'border-box';
+
+            if (isBirthdayCell) {
+                const bIcon = document.createElement('span');
+                bIcon.style.fontSize = '0.72rem';
+                bIcon.style.cursor = 'help';
+                bIcon.style.lineHeight = '1';
+                bIcon.style.flexShrink = '0';
+                bIcon.title = `🎂 Compleanno di ${player.name}! 🎉`;
+                bIcon.textContent = '🎂';
+                cellBox.appendChild(bIcon);
+                
+                select.style.flex = '1';
+                select.style.minWidth = '0';
+                select.style.width = 'auto';
+                select.style.paddingRight = '0.3rem';
+            }
+            
+            cellBox.appendChild(select);
+            td.appendChild(cellBox);
             row.appendChild(td);
         });
         tbody.appendChild(row);
@@ -3816,7 +5127,7 @@ function renderAttendanceBoard() {
 }
 
 window.toggleAllPresences = function(dateStr, isMatchDate, isChecked) {
-    const newStatus = isChecked ? (isMatchDate ? 'C' : 'P') : '';
+    const newStatus = isChecked ? (isMatchDate ? 'C' : 'P') : (isMatchDate ? '' : 'A');
     players.forEach(p => {
         updateBoardAttendance(dateStr, p.id, newStatus);
     });
@@ -3864,7 +5175,7 @@ function updateBoardAttendance(dateStr, playerId, status) {
                 const newSession = {
                     id: Date.now(),
                     date: dateStr,
-                    type: 'Allenamento Tabellone',
+                    type: 'Allenamento',
                     roster: roster
                 };
                 
@@ -3874,8 +5185,10 @@ function updateBoardAttendance(dateStr, playerId, status) {
         }
         
         trainings = trainings.filter(t => (t.roster && Object.keys(t.roster).length > 0) || (t.logistic && t.logistic !== ''));
+        window.trainings = trainings;
         localStorage.setItem('futsal_portal_trainings', JSON.stringify(trainings));
         renderTrainingHistory();
+        if (typeof window.renderAbsencesTab === 'function') window.renderAbsencesTab();
     }
     
     renderRoster();
@@ -3952,10 +5265,449 @@ function setupRosterSubTabs() {
             } else if (targetSub === 'subtab-trends') {
                 populatePlayerDropdowns();
                 handleTrendPlayerChange();
+            } else if (targetSub === 'subtab-riepilogo') {
+                renderRiepilogoPsicofisico();
             }
         });
     });
 }
+
+// ==========================================================================
+// RIEPILOGO PSICOFISICO (in-performance compact version)
+// ==========================================================================
+let riepilogoRadarChart = null;
+let riepilogoBarChart = null;
+
+function renderRiepilogoPsicofisico() {
+    // Helper to retrieve score supporting key variations (fisi-agility, fisi-Agilità)
+    const getParamScore = (sc, key) => {
+        if (!sc) return undefined;
+        if (sc.hasOwnProperty(key) && sc[key] !== undefined && sc[key] !== null) return Number(sc[key]);
+        if (key === 'fisi-agility') {
+            if (sc['fisi-Agilità'] !== undefined && sc['fisi-Agilità'] !== null) return Number(sc['fisi-Agilità']);
+            if (sc['fisi-AgilitÃ '] !== undefined && sc['fisi-AgilitÃ '] !== null) return Number(sc['fisi-AgilitÃ ']);
+        }
+        return undefined;
+    };
+
+    // Gather latest assessment per player
+    const playerLatestMap = {};
+    assessments.forEach(a => {
+        const pid = String(a.playerId);
+        if (!playerLatestMap[pid] || new Date(a.date) > new Date(playerLatestMap[pid].date)) {
+            playerLatestMap[pid] = a;
+        }
+    });
+
+    const isGk = player => {
+        if (!player || !player.role) return false;
+        const r = String(player.role).toLowerCase();
+        return r === 'portiere' || r === 'gk' || r === 'por' || r.includes('portier');
+    };
+
+    // Separate movement players and goalkeepers
+    const allPlayersList = players || [];
+    const movementPlayers = allPlayersList.filter(p => p && !isGk(p));
+    const gkPlayers = allPlayersList.filter(p => p && isGk(p));
+
+    // Sort both: compiled first, then uncompiled, then by name
+    const sortFn = (a, b) => {
+        const aHas = !!playerLatestMap[String(a.id)];
+        const bHas = !!playerLatestMap[String(b.id)];
+        if (aHas && !bHas) return -1;
+        if (!aHas && bHas) return 1;
+        return (a.name || '').localeCompare(b.name || '');
+    };
+    movementPlayers.sort(sortFn);
+    gkPlayers.sort(sortFn);
+
+    // 1. MOVEMENT PLAYERS STATS & MAIN SECTION
+    const compiledMovement = movementPlayers.filter(p => playerLatestMap[String(p.id)]);
+    const numCompiledMov = compiledMovement.length;
+
+    if (movementPlayers.length === 0 && compiledMovement.length === 0) {
+        document.getElementById('riepilogo-overview-grid').innerHTML = `<p style="color:var(--text-secondary); grid-column:1/-1; text-align:center; padding:2rem;">Nessun giocatore di movimento in rosa.</p>`;
+        ['riepilogo-strengths','riepilogo-weaknesses','riepilogo-exercises','riepilogo-player-tbody'].forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = ''; });
+    } else if (numCompiledMov === 0) {
+        document.getElementById('riepilogo-overview-grid').innerHTML = `<p style="color:var(--text-secondary); grid-column:1/-1; text-align:center; padding:2rem;">Nessuna valutazione salvata per i giocatori di movimento.</p>`;
+        ['riepilogo-strengths','riepilogo-weaknesses','riepilogo-exercises'].forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = ''; });
+        
+        const tbody = document.getElementById('riepilogo-player-tbody');
+        if (tbody) {
+            tbody.innerHTML = movementPlayers.map(player => {
+                const displayName = window.getInvertedName ? window.getInvertedName(player.name) : player.name;
+                return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05); opacity:0.75;">
+                    <td style="padding:0.5rem 0.8rem; font-weight:600;">${displayName}</td>
+                    <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td colspan="2" style="padding:0.5rem;"><span style="background:rgba(239, 68, 68, 0.15); color:#ef4444; border:1px solid rgba(239, 68, 68, 0.3); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.75rem; font-weight:600;">⚠️ Non compilata</span></td>
+                </tr>`;
+            }).join('');
+        }
+    } else {
+        // Category & parameter averages across compiled movement players (strictly autovalutazione)
+        const catAvgs = {};
+        const paramAvgs = {};
+        
+        Object.keys(paramInfo).forEach(key => {
+            let paramSum = 0;
+            let paramCount = 0;
+            compiledMovement.forEach(player => {
+                const sheet = playerLatestMap[String(player.id)];
+                const sc = (sheet && sheet.playerScores) ? sheet.playerScores : {};
+                const val = getParamScore(sc, key);
+                if (val !== undefined && !isNaN(val)) {
+                    paramSum += val;
+                    paramCount++;
+                }
+            });
+            paramAvgs[key] = paramCount > 0 ? (paramSum / paramCount) : 0;
+        });
+
+        Object.entries(psychCategoryMap).forEach(([catName, catInfo]) => {
+            const sum = catInfo.keys.reduce((acc, k) => acc + (paramAvgs[k] || 0), 0);
+            catAvgs[catName] = catInfo.keys.length > 0 ? (sum / catInfo.keys.length) : 0;
+        });
+
+        // Overview cards
+        const overviewGrid = document.getElementById('riepilogo-overview-grid');
+        if (overviewGrid) {
+            let html = '';
+            Object.entries(psychCategoryMap).forEach(([catName, catInfo]) => {
+                const avg = catAvgs[catName];
+                const pct = (avg / 10) * 100;
+                const levelLabel = avg >= 7.5 ? 'Eccellente' : avg >= 6 ? 'Buono' : avg >= 4.5 ? 'Sufficiente' : 'Da migliorare';
+                const levelColor = avg >= 7.5 ? 'var(--color-tatt)' : avg >= 6 ? 'var(--color-player)' : avg >= 4.5 ? '#f59e0b' : 'var(--color-fisi)';
+                html += `<div style="background:${catInfo.bg}; border:1px solid ${catInfo.color}30; border-radius:12px; padding:1.25rem; display:flex; flex-direction:column; gap:0.5rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:1.5rem;">${catInfo.emoji}</span><span style="font-size:1.6rem; font-weight:800; color:${catInfo.color};">${avg.toFixed(1)}</span></div>
+                    <h4 style="margin:0; font-size:0.9rem; font-weight:700;">${catName}</h4>
+                    <div style="height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden;"><div style="height:100%; width:${pct}%; background:${catInfo.color}; border-radius:3px;"></div></div>
+                    <span style="font-size:0.75rem; color:${levelColor}; font-weight:600;">${levelLabel}</span>
+                </div>`;
+            });
+            overviewGrid.innerHTML = html;
+        }
+
+        // Radar chart
+        const radarCanvas = document.getElementById('riepilogo-radar-chart');
+        if (radarCanvas) {
+            if (riepilogoRadarChart) riepilogoRadarChart.destroy();
+            const catNames = Object.keys(psychCategoryMap);
+            riepilogoRadarChart = new Chart(radarCanvas.getContext('2d'), {
+                type: 'radar',
+                data: { labels: catNames, datasets: [{ label: 'Media Giocatori Movimento', data: catNames.map(c => catAvgs[c]), backgroundColor: 'hsla(330, 80%, 60%, 0.2)', borderColor: '#f472b6', borderWidth: 2.5, pointBackgroundColor: '#fff', pointBorderColor: '#f472b6', pointRadius: 5 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { min: 0, max: 10, ticks: { stepSize: 2, display: true, color: 'rgba(255,255,255,0.5)', backdropColor: 'transparent', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.1)' }, pointLabels: { color: 'rgba(255,255,255,0.85)', font: { size: 13, weight: '600' } }, angleLines: { color: 'rgba(255,255,255,0.1)' } } } }
+            });
+        }
+
+        // Bar chart
+        const barCanvas = document.getElementById('riepilogo-bar-chart');
+        if (barCanvas) {
+            if (riepilogoBarChart) riepilogoBarChart.destroy();
+            const allKeys = Object.keys(paramInfo);
+            const barColors = allKeys.map(k => { const cat = paramInfo[k].cat; return psychCategoryMap[cat] ? psychCategoryMap[cat].color : '#f472b6'; });
+            riepilogoBarChart = new Chart(barCanvas.getContext('2d'), {
+                type: 'bar',
+                data: { labels: allKeys.map(k => paramInfo[k].label), datasets: [{ label: 'Media', data: allKeys.map(k => paramAvgs[k] || 0), backgroundColor: barColors.map(c => c.replace('1)', '0.65)')), borderColor: barColors, borderWidth: 1.5, borderRadius: 5 }] },
+                options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { min: 0, max: 10, ticks: { color: 'rgba(255,255,255,0.6)', stepSize: 2, font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.06)' } }, y: { ticks: { color: 'rgba(255,255,255,0.8)', font: { size: 11 } }, grid: { display: false } } } }
+            });
+        }
+
+        // Calculate score distribution for low scores (1 to 5) for every parameter
+        const getLowScoreDistribution = (compiledList, key) => {
+            const dist = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+            let countLow = 0;
+            compiledList.forEach(p => {
+                const sheet = playerLatestMap[String(p.id)];
+                const sc = (sheet && sheet.playerScores) ? sheet.playerScores : {};
+                const val = getParamScore(sc, key);
+                if (val !== undefined && !isNaN(val)) {
+                    if (val < 6) {
+                        countLow++;
+                        const r = Math.max(1, Math.min(5, Math.floor(val)));
+                        dist[r] = (dist[r] || 0) + 1;
+                    }
+                }
+            });
+            return { dist, countLow };
+        };
+
+        const paramDists = {};
+        Object.keys(paramInfo).forEach(key => {
+            paramDists[key] = getLowScoreDistribution(compiledMovement, key);
+        });
+
+        // Strengths (Punti Positivi): ordered by highest average score
+        const top = Object.keys(paramAvgs).sort((a, b) => paramAvgs[b] - paramAvgs[a]).slice(0, 4);
+
+        // Weaknesses (Punti Negativi): ordered strictly by HIGHEST FREQUENCY OF LOWEST SCORES (1 to 5), then by countLow, then lowest average
+        const bottom = Object.keys(paramInfo).sort((a, b) => {
+            for (let s = 1; s <= 5; s++) {
+                const diff = paramDists[b].dist[s] - paramDists[a].dist[s];
+                if (diff !== 0) return diff;
+            }
+            const diffCount = paramDists[b].countLow - paramDists[a].countLow;
+            if (diffCount !== 0) return diffCount;
+            return paramAvgs[a] - paramAvgs[b];
+        }).slice(0, 4);
+
+        const strEl = document.getElementById('riepilogo-strengths');
+        if (strEl) strEl.innerHTML = top.map(key => {
+            const avg = paramAvgs[key];
+            const countHigh = compiledMovement.filter(p => {
+                const sheet = playerLatestMap[String(p.id)];
+                const sc = (sheet && sheet.playerScores) ? sheet.playerScores : {};
+                const val = getParamScore(sc, key);
+                return val !== undefined && !isNaN(val) && val >= 7;
+            }).length;
+            return `<div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; background:rgba(255,255,255,0.03); border-radius:8px; border-left:3px solid var(--color-tatt);">
+                <div>
+                    <strong style="font-size:0.88rem;">${paramInfo[key].label}</strong>
+                    <span style="color:var(--text-secondary); font-size:0.78rem; margin-left:0.4rem;">(${paramInfo[key].cat})</span>
+                </div>
+                <div style="text-align:right;">
+                    <span style="font-weight:800; color:var(--color-tatt);">${avg.toFixed(1)}/10</span>
+                    <div style="font-size:0.72rem; color:var(--text-secondary);">${countHigh} gioc. ≥ 7</div>
+                </div>
+            </div>`;
+        }).join('');
+
+        const weakEl = document.getElementById('riepilogo-weaknesses');
+        if (weakEl) weakEl.innerHTML = bottom.map(key => {
+            const avg = paramAvgs[key];
+            const countEqualOrLower = compiledMovement.filter(p => {
+                const sheet = playerLatestMap[String(p.id)];
+                const sc = (sheet && sheet.playerScores) ? sheet.playerScores : {};
+                const val = getParamScore(sc, key);
+                return val !== undefined && !isNaN(val) && val <= avg;
+            }).length;
+            const bgStyle = countEqualOrLower > 0 
+                ? 'background:rgba(239, 68, 68, 0.08); border-left:4px solid #ef4444;' 
+                : 'background:rgba(255,255,255,0.03); border-left:3px solid var(--color-fisi);';
+            const badgeHtml = countEqualOrLower > 0 
+                ? `<span style="background:rgba(239, 68, 68, 0.22); color:#ef4444; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; border:1px solid rgba(239, 68, 68, 0.4); font-size:0.72rem;">⚠️ ${countEqualOrLower} gioc. ≤ ${avg.toFixed(1)}</span>` 
+                : `<span style="font-size:0.72rem; color:var(--text-secondary);">${countEqualOrLower} gioc. ≤ ${avg.toFixed(1)}</span>`;
+
+            return `<div style="display:flex; justify-content:space-between; align-items:center; padding:0.55rem 0.75rem; border-radius:8px; ${bgStyle}">
+                <div>
+                    <strong style="font-size:0.88rem; color:var(--text-primary);">${paramInfo[key].label}</strong>
+                    <span style="color:var(--text-secondary); font-size:0.78rem; margin-left:0.4rem;">(${paramInfo[key].cat})</span>
+                </div>
+                <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:0.1rem;">
+                    <span style="font-weight:800; color:var(--color-fisi); font-size:0.95rem;">${avg.toFixed(1)}/10</span>
+                    ${badgeHtml}
+                </div>
+            </div>`;
+        }).join('');
+
+        const exEl = document.getElementById('riepilogo-exercises');
+        if (exEl) exEl.innerHTML = bottom.map(key => {
+            const ex = psychCorrectiveExercises[key] || 'Esercizio specifico da definire con lo staff tecnico.';
+            const avg = paramAvgs[key];
+            const countEqualOrLower = compiledMovement.filter(p => {
+                const sheet = playerLatestMap[String(p.id)];
+                const sc = (sheet && sheet.playerScores) ? sheet.playerScores : {};
+                const val = getParamScore(sc, key);
+                return val !== undefined && !isNaN(val) && val <= avg;
+            }).length;
+            const freqBadge = countEqualOrLower > 0 ? `<span style="background:rgba(239, 68, 68, 0.2); color:#ef4444; font-weight:700; padding:0.1rem 0.4rem; border-radius:4px; font-size:0.72rem; border:1px solid rgba(239, 68, 68, 0.3);">⚠️ ${countEqualOrLower} gioc. ≤ ${avg.toFixed(1)}</span>` : '';
+            return `<div style="padding:0.65rem 0.9rem; background:rgba(255,255,255,0.03); border-radius:8px; border-left:3px solid #f472b6;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.2rem;">
+                    <strong style="font-size:0.88rem;">${paramInfo[key].label}</strong>
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
+                        ${freqBadge}
+                        <span style="font-size:0.75rem; color:var(--color-fisi); font-weight:600;">Media: ${avg.toFixed(1)}/10</span>
+                    </div>
+                </div>
+                <p style="color:var(--text-secondary); font-size:0.83rem; margin:0; line-height:1.4;">${ex}</p>
+            </div>`;
+        }).join('');
+
+        // Movement Players table
+        const tbody = document.getElementById('riepilogo-player-tbody');
+        if (tbody) {
+            const colorScore = v => v >= 7.5 ? 'var(--color-tatt)' : v >= 6 ? 'var(--color-player)' : v >= 4.5 ? '#f59e0b' : 'var(--color-fisi)';
+            tbody.innerHTML = movementPlayers.map(player => {
+                const pid = String(player.id);
+                const sheet = playerLatestMap[pid];
+                const displayName = window.getInvertedName ? window.getInvertedName(player.name) : player.name;
+                
+                if (!sheet) {
+                    return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05); opacity:0.75;">
+                        <td style="padding:0.5rem 0.8rem; font-weight:600;">${displayName}</td>
+                        <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                        <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                        <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                        <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                        <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                        <td colspan="2" style="padding:0.5rem;"><span style="background:rgba(239, 68, 68, 0.15); color:#ef4444; border:1px solid rgba(239, 68, 68, 0.3); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.75rem; font-weight:600;">⚠️ Non compilata</span></td>
+                    </tr>`;
+                }
+
+                const scores = sheet.playerScores || {};
+                const catScores = {};
+                Object.entries(psychCategoryMap).forEach(([cat, info]) => {
+                    let cSum = 0, cCount = 0;
+                    info.keys.forEach(k => {
+                        const v = getParamScore(scores, k);
+                        cSum += (v !== undefined ? v : 5);
+                        cCount++;
+                    });
+                    catScores[cat] = cCount > 0 ? (cSum / cCount) : 5;
+                });
+                const overall = Object.values(catScores).reduce((a, b) => a + b, 0) / 4;
+                
+                let maxKey = '', maxVal = -1, minKey = '', minVal = 11;
+                Object.keys(paramInfo).forEach(k => {
+                    const v = getParamScore(scores, k);
+                    if (v !== undefined && !isNaN(v)) {
+                        if (v > maxVal) { maxVal = v; maxKey = k; }
+                        if (v < minVal) { minVal = v; minKey = k; }
+                    }
+                });
+                const labelSource = (typeof defaultParamLabels !== 'undefined' ? defaultParamLabels : {});
+                const bestLabel = (labelSource[maxKey] && labelSource[maxKey].label) || (paramInfo[maxKey] && paramInfo[maxKey].label) || maxKey;
+                const worstLabel = (labelSource[minKey] && labelSource[minKey].label) || (paramInfo[minKey] && paramInfo[minKey].label) || minKey;
+                
+                const bestDesc = getSyntheticPlanText(sheet, maxKey, 'strength', false);
+                const worstDesc = getSyntheticPlanText(sheet, minKey, 'weakness', false);
+
+                const bestCell = maxKey ? `<div style="font-weight:700; color:var(--color-tatt); font-size:0.8rem;">${bestLabel} (${maxVal.toFixed(1)})</div>${bestDesc ? `<div style="font-size:0.73rem; color:var(--text-secondary); line-height:1.25; margin-top:0.12rem; font-weight:400;">${bestDesc}</div>` : ''}` : '-';
+                const worstCell = minKey ? `<div style="font-weight:700; color:var(--color-fisi); font-size:0.8rem;">${worstLabel} (${minVal.toFixed(1)})</div>${worstDesc ? `<div style="font-size:0.73rem; color:var(--text-secondary); line-height:1.25; margin-top:0.12rem; font-weight:400;">${worstDesc}</div>` : ''}` : '-';
+
+                return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.6rem 0.8rem; font-weight:600; vertical-align:middle;">${displayName}</td><td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Stato Psicologico'])}; font-weight:700; vertical-align:middle;">${catScores['Stato Psicologico'].toFixed(1)}</td><td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Tecnica Individuale'])}; font-weight:700; vertical-align:middle;">${catScores['Tecnica Individuale'].toFixed(1)}</td><td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Condizione Fisica'])}; font-weight:700; vertical-align:middle;">${catScores['Condizione Fisica'].toFixed(1)}</td><td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Tattica'])}; font-weight:700; vertical-align:middle;">${catScores['Tattica'].toFixed(1)}</td><td style="padding:0.6rem 0.5rem; text-align:center; font-weight:800; color:${colorScore(overall)}; vertical-align:middle;">${overall.toFixed(1)}</td><td style="padding:0.6rem 0.6rem; vertical-align:middle; max-width:210px;">${bestCell}</td><td style="padding:0.6rem 0.6rem; vertical-align:middle; max-width:210px;">${worstCell}</td></tr>`;
+            }).join('');
+        }
+    }
+
+    // 2. GOALKEEPERS SECTION AT THE BOTTOM
+    const summaryGkEl = document.getElementById('riepilogo-gk-stats-summary');
+    const overviewGkGrid = document.getElementById('riepilogo-gk-overview-grid');
+    const tbodyGk = document.getElementById('riepilogo-gk-tbody');
+
+    const compiledGk = gkPlayers.filter(p => playerLatestMap[String(p.id)]);
+    const numCompiledGk = compiledGk.length;
+
+    if (summaryGkEl) {
+        summaryGkEl.textContent = `Schede compilate: ${numCompiledGk} su ${gkPlayers.length} portieri`;
+    }
+
+    if (overviewGkGrid) {
+        if (numCompiledGk === 0) {
+            overviewGkGrid.innerHTML = `<p style="color:var(--text-secondary); grid-column:1/-1; text-align:center; padding:1rem; background:rgba(255,255,255,0.02); border-radius:8px;">Nessuna scheda salvata per i portieri.</p>`;
+        } else {
+            const gkCatAvgs = {};
+            const gkParamAvgs = {};
+            Object.keys(paramInfo).forEach(key => {
+                let sum = 0, count = 0;
+                compiledGk.forEach(player => {
+                    const sheet = playerLatestMap[String(player.id)];
+                    const scores = sheet ? sheet.playerScores : {};
+                    const val = getParamScore(scores, key);
+                    if (val !== undefined && !isNaN(val)) {
+                        sum += val;
+                        count++;
+                    }
+                });
+                gkParamAvgs[key] = count > 0 ? (sum / count) : 0;
+            });
+
+            Object.entries(psychCategoryMap).forEach(([catName, catInfo]) => {
+                const catSum = catInfo.keys.reduce((acc, k) => acc + (gkParamAvgs[k] || 0), 0);
+                gkCatAvgs[catName] = catInfo.keys.length > 0 ? (catSum / catInfo.keys.length) : 0;
+            });
+
+            let gkHtml = '';
+            Object.entries(psychCategoryMap).forEach(([catName, catInfo]) => {
+                const avg = gkCatAvgs[catName];
+                const pct = (avg / 10) * 100;
+                const labelName = catName === 'Tecnica Individuale' ? 'Tecnica Portiere' : catName;
+                gkHtml += `<div style="background:rgba(59, 130, 246, 0.08); border:1px solid rgba(96, 165, 250, 0.25); border-radius:10px; padding:0.9rem; display:flex; flex-direction:column; gap:0.4rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:1.2rem;">🧤</span>
+                        <span style="font-size:1.3rem; font-weight:800; color:#60a5fa;">${avg.toFixed(1)}</span>
+                    </div>
+                    <h5 style="margin:0; font-size:0.82rem; font-weight:700; color:var(--text-primary);">${labelName}</h5>
+                    <div style="height:5px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden;"><div style="height:100%; width:${pct}%; background:#60a5fa; border-radius:3px;"></div></div>
+                </div>`;
+            });
+            overviewGkGrid.innerHTML = gkHtml;
+        }
+    }
+
+    if (tbodyGk) {
+        if (gkPlayers.length === 0) {
+            tbodyGk.innerHTML = `<tr><td colspan="8" style="padding:1rem; text-align:center; color:var(--text-secondary);">Nessun portiere registrato in rosa.</td></tr>`;
+        } else {
+            const colorScore = v => v >= 7.5 ? 'var(--color-tatt)' : v >= 6 ? 'var(--color-player)' : v >= 4.5 ? '#f59e0b' : 'var(--color-fisi)';
+            tbodyGk.innerHTML = gkPlayers.map(player => {
+                const pid = String(player.id);
+                const sheet = playerLatestMap[pid];
+                const displayName = window.getInvertedName ? window.getInvertedName(player.name) : player.name;
+
+                if (!sheet) {
+                    return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05); opacity:0.75;">
+                        <td style="padding:0.5rem 0.8rem; font-weight:600; color:#60a5fa;">🧤 ${displayName}</td>
+                        <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                        <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                        <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                        <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                        <td style="padding:0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                        <td colspan="2" style="padding:0.5rem;"><span style="background:rgba(239, 68, 68, 0.15); color:#ef4444; border:1px solid rgba(239, 68, 68, 0.3); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.75rem; font-weight:600;">⚠️ Non compilata</span></td>
+                    </tr>`;
+                }
+
+                const scores = sheet.playerScores || {};
+                const catScores = {};
+                Object.entries(psychCategoryMap).forEach(([cat, info]) => {
+                    let cSum = 0, cCount = 0;
+                    info.keys.forEach(k => {
+                        const v = getParamScore(scores, k);
+                        cSum += (v !== undefined ? v : 5);
+                        cCount++;
+                    });
+                    catScores[cat] = cCount > 0 ? (cSum / cCount) : 5;
+                });
+                const overall = Object.values(catScores).reduce((a, b) => a + b, 0) / 4;
+
+                let maxKey = '', maxVal = -1, minKey = '', minVal = 11;
+                Object.keys(paramInfo).forEach(k => {
+                    const v = getParamScore(scores, k);
+                    if (v !== undefined && !isNaN(v)) {
+                        if (v > maxVal) { maxVal = v; maxKey = k; }
+                        if (v < minVal) { minVal = v; minKey = k; }
+                    }
+                });
+                const labelSource = (typeof gkParamLabels !== 'undefined' ? gkParamLabels : {});
+                const bestLabel = (labelSource[maxKey] && labelSource[maxKey].label) || (paramInfo[maxKey] && paramInfo[maxKey].label) || maxKey;
+                const worstLabel = (labelSource[minKey] && labelSource[minKey].label) || (paramInfo[minKey] && paramInfo[minKey].label) || minKey;
+
+                const bestDesc = getSyntheticPlanText(sheet, maxKey, 'strength', true);
+                const worstDesc = getSyntheticPlanText(sheet, minKey, 'weakness', true);
+
+                const bestCell = maxKey ? `<div style="font-weight:700; color:var(--color-tatt); font-size:0.8rem;">${bestLabel} (${maxVal.toFixed(1)})</div>${bestDesc ? `<div style="font-size:0.73rem; color:var(--text-secondary); line-height:1.25; margin-top:0.12rem; font-weight:400;">${bestDesc}</div>` : ''}` : '-';
+                const worstCell = minKey ? `<div style="font-weight:700; color:var(--color-fisi); font-size:0.8rem;">${worstLabel} (${minVal.toFixed(1)})</div>${worstDesc ? `<div style="font-size:0.73rem; color:var(--text-secondary); line-height:1.25; margin-top:0.12rem; font-weight:400;">${worstDesc}</div>` : ''}` : '-';
+
+                return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.6rem 0.8rem; font-weight:600; color:#60a5fa; vertical-align:middle;">🧤 ${displayName}</td><td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Stato Psicologico'])}; font-weight:700; vertical-align:middle;">${catScores['Stato Psicologico'].toFixed(1)}</td><td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Tecnica Individuale'])}; font-weight:700; vertical-align:middle;">${catScores['Tecnica Individuale'].toFixed(1)}</td><td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Condizione Fisica'])}; font-weight:700; vertical-align:middle;">${catScores['Condizione Fisica'].toFixed(1)}</td><td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Tattica'])}; font-weight:700; vertical-align:middle;">${catScores['Tattica'].toFixed(1)}</td><td style="padding:0.6rem 0.5rem; text-align:center; font-weight:800; color:${colorScore(overall)}; vertical-align:middle;">${overall.toFixed(1)}</td><td style="padding:0.6rem 0.6rem; vertical-align:middle; max-width:210px;">${bestCell}</td><td style="padding:0.6rem 0.6rem; vertical-align:middle; max-width:210px;">${worstCell}</td></tr>`;
+            }).join('');
+        }
+    }
+}
+window.renderRiepilogoPsicofisico = renderRiepilogoPsicofisico;
+
+function printRiepilogoPsicofisico() {
+    document.body.classList.add('print-riepilogo');
+    adaptChartsForPrint(true);
+    window.print();
+    setTimeout(() => {
+        document.body.classList.remove('print-riepilogo');
+        adaptChartsForPrint(false);
+    }, 500);
+}
+window.printRiepilogoPsicofisico = printRiepilogoPsicofisico;
 
 // ==========================================================================
 // MODAL POPUP CONTROL FUNCTIONS
@@ -3970,6 +5722,8 @@ function openAddMatchModal() {
     document.getElementById('popup-match-opponent').value = '';
     document.getElementById('popup-match-notes').value = '';
     document.getElementById('popup-match-type').value = '';
+    const popupLogistic = document.getElementById('popup-training-logistic');
+    if (popupLogistic) popupLogistic.value = '';
     document.getElementById('popup-match-location').value = 'C';
     
     const eventTypeSelect = document.getElementById('popup-match-event-type');
@@ -4083,10 +5837,14 @@ function openEditColumnModal(dateStr, isMatch) {
         
         if (session) {
             document.getElementById('edit-col-type').value = session.type || '';
+            const editLogisticEl = document.getElementById('edit-col-training-logistic');
+            if (editLogisticEl) editLogisticEl.value = session.logistic || '';
             deleteBtn.classList.remove('hidden');
         } else {
             document.getElementById('edit-col-type').value = '';
-            deleteBtn.classList.add('hidden');
+            const editLogisticEl = document.getElementById('edit-col-training-logistic');
+            if (editLogisticEl) editLogisticEl.value = '';
+            deleteBtn.classList.remove('hidden');
         }
     }
     
@@ -4094,11 +5852,333 @@ function openEditColumnModal(dateStr, isMatch) {
     popup.classList.remove('hidden');
 }
 
+function openPreseasonSummaryModal() {
+    const overlay = document.getElementById('modal-overlay');
+    const popup = document.getElementById('popup-preseason-summary');
+    const body = document.getElementById('preseason-summary-body');
+    if (!overlay || !popup || !body) return;
+
+    // Date range: 17/08/2026 to 18/09/2026
+    const allDates = generateSeasonDates();
+    const startDate = new Date(2026, 7, 17, 0, 0, 0); // 17 Agosto 2026
+    const endDate = new Date(2026, 8, 18, 23, 59, 59); // 18 Settembre 2026
+
+    const preseasonDates = allDates.filter(d => d >= startDate && d <= endDate);
+
+    let totalSessions = preseasonDates.length;
+    let trainingsCount = 0;
+    let friendliesCount = 0;
+    let officialMatchesCount = 0;
+    let totalPresenti = 0;
+    let totalAssenti = 0;
+    let totalInfortunati = 0;
+    let totalGiustificati = 0;
+
+    const sessionItemsHTML = preseasonDates.map((date, index) => {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dateStr = `${y}-${m}-${day}`;
+
+        const dayNames = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+        const dayName = dayNames[date.getDay()];
+
+        const match = convocations.find(c => c.date === dateStr);
+        const session = trainings.find(t => t.date === dateStr);
+
+        let eventTypeLabel = '';
+        let badgeStyle = '';
+        let detailsText = '';
+        let attendanceStatsHTML = '';
+        let locationBadgeHTML = '';
+
+        // Extract location (Casa = Palazzetto / Spiaggia / Trasferta)
+        let locationKey = 'casa'; // Default
+        if (match) {
+            let cleanOpp = match.opponent || '';
+            if (cleanOpp.endsWith('(T)')) locationKey = 'trasferta';
+            else if (cleanOpp.endsWith('(S)')) locationKey = 'spiaggia';
+            else locationKey = 'casa';
+        } else if (session && session.logistic) {
+            locationKey = session.logistic;
+        }
+
+        if (locationKey === 'trasferta') {
+            locationBadgeHTML = `<span style="background: rgba(255, 0, 127, 0.18); color: #ff007f; border: 1px solid rgba(255, 0, 127, 0.5); padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;">🚌 Trasferta</span>`;
+        } else if (locationKey === 'spiaggia') {
+            locationBadgeHTML = `<span style="background: rgba(255, 193, 7, 0.18); color: #ffca2c; border: 1px solid rgba(255, 193, 7, 0.5); padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;">🏖️ Spiaggia</span>`;
+        } else {
+            locationBadgeHTML = `<span style="background: rgba(57, 255, 20, 0.15); color: #39ff14; border: 1px solid rgba(57, 255, 20, 0.4); padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;">🏠 Palazzetto (Casa)</span>`;
+        }
+
+        if (match) {
+            const isFriendly = match.type === 'friendly';
+            if (isFriendly) friendliesCount++;
+            else officialMatchesCount++;
+
+            let cleanOpponent = (match.opponent || '').replace(/\s*\([CTS]\)$/, '');
+
+            eventTypeLabel = isFriendly ? '🤝 Amichevole' : '⚽ Gara Ufficiale';
+            badgeStyle = isFriendly 
+                ? 'background: rgba(255, 193, 7, 0.2); color: #ffca2c; border: 1px solid rgba(255, 193, 7, 0.4);' 
+                : 'background: rgba(40, 167, 69, 0.2); color: #2ecc71; border: 1px solid rgba(40, 167, 69, 0.4);';
+
+            detailsText = `vs <strong>${escapeHTML(cleanOpponent)}</strong>`;
+
+            const convocatiCount = (match.selectedIds || []).length;
+            if (convocatiCount > 0) {
+                attendanceStatsHTML = `<span style="color: var(--color-player); font-weight: 600;">${convocatiCount} Convocati</span>`;
+            } else {
+                attendanceStatsHTML = ``;
+            }
+        } else {
+            trainingsCount++;
+            eventTypeLabel = '🏃 Allenamento';
+            badgeStyle = 'background: rgba(0, 123, 255, 0.2); color: #38bdf8; border: 1px solid rgba(0, 123, 255, 0.4);';
+
+            let typeName = (session && session.type) ? session.type.trim() : '';
+
+            if (typeName && typeName !== 'Allenamento' && typeName !== 'Allenamento Tabellone') {
+                detailsText = `<strong>${escapeHTML(typeName)}</strong>`;
+            } else {
+                detailsText = '';
+            }
+
+            let p = 0, a = 0, i = 0, g = 0, t = 0;
+            if (session && session.roster) {
+                Object.values(session.roster).forEach(st => {
+                    if (st === 'P') p++;
+                    else if (st === 'A') a++;
+                    else if (st === 'I') i++;
+                    else if (st === 'G') g++;
+                    else if (st === 'T') t++;
+                });
+            }
+            totalPresenti += (p + t);
+            totalAssenti += a;
+            totalInfortunati += i;
+            totalGiustificati += g;
+
+            const active = p + a + t;
+            const rate = active > 0 ? (((p + t) / active) * 100).toFixed(0) : '-';
+
+            if (p === 0 && a === 0 && i === 0 && g === 0 && t === 0) {
+                attendanceStatsHTML = ``;
+            } else {
+                attendanceStatsHTML = `
+                    <span style="color: var(--color-tatt); font-weight:600;">${p + t} Presenti</span>
+                    ${a > 0 ? `<span style="color: var(--color-danger); font-size:0.8rem; margin-left:4px;">(${a}A)</span>` : ''}
+                    <span style="color: var(--text-muted); font-size:0.8rem; margin-left:4px;">(${rate}%)</span>
+                `;
+            }
+        }
+
+        return `
+            <div style="display: grid; grid-template-columns: 190px 1fr 310px; align-items: center; padding: 0.75rem 1rem; background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); gap: 1rem;">
+                <!-- 1. DATA E GIORNO -->
+                <div style="display: flex; align-items: center; gap: 0.8rem;">
+                    <span style="font-weight: 700; color: var(--color-tecn); font-size: 0.85rem; min-width: 28px;">#${index + 1}</span>
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-color);">${dayName} ${day}/${m}/${y}</div>
+                    </div>
+                </div>
+
+                <!-- 2. TIPO EVENTO & DETTAGLI -->
+                <div style="display: flex; align-items: center; gap: 0.75rem; overflow: hidden;">
+                    <span style="font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; font-weight: 600; white-space: nowrap; ${badgeStyle}">${eventTypeLabel}</span>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${detailsText}</div>
+                </div>
+
+                <!-- 3. LUOGO EVIDENZIATO & PRESENZE -->
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 0.8rem;">
+                    ${locationBadgeHTML}
+                    <div style="text-align: right; min-width: 130px;">
+                        ${attendanceStatsHTML}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    body.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+            <div class="stat-bubble" style="background: rgba(0, 123, 255, 0.1); border: 1px solid rgba(0, 123, 255, 0.3); text-align: center; padding: 0.85rem; border-radius: 8px;">
+                <span class="num" style="display: block; font-size: 1.6rem; font-weight: 800; color: #38bdf8;">${totalSessions}</span>
+                <span class="lbl" style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Giorni Programmati</span>
+            </div>
+            <div class="stat-bubble" style="background: rgba(0, 200, 150, 0.1); border: 1px solid rgba(0, 200, 150, 0.3); text-align: center; padding: 0.85rem; border-radius: 8px;">
+                <span class="num" style="display: block; font-size: 1.6rem; font-weight: 800; color: #2ecc71;">${trainingsCount}</span>
+                <span class="lbl" style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Sedute Allenamento</span>
+            </div>
+            <div class="stat-bubble" style="background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); text-align: center; padding: 0.85rem; border-radius: 8px;">
+                <span class="num" style="display: block; font-size: 1.6rem; font-weight: 800; color: #ffca2c;">${friendliesCount}</span>
+                <span class="lbl" style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Amichevoli</span>
+            </div>
+            ${officialMatchesCount > 0 ? `
+            <div class="stat-bubble" style="background: rgba(155, 89, 182, 0.1); border: 1px solid rgba(155, 89, 182, 0.3); text-align: center; padding: 0.85rem; border-radius: 8px;">
+                <span class="num" style="display: block; font-size: 1.6rem; font-weight: 800; color: #9b59b6;">${officialMatchesCount}</span>
+                <span class="lbl" style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Gare Ufficiali</span>
+            </div>` : ''}
+        </div>
+
+        <div style="margin-top: 0.5rem;">
+            <div style="display: grid; grid-template-columns: 190px 1fr 310px; gap: 1rem; padding: 0.4rem 1rem; margin-bottom: 0.4rem; background: hsla(224, 45%, 4%, 0.6); border-radius: var(--border-radius-sm); font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                <div>1. Data & Giorno</div>
+                <div>2. Evento / Dettagli</div>
+                <div style="text-align: right;">3. Luogo & Presenze</div>
+            </div>
+            <div class="preseason-summary-list" style="display: flex; flex-direction: column; gap: 0.6rem; max-height: 50vh; overflow-y: auto; padding-right: 4px;">
+                ${sessionItemsHTML || '<div style="text-align:center; padding:2rem; color:var(--text-muted);">Nessuna seduta programmata nel periodo.</div>'}
+            </div>
+        </div>
+    `;
+
+    // Hide any other popups inside overlay
+    const popups = document.querySelectorAll('.modal-overlay .modal-content');
+    popups.forEach(p => p.classList.add('hidden'));
+
+    overlay.classList.remove('hidden');
+    popup.classList.remove('hidden');
+}
+
+function downloadPreseasonSummaryTXT() {
+    const allDates = generateSeasonDates();
+    const startDate = new Date(2026, 7, 17, 0, 0, 0); // 17 Agosto 2026
+    const endDate = new Date(2026, 8, 18, 23, 59, 59); // 18 Settembre 2026
+
+    const preseasonDates = allDates.filter(d => d >= startDate && d <= endDate);
+
+    let totalSessions = preseasonDates.length;
+    let trainingsCount = 0;
+    let friendliesCount = 0;
+    let officialMatchesCount = 0;
+
+    let lines = [];
+    lines.push("===================================================================");
+    lines.push("📋 RIEPILOGO PRE-CAMPIONATO (dal 17/08/2026 al 18/09/2026)");
+    lines.push("Futsal Dashboard - Adriauto F.M. C5");
+    lines.push("===================================================================");
+    lines.push("");
+
+    let itemsLines = [];
+
+    preseasonDates.forEach((date, index) => {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dateStr = `${y}-${m}-${day}`;
+
+        const dayNames = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+        const dayName = dayNames[date.getDay()];
+
+        const match = convocations.find(c => c.date === dateStr);
+        const session = trainings.find(t => t.date === dateStr);
+
+        let eventTypeLabel = '';
+        let detailsText = '';
+        let attendanceText = '';
+        let locationText = '';
+
+        // Location
+        let locationKey = 'casa';
+        if (match) {
+            let cleanOpp = match.opponent || '';
+            if (cleanOpp.endsWith('(T)')) locationKey = 'trasferta';
+            else if (cleanOpp.endsWith('(S)')) locationKey = 'spiaggia';
+            else locationKey = 'casa';
+        } else if (session && session.logistic) {
+            locationKey = session.logistic;
+        }
+
+        if (locationKey === 'trasferta') locationText = '🚌';
+        else if (locationKey === 'spiaggia') locationText = '🏖️';
+        else locationText = '🏠';
+
+        if (match) {
+            const isFriendly = match.type === 'friendly';
+            if (isFriendly) friendliesCount++;
+            else officialMatchesCount++;
+
+            let cleanOpponent = (match.opponent || '').replace(/\s*\([CTS]\)$/, '');
+
+            eventTypeLabel = isFriendly ? 'Amichevole' : 'Gara Ufficiale';
+            detailsText = `vs ${cleanOpponent}`;
+
+            const convocatiCount = (match.selectedIds || []).length;
+            if (convocatiCount > 0) {
+                attendanceText = `${convocatiCount} Convocati`;
+            }
+        } else {
+            trainingsCount++;
+            eventTypeLabel = 'Allenamento';
+
+            let typeName = (session && session.type) ? session.type.trim() : '';
+            if (typeName && typeName !== 'Allenamento' && typeName !== 'Allenamento Tabellone') {
+                detailsText = typeName;
+            }
+
+            let p = 0, a = 0, i = 0, g = 0, t = 0;
+            if (session && session.roster) {
+                Object.values(session.roster).forEach(st => {
+                    if (st === 'P') p++;
+                    else if (st === 'A') a++;
+                    else if (st === 'I') i++;
+                    else if (st === 'G') g++;
+                    else if (st === 'T') t++;
+                });
+            }
+            const active = p + a + t;
+            const rate = active > 0 ? (((p + t) / active) * 100).toFixed(0) : '-';
+
+            if (p + t > 0 || a > 0) {
+                attendanceText = `${p + t} Presenti${a > 0 ? ` (${a} Assenti)` : ''} [${rate}%]`;
+            }
+        }
+
+        let numStr = `#${String(index + 1).padStart(2, '0')}`;
+        let rowStr = `${numStr} | ${dayName} ${day}/${m}/${y} | ${eventTypeLabel}${detailsText ? ` (${detailsText})` : ''} | ${locationText}${attendanceText ? ` | ${attendanceText}` : ''}`;
+        itemsLines.push(rowStr);
+    });
+
+    lines.push("[ STATISTICHE GENERALI ]");
+    lines.push(`- Giorni Programmati : ${totalSessions}`);
+    lines.push(`- Sedute Allenamento : ${trainingsCount}`);
+    lines.push(`- Amichevoli          : ${friendliesCount}`);
+    if (officialMatchesCount > 0) {
+        lines.push(`- Gare Ufficiali     : ${officialMatchesCount}`);
+    }
+    lines.push("");
+    lines.push("-------------------------------------------------------------------");
+    lines.push("CRONOLOGIA DETTAGLIATA SEDUTE E AMICHEVOLI");
+    lines.push("-------------------------------------------------------------------");
+    lines.push(...itemsLines);
+    lines.push("");
+    lines.push("===================================================================");
+
+    const txtContent = lines.join("\r\n");
+    const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Riepilogo_Pre-Campionato_${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
 // Bind to window to ensure accessibility from inline onclick HTML handlers
 window.openAddMatchModal = openAddMatchModal;
 window.closeModal = closeModal;
 window.openEditColumnModal = openEditColumnModal;
 window.openAddPlayerModal = openAddPlayerModal;
+window.openPreseasonSummaryModal = openPreseasonSummaryModal;
+window.downloadPreseasonSummaryTXT = downloadPreseasonSummaryTXT;
+window.printPreseasonSummary = function() {
+    document.body.classList.add('print-preseason');
+    document.body.classList.remove('print-evaluation', 'print-distinta');
+    window.print();
+};
 
 // ==========================================================================
 // PREPARAZIONE ATLETICA: SUB-TAB NAVIGATION
@@ -4168,20 +6248,20 @@ function getTestRating(testType, value) {
             badgeClass = 'badge-danger';
             desc = `Cilindrata aerobica insufficiente (VO2max stimato: ${vo2} ml/kg/min). Richiede lavoro specifico di fondo e interval training.`;
         }
-    } else if (testType === 'AgilitÃ ') {
+    } else if (testType === 'Agilità') {
         const t = parseFloat(value) || 99;
         if (t < 9.5) {
             rating = 'Eccellente';
             badgeClass = 'badge-success';
-            desc = 'rapiditÃ â€™Ãƒâ€šÃ‚Â  e fluiditÃ â€™Ãƒâ€šÃ‚Â  eccezionale nei cambi di direzione. Ottima coordinazione motoria e frenata.';
+            desc = 'Rapidità e fluidità eccezionale nei cambi di direzione. Ottima coordinazione motoria e frenata.';
         } else if (t <= 10.5) {
             rating = 'Buono';
             badgeClass = 'badge-info';
-            desc = 'Ottimo controllo motorio e reattivitÃ â€™Ãƒâ€šÃ‚Â . Agile nei cambi di orientamento tipici del futsal.';
+            desc = 'Ottimo controllo motorio e reattività. Agile nei cambi di orientamento tipici del futsal.';
         } else if (t <= 11.5) {
             rating = 'Medio';
             badgeClass = 'badge-warning';
-            desc = 'AgilitÃ â€™Ãƒâ€šÃ‚Â  nella media. Margini di miglioramento nell\'esplosivitÃ â€™Ãƒâ€šÃ‚Â  laterale e nella rapiditÃ â€™Ãƒâ€šÃ‚Â  del passo.';
+            desc = 'Agilità nella media. Margini di miglioramento nell\'esplosività laterale e nella rapidità del passo.';
         } else {
             rating = 'Insufficiente';
             badgeClass = 'badge-danger';
@@ -4192,15 +6272,15 @@ function getTestRating(testType, value) {
         if (t < 4.0) {
             rating = 'Eccellente';
             badgeClass = 'badge-success';
-            desc = 'velocitÃ â€™Ãƒâ€šÃ‚Â  pura eccezionale. Forte capacitÃ â€™Ãƒâ€šÃ‚Â  di accelerazione e spunto sui 30 metri.';
+            desc = 'Velocità pura eccezionale. Forte capacità di accelerazione e spunto sui 30 metri.';
         } else if (t <= 4.3) {
             rating = 'Buono';
             badgeClass = 'badge-info';
-            desc = 'velocitÃ â€™Ãƒâ€šÃ‚Â  buona. Molto competitivo negli allunghi ed efficacia nelle ripartenze.';
+            desc = 'Velocità buona. Molto competitivo negli allunghi ed efficacia nelle ripartenze.';
         } else if (t <= 4.6) {
             rating = 'Medio';
             badgeClass = 'badge-warning';
-            desc = 'velocitÃ â€™Ãƒâ€šÃ‚Â  discreta. Lavoro consigliato sulle frequenze di passo e sulla spinta al suolo.';
+            desc = 'Velocità discreta. Lavoro consigliato sulle frequenze di passo e sulla spinta al suolo.';
         } else {
             rating = 'Insufficiente';
             badgeClass = 'badge-danger';
@@ -4260,11 +6340,11 @@ function saveAthleticTest(e) {
     }
     
     const valYoyo = parseFloat(document.getElementById('input-yoyo-distance').value);
-    const valAgilitÃ  = parseFloat(document.getElementById('input-AgilitÃ -time').value);
+    const valAgility = parseFloat(document.getElementById('input-agility-time').value);
     const valSprint = parseFloat(document.getElementById('input-sprint-time').value);
     const valCmj = parseFloat(document.getElementById('input-cmj-height').value);
     
-    if (isNaN(valYoyo) && isNaN(valAgilitÃ ) && isNaN(valSprint) && isNaN(valCmj)) {
+    if (isNaN(valYoyo) && isNaN(valAgility) && isNaN(valSprint) && isNaN(valCmj)) {
         showToast("Inserisci almeno un valore per i test!", "error");
         return;
     }
@@ -4284,7 +6364,7 @@ function saveAthleticTest(e) {
     let offset = 0;
     
     if (!isNaN(valYoyo) && valYoyo > 0) athleticTests.push({ id: timestamp + (++offset), playerId, date, type: 'yoyo', value: valYoyo });
-    if (!isNaN(valAgilitÃ ) && valAgilitÃ  > 0) athleticTests.push({ id: timestamp + (++offset), playerId, date, type: 'AgilitÃ ', value: valAgilitÃ  });
+    if (!isNaN(valAgility) && valAgility > 0) athleticTests.push({ id: timestamp + (++offset), playerId, date, type: 'Agilità', value: valAgility });
     if (!isNaN(valSprint) && valSprint > 0) athleticTests.push({ id: timestamp + (++offset), playerId, date, type: 'sprint', value: valSprint });
     if (!isNaN(valCmj) && valCmj > 0) athleticTests.push({ id: timestamp + (++offset), playerId, date, type: 'cmj', value: valCmj });
     
@@ -4295,7 +6375,7 @@ function saveAthleticTest(e) {
     
     // Reset inputs
     document.getElementById('input-yoyo-distance').value = '';
-    document.getElementById('input-AgilitÃ -time').value = '';
+    document.getElementById('input-agility-time').value = '';
     document.getElementById('input-sprint-time').value = '';
     document.getElementById('input-cmj-height').value = '';
     
@@ -4467,7 +6547,7 @@ function renderAthleticTestsTable() {
         uniqueDates.forEach((date, index) => {
             const testsOnDate = pTests.filter(t => t.date === date);
             const testYoyo = testsOnDate.find(t => t.type === 'yoyo');
-            const testAgilitÃ  = testsOnDate.find(t => t.type === 'AgilitÃ ');
+            const testAgility = testsOnDate.find(t => t.type === 'Agilità' || t.type === 'agility' || t.type === 'AgilitÃ ');
             const testSprint = testsOnDate.find(t => t.type === 'sprint');
             const testCmj = testsOnDate.find(t => t.type === 'cmj');
             
@@ -4481,7 +6561,7 @@ function renderAthleticTestsTable() {
                 </td>
                 <td>${formatDate(date)}</td>
                 <td>${formatTestCell(testYoyo, 'm')}</td>
-                <td>${formatTestCell(testAgilitÃ , 's')}</td>
+                <td>${formatTestCell(testAgility, 's')}</td>
                 <td>${formatTestCell(testSprint, 's')}</td>
                 <td>${formatTestCell(testCmj, 'cm')}</td>
                 <td style="text-align: center; vertical-align: middle;">
@@ -4511,7 +6591,7 @@ window.openAthleticTestForPlayer = function(playerId) {
     // Invece di aprire il popup, passiamo al tab di inserimento
     window.switchTabTo('tab-athletic', 'subtab-athletic-insert');
     
-    // Diamo tempo al DOM di attivare il tab prima di impostare i valori se necessario (ma i valori possono essere impostati anche se nascosÃ¬)
+    // Diamo tempo al DOM di attivare il tab prima di impostare i valori se necessario
     setTimeout(() => {
         const select = document.getElementById('athletic-player-select');
         if (select) {
@@ -4521,13 +6601,12 @@ window.openAthleticTestForPlayer = function(playerId) {
         
         const dateInput = document.getElementById('athletic-test-date');
         if (dateInput) {
-            // Set date to today's date formatted as YYYY-MM-DD
             dateInput.value = new Date().toISOString().split('T')[0];
         }
         
         // Svuotiamo i campi per sicurezza in caso di nuovo inserimento
         document.getElementById('input-yoyo-distance').value = '';
-        document.getElementById('input-AgilitÃ -time').value = '';
+        document.getElementById('input-agility-time').value = '';
         document.getElementById('input-sprint-time').value = '';
         document.getElementById('input-cmj-height').value = '';
 
@@ -4549,7 +6628,7 @@ window.deleteAthleticSession = function(playerId, date) {
 window.editAthleticSession = function(playerId, date) {
     const sessionTests = athleticTests.filter(t => t.playerId == playerId && t.date == date);
     if (sessionTests.length === 0) {
-        alert("Nessun test trovato per questo giÃ .");
+        alert("Nessun test trovato per questo giocatore.");
         return;
     }
     
@@ -4563,13 +6642,13 @@ window.editAthleticSession = function(playerId, date) {
         document.getElementById('athletic-test-date').value = date;
         
         document.getElementById('input-yoyo-distance').value = '';
-        document.getElementById('input-AgilitÃ -time').value = '';
+        document.getElementById('input-agility-time').value = '';
         document.getElementById('input-sprint-time').value = '';
         document.getElementById('input-cmj-height').value = '';
         
         sessionTests.forEach(test => {
             if (test.type === 'yoyo') document.getElementById('input-yoyo-distance').value = test.value;
-            if (test.type === 'AgilitÃ ') document.getElementById('input-AgilitÃ -time').value = test.value;
+            if (test.type === 'Agilità' || test.type === 'agility' || test.type === 'AgilitÃ ') document.getElementById('input-agility-time').value = test.value;
             if (test.type === 'sprint') document.getElementById('input-sprint-time').value = test.value;
             if (test.type === 'cmj') document.getElementById('input-cmj-height').value = test.value;
         });
@@ -4611,12 +6690,13 @@ function renderAthleticProgressCharts(playerId) {
     // Group and filter tests for the player
     const pTests = athleticTests.filter(t => t.playerId === playerId);
     
-    const testTypes = ['yoyo', 'cmj', 'sprint', 'AgilitÃ '];
-    const dataGroups = { yoyo: [], cmj: [], sprint: [], AgilitÃ : [] };
+    const testTypes = ['yoyo', 'cmj', 'sprint', 'Agilità'];
+    const dataGroups = { yoyo: [], cmj: [], sprint: [], Agilità: [] };
     
     pTests.forEach(t => {
-        if (dataGroups[t.type]) {
-            dataGroups[t.type].push(t);
+        const typeKey = (t.type === 'agility' || t.type === 'AgilitÃ ') ? 'Agilità' : t.type;
+        if (dataGroups[typeKey]) {
+            dataGroups[typeKey].push(t);
         }
     });
     
@@ -4629,7 +6709,7 @@ function renderAthleticProgressCharts(playerId) {
     if (yoyoChartInstance) yoyoChartInstance.destroy();
     if (cmjChartInstance) cmjChartInstance.destroy();
     if (sprintChartInstance) sprintChartInstance.destroy();
-    if (AgilitÃ ) AgilitÃ .destroy();
+    if (agilityChartInstance) agilityChartInstance.destroy();
     
     // 1. Yo-Yo Chart
     yoyoChartInstance = drawProgressionLineChart(
@@ -4659,10 +6739,10 @@ function renderAthleticProgressCharts(playerId) {
         true // Invert Y scale since lower time is better
     );
     
-    // 4. AgilitÃ  Chart
-    AgilitÃ  = drawProgressionLineChart(
-        'chart-progress-AgilitÃ ', 
-        dataGroups.AgilitÃ , 
+    // 4. Agilità Chart
+    agilityChartInstance = drawProgressionLineChart(
+        'chart-progress-agility', 
+        dataGroups.Agilità, 
         'Tempo (secondi)', 
         'hsla(145, 80%, 45%, 0.85)', 
         'hsla(145, 80%, 45%, 0.15)',
@@ -4766,14 +6846,14 @@ function renderTeamFitnessDashboard() {
     players.forEach(p => {
         const pTests = athleticTests.filter(t => t.playerId === p.id);
         const latestYoyo = pTests.filter(t => t.type === 'yoyo').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
-        const latestAgilitÃ  = pTests.filter(t => t.type === 'AgilitÃ ').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
+        const latestAgility = pTests.filter(t => t.type === 'Agilità' || t.type === 'agility' || t.type === 'AgilitÃ ').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
         const latestSprint = pTests.filter(t => t.type === 'sprint').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
         const latestCmj = pTests.filter(t => t.type === 'cmj').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
         
         let scoreSum = 0;
         let count = 0;
         
-        [latestYoyo, latestAgilitÃ , latestSprint, latestCmj].forEach(test => {
+        [latestYoyo, latestAgility, latestSprint, latestCmj].forEach(test => {
             if (test) {
                 const r = getTestRating(test.type, test.value).rating;
                 scoreSum += ratingValues[r] || 0;
@@ -5163,59 +7243,426 @@ window.athleticSubTabClickHandler_inline = function(btn) {
     }
 };
 
-window.switchTabTo = function(tabName, subTabName = null) {
-    // Switch main tabs
-    const tabBtns = document.querySelectorAll('.tab-navigation .tab-btn, .sidebar-nav .nav-item');
-    const tabPanels = document.querySelectorAll('.tab-panel');
-    
-    tabBtns.forEach(btn => {
-        if (btn.getAttribute('data-tab') === tabName) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
-    
-    tabPanels.forEach(panel => {
-        if (panel.id === tabName) {
-            panel.classList.add('active');
-        } else {
-            panel.classList.remove('active');
+// ==========================================================================
+// TAB: CONDIZIONE PSICOFISICA
+// ==========================================================================
+let psychRadarChartInstance = null;
+let psychBarChartInstance = null;
+
+const psychCategoryMap = {
+    'Stato Psicologico': { keys: ['psic-focus','psic-stress','psic-grinta','psic-team'], color: 'hsla(270, 80%, 65%, 1)', bg: 'hsla(270, 80%, 65%, 0.15)', emoji: '🧠' },
+    'Tecnica Individuale': { keys: ['tecn-control','tecn-pass','tecn-shot','tecn-dribble'], color: 'hsla(185, 90%, 50%, 1)', bg: 'hsla(185, 90%, 50%, 0.15)', emoji: '⚽' },
+    'Condizione Fisica': { keys: ['fisi-speed','fisi-stamina','fisi-strength','fisi-agility'], color: 'hsla(30, 95%, 55%, 1)', bg: 'hsla(30, 95%, 55%, 0.15)', emoji: '🏃' },
+    'Tattica': { keys: ['tatt-movement','tatt-defense','tatt-transition','tatt-reading'], color: 'hsla(160, 80%, 45%, 1)', bg: 'hsla(160, 80%, 45%, 0.15)', emoji: '🎯' }
+};
+
+const psychCorrectiveExercises = {
+    'psic-focus': '🧘 Esercizi di mindfulness e concentrazione pre-partita (visualizzazione 5 min)',
+    'psic-stress': '🌬️ Respirazione diaframmatica 4-7-8 e simulazioni di pressione in allenamento',
+    'psic-grinta': '🥊 Esercitazioni competitive ad alta intensità con sfide a punti',
+    'psic-team': '🤝 Team building e comunicazione verbale obbligatoria durante gli esercizi',
+    'tecn-control': '👟 Ricezione di suola con cambio direzione rapido (3 serie x 10 ripetizioni)',
+    'tecn-pass': '🎯 Passaggi di prima intenzione a coppie con variazioni di distanza e angolo',
+    'tecn-shot': '⚡ 15 tiri in porta di prima su scarico laterale a fine allenamento',
+    'tecn-dribble': '🏃 1vs1 in spaces ristretti (corridoi 3m) con finta di corpo obbligatoria',
+    'fisi-speed': '🚀 Scatti brevi 5-10m con cambi di direzione e ripartenze esplosive',
+    'fisi-stamina': '💪 HIIT specifico futsal: scatti 15m alternati a recuperi attivi (4 serie x 6)',
+    'fisi-strength': '🏋️ Squat, affondi e core-stability con sovraccarico progressivo',
+    'fisi-agility': '🔄 Scaletta coordinativa rapida + scatto con arresto e ripartenza',
+    'tatt-movement': '📐 Rotazioni tattiche a secco (3-1, 4-0) con tempi di smarcamento',
+    'tatt-defense': '🛡️ Situazionali difensivi 2vs2 e 3vs3 sulla distanza di marcamento',
+    'tatt-transition': '⏱️ Partite condizionate: ripiegamento difensivo obbligatorio entro 4 secondi',
+    'tatt-reading': '🧩 Partite a tocchi limitati (1-2 tocchi) per velocizzare la lettura del gioco'
+};
+
+function renderPsychophysicalDashboard() {
+    // Gather the latest assessment for each player (coach scores preferred)
+    const playerLatestMap = {};
+    assessments.forEach(a => {
+        const pid = String(a.playerId);
+        if (!playerLatestMap[pid] || new Date(a.date) > new Date(playerLatestMap[pid].date)) {
+            playerLatestMap[pid] = a;
         }
     });
 
-    // Handle subtabs if requested
-    if (subTabName) {
-        setTimeout(() => {
-            const subBtns = document.querySelectorAll('.profile-sub-tab-btn, .roster-sub-tab-btn, .attendance-sub-tab-btn, .athletic-sub-tab-btn, .preparation-sub-tab-btn');
-            const subBtnToClick = Array.from(subBtns).find(b => b.getAttribute('data-subtab') === subTabName);
-            if (subBtnToClick) {
-                subBtnToClick.click();
+    const targetPlayers = (players || []).slice();
+    targetPlayers.sort((a, b) => {
+        const aHas = !!playerLatestMap[String(a.id)];
+        const bHas = !!playerLatestMap[String(b.id)];
+        if (aHas && !bHas) return -1;
+        if (!aHas && bHas) return 1;
+        return (a.name || '').localeCompare(b.name || '');
+    });
+
+    const compiledPlayers = targetPlayers.filter(p => playerLatestMap[String(p.id)]);
+    const numCompiled = compiledPlayers.length;
+
+    // Empty state
+    if (targetPlayers.length === 0) {
+        document.getElementById('psych-overview-grid').innerHTML = '<p style="color:var(--text-secondary); grid-column:1/-1; text-align:center; padding:2rem;">Nessun giocatore in rosa.</p>';
+        document.getElementById('psych-team-strengths').innerHTML = '';
+        document.getElementById('psych-team-weaknesses').innerHTML = '';
+        document.getElementById('psych-corrective-exercises').innerHTML = '';
+        document.getElementById('psych-player-detail-tbody').innerHTML = '';
+        return;
+    }
+
+    if (numCompiled === 0) {
+        document.getElementById('psych-overview-grid').innerHTML = '<p style="color:var(--text-secondary); grid-column:1/-1; text-align:center; padding:2rem;">Nessuna valutazione salvata. Vai nella sezione <strong>Performance</strong> per compilare le schede dei giocatori.</p>';
+        document.getElementById('psych-team-strengths').innerHTML = '';
+        document.getElementById('psych-team-weaknesses').innerHTML = '';
+        document.getElementById('psych-corrective-exercises').innerHTML = '';
+        
+        const tbody = document.getElementById('psych-player-detail-tbody');
+        if (tbody) {
+            tbody.innerHTML = targetPlayers.map(player => {
+                const displayName = window.getInvertedName ? window.getInvertedName(player.name) : player.name;
+                return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05); opacity:0.75;">
+                    <td style="padding:0.6rem 0.8rem; font-weight:600; color:var(--text-primary);">${displayName}</td>
+                    <td style="padding:0.6rem 0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.6rem 0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.6rem 0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.6rem 0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.6rem 0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td colspan="2" style="padding:0.6rem 0.5rem;"><span style="background:rgba(239, 68, 68, 0.15); color:#ef4444; border:1px solid rgba(239, 68, 68, 0.3); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.75rem; font-weight:600;">⚠️ Non compilata</span></td>
+                </tr>`;
+            }).join('');
+        }
+        return;
+    }
+
+    // Helper to retrieve score supporting key variations (fisi-agility, fisi-Agilità)
+    const getParamScore = (sc, key) => {
+        if (!sc) return undefined;
+        if (sc.hasOwnProperty(key) && sc[key] !== undefined && sc[key] !== null) return Number(sc[key]);
+        if (key === 'fisi-agility') {
+            if (sc['fisi-Agilità'] !== undefined && sc['fisi-Agilità'] !== null) return Number(sc['fisi-Agilità']);
+            if (sc['fisi-AgilitÃ '] !== undefined && sc['fisi-AgilitÃ '] !== null) return Number(sc['fisi-AgilitÃ ']);
+        }
+        return undefined;
+    };
+
+    // Calculate category & parameter averages across compiled players (strictly autovalutazione)
+    const catAvgs = {};
+    const paramAvgs = {};
+
+    Object.keys(paramInfo).forEach(key => {
+        let paramSum = 0;
+        let paramCount = 0;
+        compiledPlayers.forEach(player => {
+            const sheet = playerLatestMap[String(player.id)];
+            const sc = (sheet && sheet.playerScores) ? sheet.playerScores : {};
+            const val = getParamScore(sc, key);
+            if (val !== undefined && !isNaN(val)) {
+                paramSum += val;
+                paramCount++;
             }
-        }, 50);
-    } else {
-        switch(tabName) {
-            case 'tab-roster': if(typeof renderRoster === 'function') renderRoster(); break;
-            case 'tab-attendance': if(typeof renderAttendanceBoard === 'function') renderAttendanceBoard(); break;
-            case 'tab-athletic': if(typeof renderAthleticTestsTable === 'function') renderAthleticTestsTable(); break;
-            case 'tab-preparation': if(typeof renderTeamFitnessDashboard === 'function') renderTeamFitnessDashboard(); break;
-        }
+        });
+        paramAvgs[key] = paramCount > 0 ? (paramSum / paramCount) : 0;
+    });
+
+    Object.entries(psychCategoryMap).forEach(([catName, catInfo]) => {
+        const sum = catInfo.keys.reduce((acc, k) => acc + (paramAvgs[k] || 0), 0);
+        catAvgs[catName] = catInfo.keys.length > 0 ? (sum / catInfo.keys.length) : 0;
+    });
+
+    // 1. Overview Grid Cards
+    const overviewGrid = document.getElementById('psych-overview-grid');
+    let overviewHTML = '';
+    Object.entries(psychCategoryMap).forEach(([catName, catInfo]) => {
+        const avg = catAvgs[catName];
+        const pct = (avg / 10) * 100;
+        const levelLabel = avg >= 7.5 ? 'Eccellente' : avg >= 6 ? 'Buono' : avg >= 4.5 ? 'Sufficiente' : 'Da migliorare';
+        const levelColor = avg >= 7.5 ? 'var(--color-tatt)' : avg >= 6 ? 'var(--color-player)' : avg >= 4.5 ? '#f59e0b' : 'var(--color-fisi)';
+        overviewHTML += `
+            <div style="background:${catInfo.bg}; border:1px solid ${catInfo.color}30; border-radius:12px; padding:1.25rem; display:flex; flex-direction:column; gap:0.5rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:1.5rem;">${catInfo.emoji}</span>
+                    <span style="font-size:1.6rem; font-weight:800; color:${catInfo.color};">${avg.toFixed(1)}</span>
+                </div>
+                <h4 style="margin:0; font-size:0.9rem; font-weight:700; color:var(--text-primary);">${catName}</h4>
+                <div style="height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden;">
+                    <div style="height:100%; width:${pct}%; background:${catInfo.color}; border-radius:3px; transition:width 0.5s;"></div>
+                </div>
+                <span style="font-size:0.75rem; color:${levelColor}; font-weight:600;">${levelLabel}</span>
+            </div>
+        `;
+    });
+    if (overviewGrid) overviewGrid.innerHTML = overviewHTML;
+
+    // 2. Radar Chart
+    const radarCanvas = document.getElementById('psych-team-radar-chart');
+    if (radarCanvas) {
+        if (psychRadarChartInstance) psychRadarChartInstance.destroy();
+        const catNames = Object.keys(psychCategoryMap);
+        const catValues = catNames.map(c => catAvgs[c]);
+
+        psychRadarChartInstance = new Chart(radarCanvas.getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: catNames,
+                datasets: [{
+                    label: 'Media Squadra',
+                    data: catValues,
+                    backgroundColor: 'hsla(330, 80%, 60%, 0.2)',
+                    borderColor: '#f472b6',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#f472b6',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    r: {
+                        min: 0, max: 10,
+                        ticks: { stepSize: 2, display: true, color: 'rgba(255,255,255,0.4)', backdropColor: 'transparent', font: { size: 10 } },
+                        grid: { color: 'rgba(255,255,255,0.08)' },
+                        pointLabels: { color: 'rgba(255,255,255,0.7)', font: { size: 11 } },
+                        angleLines: { color: 'rgba(255,255,255,0.08)' }
+                    }
+                }
+            }
+        });
     }
-    
-    // Mostra/Nascondi popup attrezzi solo nella tab schemi
-    const boardToolsPopup = document.getElementById('board-tools-popup');
-    if (boardToolsPopup) {
-        if (tabName === 'tab-schemi') {
-            boardToolsPopup.style.display = 'block';
-        } else {
-            boardToolsPopup.style.display = 'none';
-        }
+
+    // 3. Bar Chart - all 16 params
+    const barCanvas = document.getElementById('psych-team-bar-chart');
+    if (barCanvas) {
+        if (psychBarChartInstance) psychBarChartInstance.destroy();
+        const allKeys = Object.keys(paramInfo);
+        const barLabels = allKeys.map(k => paramInfo[k].label);
+        const barValues = allKeys.map(k => paramAvgs[k] || 0);
+        const barColors = allKeys.map(k => {
+            const cat = paramInfo[k].cat;
+            return psychCategoryMap[cat] ? psychCategoryMap[cat].color : '#f472b6';
+        });
+
+        psychBarChartInstance = new Chart(barCanvas.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: barLabels,
+                datasets: [{
+                    label: 'Media Squadra',
+                    data: barValues,
+                    backgroundColor: barColors.map(c => c.replace('1)', '0.6)')),
+                    borderColor: barColors,
+                    borderWidth: 1,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                indexAxis: 'y',
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { min: 0, max: 10, ticks: { color: 'rgba(255,255,255,0.5)', stepSize: 2 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    y: { ticks: { color: 'rgba(255,255,255,0.7)', font: { size: 10 } }, grid: { display: false } }
+                }
+            }
+        });
     }
-    
-    // Trigger any resize events for charts
-    window.dispatchEvent(new Event('resize'));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-};
+
+    // Calculate score distribution for low scores (1 to 5) for every parameter
+    const getLowScoreDistribution = (compiledList, key) => {
+        const dist = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        let countLow = 0;
+        compiledList.forEach(p => {
+            const sheet = playerLatestMap[String(p.id)];
+            const sc = (sheet && sheet.playerScores) ? sheet.playerScores : {};
+            const val = getParamScore(sc, key);
+            if (val !== undefined && !isNaN(val)) {
+                if (val < 6) {
+                    countLow++;
+                    const r = Math.max(1, Math.min(5, Math.floor(val)));
+                    dist[r] = (dist[r] || 0) + 1;
+                }
+            }
+        });
+        return { dist, countLow };
+    };
+
+    const paramDists = {};
+    Object.keys(paramInfo).forEach(key => {
+        paramDists[key] = getLowScoreDistribution(compiledPlayers, key);
+    });
+
+    // Strengths: ordered by highest average score
+    const topParams = Object.keys(paramAvgs).sort((a, b) => paramAvgs[b] - paramAvgs[a]).slice(0, 4);
+
+    // Weaknesses (Punti Negativi): ordered strictly by HIGHEST FREQUENCY OF LOWEST SCORES (1 to 5), then by countLow, then lowest average
+    const bottomParams = Object.keys(paramInfo).sort((a, b) => {
+        for (let s = 1; s <= 5; s++) {
+            const diff = paramDists[b].dist[s] - paramDists[a].dist[s];
+            if (diff !== 0) return diff;
+        }
+        const diffCount = paramDists[b].countLow - paramDists[a].countLow;
+        if (diffCount !== 0) return diffCount;
+        return paramAvgs[a] - paramAvgs[b];
+    }).slice(0, 4);
+
+    // Strengths
+    const strengthsEl = document.getElementById('psych-team-strengths');
+    strengthsEl.innerHTML = topParams.map(key => {
+        const info = paramInfo[key];
+        const avg = paramAvgs[key];
+        const countHigh = compiledPlayers.filter(p => {
+            const sheet = playerLatestMap[String(p.id)];
+            const sc = (sheet && sheet.playerScores) ? sheet.playerScores : {};
+            const val = getParamScore(sc, key);
+            return val !== undefined && !isNaN(val) && val >= 7;
+        }).length;
+        return `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 0.8rem; background:rgba(255,255,255,0.03); border-radius:8px; border-left:3px solid var(--color-tatt);">
+                <div>
+                    <strong style="color:var(--text-primary); font-size:0.9rem;">${info.label}</strong>
+                    <span style="color:var(--text-secondary); font-size:0.8rem; margin-left:0.5rem;">(${info.cat})</span>
+                </div>
+                <div style="text-align:right;">
+                    <span style="font-weight:800; color:var(--color-tatt); font-size:1rem;">${avg.toFixed(1)}/10</span>
+                    <div style="font-size:0.72rem; color:var(--text-secondary);">${countHigh} gioc. ≥ 7</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Weaknesses
+    const weaknessesEl = document.getElementById('psych-team-weaknesses');
+    weaknessesEl.innerHTML = bottomParams.map(key => {
+        const info = paramInfo[key];
+        const avg = paramAvgs[key];
+        const countEqualOrLower = compiledPlayers.filter(p => {
+            const sheet = playerLatestMap[String(p.id)];
+            const sc = (sheet && sheet.playerScores) ? sheet.playerScores : {};
+            const val = getParamScore(sc, key);
+            return val !== undefined && !isNaN(val) && val <= avg;
+        }).length;
+        const bgStyle = countEqualOrLower > 0 
+            ? 'background:rgba(239, 68, 68, 0.08); border-left:4px solid #ef4444;' 
+            : 'background:rgba(255,255,255,0.03); border-left:3px solid var(--color-fisi);';
+        const badgeHtml = countEqualOrLower > 0 
+            ? `<span style="background:rgba(239, 68, 68, 0.22); color:#ef4444; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; border:1px solid rgba(239, 68, 68, 0.4); font-size:0.72rem;">⚠️ ${countEqualOrLower} gioc. ≤ ${avg.toFixed(1)}</span>` 
+            : `<span style="font-size:0.72rem; color:var(--text-secondary);">${countEqualOrLower} gioc. ≤ ${avg.toFixed(1)}</span>`;
+
+        return `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 0.8rem; border-radius:8px; ${bgStyle}">
+                <div>
+                    <strong style="color:var(--text-primary); font-size:0.9rem;">${info.label}</strong>
+                    <span style="color:var(--text-secondary); font-size:0.8rem; margin-left:0.5rem;">(${info.cat})</span>
+                </div>
+                <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:0.1rem;">
+                    <span style="font-weight:800; color:var(--color-fisi); font-size:1rem;">${avg.toFixed(1)}/10</span>
+                    ${badgeHtml}
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // 5. Corrective Exercises (based on weakest params)
+    const exercisesEl = document.getElementById('psych-corrective-exercises');
+    exercisesEl.innerHTML = bottomParams.map(key => {
+        const info = paramInfo[key];
+        const avg = paramAvgs[key];
+        const exercise = psychCorrectiveExercises[key] || 'Esercizio specifico da definire con lo staff tecnico.';
+        const countEqualOrLower = compiledPlayers.filter(p => {
+            const sheet = playerLatestMap[String(p.id)];
+            const sc = (sheet && sheet.playerScores) ? sheet.playerScores : {};
+            const val = getParamScore(sc, key);
+            return val !== undefined && !isNaN(val) && val <= avg;
+        }).length;
+        const freqBadge = countEqualOrLower > 0 ? `<span style="background:rgba(239, 68, 68, 0.2); color:#ef4444; font-weight:700; padding:0.1rem 0.4rem; border-radius:4px; font-size:0.72rem; border:1px solid rgba(239, 68, 68, 0.3);">⚠️ ${countEqualOrLower} gioc. ≤ ${avg.toFixed(1)}</span>` : '';
+        return `
+            <div style="padding:0.75rem 1rem; background:rgba(255,255,255,0.03); border-radius:8px; border-left:3px solid #f472b6;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">
+                    <strong style="color:var(--text-primary); font-size:0.9rem;">${info.label}</strong>
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
+                        ${freqBadge}
+                        <span style="font-size:0.75rem; color:var(--color-fisi); font-weight:600;">Media: ${avg.toFixed(1)}/10</span>
+                    </div>
+                </div>
+                <p style="color:var(--text-secondary); font-size:0.85rem; margin:0; line-height:1.4;">${exercise}</p>
+            </div>
+        `;
+    }).join('');
+
+    // 6. Per-player detail table
+    const tbody = document.getElementById('psych-player-detail-tbody');
+    let rowsHTML = '';
+    targetPlayers.forEach(player => {
+        const pid = String(player.id);
+        const displayName = window.getInvertedName ? window.getInvertedName(player.name) : player.name;
+        const sheet = playerLatestMap[pid];
+
+        if (!sheet) {
+            rowsHTML += `
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05); opacity:0.75;">
+                    <td style="padding:0.6rem 0.8rem; font-weight:600; color:var(--text-primary);">${displayName}</td>
+                    <td style="padding:0.6rem 0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.6rem 0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.6rem 0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.6rem 0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td style="padding:0.6rem 0.5rem; text-align:center; color:var(--text-secondary);">-</td>
+                    <td colspan="2" style="padding:0.6rem 0.5rem;"><span style="background:rgba(239, 68, 68, 0.15); color:#ef4444; border:1px solid rgba(239, 68, 68, 0.3); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.75rem; font-weight:600;">⚠️ Non compilata</span></td>
+                </tr>
+            `;
+            return;
+        }
+
+        const scores = sheet.playerScores || {};
+
+        const catScores = {};
+        Object.entries(psychCategoryMap).forEach(([catName, catInfo]) => {
+            let cSum = 0, cCount = 0;
+            catInfo.keys.forEach(k => {
+                const v = getParamScore(scores, k);
+                cSum += (v !== undefined ? v : 5);
+                cCount++;
+            });
+            catScores[catName] = cCount > 0 ? (cSum / cCount) : 5;
+        });
+        const overall = Object.values(catScores).reduce((a, b) => a + b, 0) / 4;
+
+        let maxKey = '', maxVal = -1, minKey = '', minVal = 11;
+        Object.keys(paramInfo).forEach(k => {
+            const v = getParamScore(scores, k);
+            if (v !== undefined && !isNaN(v)) {
+                if (v > maxVal) { maxVal = v; maxKey = k; }
+                if (v < minVal) { minVal = v; minKey = k; }
+            }
+        });
+        const isGkPlayer = player && (player.role === 'Portiere' || player.role === 'GK' || (player.role && player.role.toLowerCase().includes('portier')));
+        const labelSource = isGkPlayer ? (typeof gkParamLabels !== 'undefined' ? gkParamLabels : {}) : (typeof defaultParamLabels !== 'undefined' ? defaultParamLabels : {});
+        const bestLabel = (labelSource[maxKey] && labelSource[maxKey].label) || (paramInfo[maxKey] && paramInfo[maxKey].label) || maxKey;
+        const worstLabel = (labelSource[minKey] && labelSource[minKey].label) || (paramInfo[minKey] && paramInfo[minKey].label) || minKey;
+
+        const bestDesc = getSyntheticPlanText(sheet, maxKey, 'strength', isGkPlayer);
+        const worstDesc = getSyntheticPlanText(sheet, minKey, 'weakness', isGkPlayer);
+
+        const bestCell = maxKey ? `<div style="font-weight:700; color:var(--color-tatt); font-size:0.8rem;">${bestLabel} (${maxVal.toFixed(1)})</div>${bestDesc ? `<div style="font-size:0.73rem; color:var(--text-secondary); line-height:1.25; margin-top:0.12rem; font-weight:400;">${bestDesc}</div>` : ''}` : '-';
+        const worstCell = minKey ? `<div style="font-weight:700; color:var(--color-fisi); font-size:0.8rem;">${worstLabel} (${minVal.toFixed(1)})</div>${worstDesc ? `<div style="font-size:0.73rem; color:var(--text-secondary); line-height:1.25; margin-top:0.12rem; font-weight:400;">${worstDesc}</div>` : ''}` : '-';
+
+        const colorScore = (val) => val >= 7.5 ? 'var(--color-tatt)' : val >= 6 ? 'var(--color-player)' : val >= 4.5 ? '#f59e0b' : 'var(--color-fisi)';
+
+        rowsHTML += `
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                <td style="padding:0.6rem 0.8rem; font-weight:600; color:var(--text-primary); vertical-align:middle;">${displayName}</td>
+                <td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Stato Psicologico'])}; font-weight:700; vertical-align:middle;">${catScores['Stato Psicologico'].toFixed(1)}</td>
+                <td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Tecnica Individuale'])}; font-weight:700; vertical-align:middle;">${catScores['Tecnica Individuale'].toFixed(1)}</td>
+                <td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Condizione Fisica'])}; font-weight:700; vertical-align:middle;">${catScores['Condizione Fisica'].toFixed(1)}</td>
+                <td style="padding:0.6rem 0.5rem; text-align:center; color:${colorScore(catScores['Tattica'])}; font-weight:700; vertical-align:middle;">${catScores['Tattica'].toFixed(1)}</td>
+                <td style="padding:0.6rem 0.5rem; text-align:center; font-weight:800; color:${colorScore(overall)}; vertical-align:middle;">${overall.toFixed(1)}</td>
+                <td style="padding:0.6rem 0.6rem; vertical-align:middle; max-width:210px;">${bestCell}</td>
+                <td style="padding:0.6rem 0.6rem; vertical-align:middle; max-width:210px;">${worstCell}</td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = rowsHTML;
+}
+window.renderPsychophysicalDashboard = renderPsychophysicalDashboard;
 
 function setupDashboardCards() {
     const cards = document.querySelectorAll('.main-dashboard-card');
@@ -5608,21 +8055,129 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // ==========================================
-        // QUARTETTI LOGIC
         // ==========================================
+        // QUARTETTI LOGIC (WITH DRAG & DROP & BENCH)
+        // ==========================================
+        let draggedPlayerId = null;
+
+        window.handleQuartetDragStart = function(event, id) {
+            draggedPlayerId = String(id);
+            event.dataTransfer.setData('text/plain', String(id));
+            event.dataTransfer.effectAllowed = 'move';
+            if (event.currentTarget) event.currentTarget.style.opacity = '0.5';
+        };
+
+        window.handleQuartetDragEnd = function(event) {
+            if (event.currentTarget) event.currentTarget.style.opacity = '1';
+            draggedPlayerId = null;
+            document.querySelectorAll('.futsal-pitch-rhombus, #unassigned-players-container').forEach(el => el.classList.remove('drag-over'));
+        };
+
+        window.handleQuartetDragOver = function(event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
+        };
+
+        window.handleQuartetDragEnter = function(event) {
+            event.preventDefault();
+            if (event.currentTarget) event.currentTarget.classList.add('drag-over');
+        };
+
+        window.handleQuartetDragLeave = function(event) {
+            if (event.currentTarget) event.currentTarget.classList.remove('drag-over');
+        };
+
+        window.handleQuartetDrop = function(event, targetQuartetName) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (event.currentTarget) event.currentTarget.classList.remove('drag-over');
+
+            const pid = event.dataTransfer.getData('text/plain') || draggedPlayerId;
+            if (!pid) return;
+
+            const player = players.find(p => String(p.id) === String(pid));
+            if (!player) return;
+
+            const cleanTarget = targetQuartetName.replace(/Ã‚Â°|Ãƒâ€šÃ‚Â°/g, '°');
+            if (player.quartets !== cleanTarget) {
+                player.quartets = cleanTarget;
+                localStorage.setItem('futsal_portal_players', JSON.stringify(players));
+                const name = window.getInvertedName ? window.getInvertedName(player.name) : player.name;
+                showToast(`${name} spostato in ${cleanTarget}`, 'success');
+                renderQuartets();
+                if (typeof renderRoster === 'function') renderRoster();
+            }
+        };
+
+        window.handleQuartetSlotDrop = function(event, targetPlayerId, targetQuartetName) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const pid = event.dataTransfer.getData('text/plain') || draggedPlayerId;
+            if (!pid || String(pid) === String(targetPlayerId)) return;
+
+            const sourcePlayer = players.find(p => String(p.id) === String(pid));
+            const targetPlayer = players.find(p => String(p.id) === String(targetPlayerId));
+
+            if (!sourcePlayer || !targetPlayer) return;
+
+            const cleanTarget = targetQuartetName.replace(/Ã‚Â°|Ãƒâ€šÃ‚Â°/g, '°');
+            const prevQuartet = sourcePlayer.quartets || '';
+
+            sourcePlayer.quartets = cleanTarget;
+            targetPlayer.quartets = prevQuartet;
+
+            localStorage.setItem('futsal_portal_players', JSON.stringify(players));
+            const sName = window.getInvertedName ? window.getInvertedName(sourcePlayer.name) : sourcePlayer.name;
+            const tName = window.getInvertedName ? window.getInvertedName(targetPlayer.name) : targetPlayer.name;
+            showToast(`Scambio effettuato: ${sName} ↔ ${tName}`, 'info');
+            renderQuartets();
+            if (typeof renderRoster === 'function') renderRoster();
+        };
+
+        window.handleQuartetDropToBench = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (event.currentTarget) event.currentTarget.classList.remove('drag-over');
+
+            const pid = event.dataTransfer.getData('text/plain') || draggedPlayerId;
+            if (!pid) return;
+
+            const player = players.find(p => String(p.id) === String(pid));
+            if (!player) return;
+
+            if (player.quartets) {
+                player.quartets = '';
+                localStorage.setItem('futsal_portal_players', JSON.stringify(players));
+                const name = window.getInvertedName ? window.getInvertedName(player.name) : player.name;
+                showToast(`${name} spostato in Panchina`, 'info');
+                renderQuartets();
+                if (typeof renderRoster === 'function') renderRoster();
+            }
+        };
+
         window.renderQuartets = function() {
             const quartets = {
-                '1Ã‚Â° Quartetto (Titolari)': 'pitch-quartet-1',
-                '2Ã‚Â° Quartetto (Prime Rotazioni)': 'pitch-quartet-2',
-                '3Ã‚Â° Quartetto (Seconde Rotazioni)': 'pitch-quartet-3'
+                '1° Quartetto (Titolari)': 'pitch-quartet-1',
+                '2° Quartetto (Prime Rotazioni)': 'pitch-quartet-2',
+                '3° Quartetto (Seconde Rotazioni)': 'pitch-quartet-3',
+                '4° Quartetto (Terze Rotazioni)': 'pitch-quartet-4'
             };
+
+            const assignedQuartetNames = Object.keys(quartets);
 
             for (const [qName, containerId] of Object.entries(quartets)) {
                 const container = document.getElementById(containerId);
                 if (!container) continue;
+
+                // Add Drag & Drop zone on pitch container
+                container.setAttribute('ondragover', 'handleQuartetDragOver(event)');
+                container.setAttribute('ondragenter', 'handleQuartetDragEnter(event)');
+                container.setAttribute('ondragleave', 'handleQuartetDragLeave(event)');
+                container.setAttribute('ondrop', `handleQuartetDrop(event, '${qName}')`);
                 
                 // Get players for this quartet
-                const qPlayers = players.filter(p => p.quartets === qName);
+                const qPlayers = players.filter(p => p.quartets === qName || (p.quartets && p.quartets.replace(/Ã‚Â°|Ãƒâ€šÃ‚Â°/g, '°') === qName));
                 
                 // Classify by role
                 let portiere = qPlayers.find(p => p.role === 'Portiere' || p.role === 'Portiere (GK)') || qPlayers.find(p => p.secondaryRoles && (p.secondaryRoles.includes('Portiere') || p.secondaryRoles.includes('GK')));
@@ -5649,22 +8204,69 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="pitch-penalty-top"></div>
                     <div class="pitch-penalty-bottom"></div>
 
-                    ${renderRhombusSlot(pivot, 'slot-top', '')}
-                    ${renderRhombusSlot(laterali[0], 'slot-left', '')}
-                    ${renderRhombusSlot(laterali[1], 'slot-right', '')}
-                    ${renderRhombusSlot(centrale, 'slot-bottom', '')}
-                    ${renderRhombusSlot(portiere, 'slot-goalie', '')}
+                    ${renderRhombusSlot(pivot, 'slot-top', '', qName)}
+                    ${renderRhombusSlot(laterali[0], 'slot-left', '', qName)}
+                    ${renderRhombusSlot(laterali[1], 'slot-right', '', qName)}
+                    ${renderRhombusSlot(centrale, 'slot-bottom', '', qName)}
+                    ${renderRhombusSlot(portiere, 'slot-goalie', '', qName)}
                 `;
             }
 
+            // Render Unassigned Bench Players
+            renderUnassignedBench(assignedQuartetNames);
         };
 
-        function renderRhombusSlot(player, posClass, roleLabel) {
+        function renderUnassignedBench(assignedQuartetNames) {
+            const benchContainer = document.getElementById('unassigned-players-container');
+            const badgeEl = document.getElementById('unassigned-count-badge');
+            if (!benchContainer) return;
+
+            const unassignedPlayers = players.filter(p => {
+                if (!p.quartets || p.quartets === 'Nessuno' || p.quartets === 'Rotazione Libera') return true;
+                const cleanQ = p.quartets.replace(/Ã‚Â°|Ãƒâ€šÃ‚Â°/g, '°');
+                return !assignedQuartetNames.includes(cleanQ);
+            });
+
+            if (badgeEl) badgeEl.textContent = unassignedPlayers.length;
+
+            if (unassignedPlayers.length === 0) {
+                benchContainer.innerHTML = `<p style="color:var(--text-muted); font-size:0.85rem; margin:0 auto; padding:0.5rem 0;">✨ Tutti i giocatori della rosa sono stati assegnati a un quartetto.</p>`;
+                return;
+            }
+
+            benchContainer.innerHTML = unassignedPlayers.map(p => {
+                const initials = getInitials(p.name);
+                const displayName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+                const avatarHTML = p.photo 
+                    ? `<img src="${p.photo}" alt="${escapeHTML(p.name)}" style="width:100%; height:100%; object-fit:cover;">`
+                    : `<span style="font-weight:800; color:var(--color-player); font-size:0.75rem;">${initials}</span>`;
+
+                return `
+                    <div class="unassigned-player-card"
+                         draggable="true"
+                         ondragstart="handleQuartetDragStart(event, '${p.id}')"
+                         ondragend="handleQuartetDragEnd(event)"
+                         onclick="openPlayerSummaryModal('${p.id}')"
+                         style="display:flex; align-items:center; gap:0.6rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); padding:0.4rem 0.75rem; border-radius:20px; cursor:grab; transition:all 0.2s ease; user-select:none;"
+                         title="Trascina sul campo per inserire nel quartetto">
+                        <div style="width:32px; height:32px; border-radius:50%; overflow:hidden; border:2px solid var(--color-player); flex-shrink:0; background:rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center;">
+                            ${avatarHTML}
+                        </div>
+                        <div style="display:flex; flex-direction:column; line-height:1.2;">
+                            <span style="font-size:0.8rem; font-weight:700; color:var(--text-primary); white-space:nowrap;">${escapeHTML(displayName)}</span>
+                            <span style="font-size:0.7rem; color:var(--color-player); font-weight:600;">#${p.number || '-'} · ${escapeHTML(p.role || 'Universale')}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderRhombusSlot(player, posClass, roleLabel, qName) {
             if (!player) {
                 return `
-                    <div class="rhombus-slot ${posClass}">
-                        <div class="rhombus-empty">
-                            <span>Vuoto</span>
+                    <div class="rhombus-slot ${posClass}" ondragover="handleQuartetDragOver(event)" ondrop="handleQuartetDrop(event, '${qName}')">
+                        <div class="rhombus-empty" title="Trascina qui un giocatore">
+                            <span>+ Vuoto</span>
                         </div>
                     </div>
                 `;
@@ -5690,11 +8292,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 boxShadow = '0 0 12px rgba(234, 179, 8, 0.7)';
             }
                 
+            const displayName = window.getInvertedName ? window.getInvertedName(player.name) : player.name;
+
             return `
-                <div class="rhombus-slot ${posClass}">
-                    <div class="rhombus-player clickable-card" onclick="openPlayerSummaryModal('${player.id}')" style="cursor:pointer;" title="Apri Profilo">
+                <div class="rhombus-slot ${posClass}" ondragover="handleQuartetDragOver(event)" ondrop="handleQuartetSlotDrop(event, '${player.id}', '${qName}')">
+                    <div class="rhombus-player clickable-card" 
+                         draggable="true" 
+                         ondragstart="handleQuartetDragStart(event, '${player.id}')"
+                         ondragend="handleQuartetDragEnd(event)"
+                         onclick="openPlayerSummaryModal('${player.id}')" 
+                         style="cursor:grab;" 
+                         title="Trascina per spostare o scambiare">
                         <div class="avatar" style="border: ${customBorder}; box-shadow: ${boxShadow};">${avatarHTML}</div>
-                        <div class="rhombus-player-name">${escapeHTML(player.name)}</div>
+                        <div class="rhombus-player-name">${escapeHTML(displayName)}</div>
                     </div>
                 </div>
             `;
@@ -5989,21 +8599,59 @@ window.deleteUser = function(username) {
 
 // --- BACKUP E RIPRISTINO DATABASE ---
 window.exportDatabase = function() {
-    const db = {};
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('futsal_')) {
-            // Escludiamo la sessione corrente per non creare conflitti al login
-            if (key === 'futsal_current_user') continue;
-            db[key] = localStorage.getItem(key);
+    try {
+        const db = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && (key.startsWith('futsal_') || key.startsWith('futsal'))) {
+                // Escludiamo la sessione corrente per non creare conflitti al login
+                if (key === 'futsal_current_user') continue;
+                db[key] = localStorage.getItem(key);
+            }
         }
+
+        // Sincronizziamo anche lo stato in memoria se presente
+        if (typeof players !== 'undefined' && Array.isArray(players) && players.length > 0) {
+            db['futsal_portal_players'] = JSON.stringify(players);
+        }
+        if (typeof trainings !== 'undefined' && Array.isArray(trainings) && trainings.length > 0) {
+            db['futsal_portal_trainings'] = JSON.stringify(trainings);
+        }
+        if (typeof convocations !== 'undefined' && Array.isArray(convocations) && convocations.length > 0) {
+            db['futsal_portal_convocations'] = JSON.stringify(convocations);
+        }
+        if (typeof athleticTests !== 'undefined' && Array.isArray(athleticTests) && athleticTests.length > 0) {
+            db['futsal_portal_athletic_tests'] = JSON.stringify(athleticTests);
+        }
+        if (typeof futsalUsers !== 'undefined' && Array.isArray(futsalUsers) && futsalUsers.length > 0) {
+            db['futsal_users'] = JSON.stringify(futsalUsers);
+        }
+        
+        const jsonStr = JSON.stringify(db, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        
+        const dateTag = new Date().toISOString().split('T')[0];
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `adriauto_c5_database_backup_${dateTag}.json`;
+        
+        document.body.appendChild(a);
+        a.click();
+        
+        setTimeout(() => {
+            if (document.body.contains(a)) document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 500);
+
+        if (typeof showToast === 'function') {
+            showToast("Database esportato con successo!", "success");
+        }
+    } catch (err) {
+        console.error("Errore durante l'esportazione del database:", err);
+        alert("Errore durante l'esportazione del database: " + err.message);
     }
-    
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
-    const dlAnchorElem = document.createElement('a');
-    dlAnchorElem.setAttribute("href", dataStr);
-    dlAnchorElem.setAttribute("download", "adriauto_c5_database_backup.json");
-    dlAnchorElem.click();
 };
 
 window.importDatabase = function(event) {
@@ -6014,12 +8662,12 @@ window.importDatabase = function(event) {
     reader.onload = function(e) {
         try {
             const db = JSON.parse(e.target.result);
-            if (confirm("Attenzione: questa operazione sovrascriverÃ  tutti i dati correnti (giocatori, voti, logo, ecc.). Vuoi procedere?")) {
+            if (confirm("Attenzione: questa operazione sovrascriverà tutti i dati correnti (giocatori, voti, logo, ecc.). Vuoi procedere?")) {
                 // Rimuoviamo le vecchie chiavi futsal_ (tranne l'utente corrente)
                 const keysToRemove = [];
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
-                    if (key && key.startsWith('futsal_') && key !== 'futsal_current_user') {
+                    if (key && (key.startsWith('futsal_') || key.startsWith('futsal')) && key !== 'futsal_current_user') {
                         keysToRemove.push(key);
                     }
                 }
@@ -6027,12 +8675,13 @@ window.importDatabase = function(event) {
 
                 // Inseriamo le nuove chiavi
                 for (const [key, value] of Object.entries(db)) {
-                    if (key.startsWith('futsal_') && key !== 'futsal_current_user') {
-                        localStorage.setItem(key, value);
+                    if ((key.startsWith('futsal_') || key.startsWith('futsal')) && key !== 'futsal_current_user') {
+                        const valStr = typeof value === 'string' ? value : JSON.stringify(value);
+                        localStorage.setItem(key, valStr);
                     }
                 }
                 
-                alert("Database importato con successo! L'applicazione verrÃ  ricaricata.");
+                alert("Database importato con successo! L'applicazione verrà ricaricata.");
                 window.location.reload();
             }
         } catch (err) {
@@ -6042,5 +8691,850 @@ window.importDatabase = function(event) {
     };
     reader.readAsText(file);
     event.target.value = ''; // Reset per permettere nuove selezioni
+};
+
+// ==========================================================================
+// HOME DASHBOARD ALERTS WIDGET ENGINE
+// ==========================================================================
+window.renderDashboardAlertsWidget = function() {
+    const alertsGrid = document.getElementById('dashboard-alerts-grid');
+    const badgeEl = document.getElementById('dashboard-alerts-count-badge');
+    if (!alertsGrid) return;
+
+    const playersList = (typeof players !== 'undefined' && Array.isArray(players) && players.length > 0) ? players : (window.players || []);
+    const trainingsList = window.trainings || [];
+    const convocationsList = window.convocations || [];
+    const athleticTestsList = window.athleticTests || [];
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let alertsCount = 0;
+    let cardsHTML = '';
+
+    // 1. ALERT: PROSSIMO COMPLEANNO (OR TODAY)
+    const processedPlayers = playersList.map(p => {
+        const bInfo = window.parsePlayerBirthDate(p);
+        if (!bInfo) return { player: p, hasBirthDate: false, daysRemaining: 9999 };
+        const bMonth = bInfo.month;
+        const bDay = bInfo.day;
+        const bYear = bInfo.year;
+
+        let nextBday = new Date(today.getFullYear(), bMonth - 1, bDay);
+        if (nextBday < today) {
+            nextBday = new Date(today.getFullYear() + 1, bMonth - 1, bDay);
+        }
+        const diffTime = nextBday.getTime() - today.getTime();
+        const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const turningAge = bYear ? (nextBday.getFullYear() - bYear) : null;
+        return { player: p, hasBirthDate: true, bMonth, bDay, bYear, daysRemaining, turningAge };
+    });
+
+    const validBirthdays = processedPlayers.filter(p => p.hasBirthDate);
+    validBirthdays.sort((a, b) => a.daysRemaining - b.daysRemaining);
+
+    if (validBirthdays.length > 0) {
+        alertsCount++;
+        const closest = validBirthdays[0];
+        const pName = window.getInvertedName ? window.getInvertedName(closest.player.name) : closest.player.name;
+        const dayFormatted = `${String(closest.bDay).padStart(2, '0')}/${String(closest.bMonth).padStart(2, '0')}`;
+
+        if (closest.daysRemaining === 0) {
+            cardsHTML += `
+                <div class="glass-panel" onclick="switchTabTo('tab-attendance', 'subtab-birthdays')" style="padding: 1rem; border-radius: 10px; background: linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(234, 179, 8, 0.08)); border: 1.5px solid #facc15; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+                        <span style="font-size: 0.75rem; font-weight: 800; color: #fde047; text-transform: uppercase;">🎂 Compleanno di Oggi!</span>
+                        <span style="font-size: 0.7rem; background: #facc15; color: #000; padding: 0.15rem 0.5rem; border-radius: 10px; font-weight: 800;">OGGI 🎉</span>
+                    </div>
+                    <h4 style="margin: 0 0 0.25rem 0; color: #fff; font-size: 1rem; font-weight: 800;">
+                        ${escapeHTML(pName)} (#${closest.player.number || ''})
+                    </h4>
+                    <p style="margin: 0; font-size: 0.8rem; color: #fef08a;">
+                        Tanti auguri per i suoi <strong>${closest.turningAge ? closest.turningAge + ' anni' : ''}</strong>! 🥳
+                    </p>
+                </div>
+            `;
+        } else {
+            cardsHTML += `
+                <div class="glass-panel" onclick="switchTabTo('tab-attendance', 'subtab-birthdays')" style="padding: 1rem; border-radius: 10px; background: hsla(224, 45%, 4%, 0.6); border: 1px solid rgba(250, 204, 21, 0.4); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+                        <span style="font-size: 0.75rem; font-weight: 800; color: #fde047; text-transform: uppercase;">🎂 Prossimo Compleanno</span>
+                        <span style="font-size: 0.7rem; background: rgba(234, 179, 8, 0.2); color: #fde047; padding: 0.15rem 0.5rem; border-radius: 10px; font-weight: bold; border: 1px solid rgba(250, 204, 21, 0.4);">Tra ${closest.daysRemaining} gg</span>
+                    </div>
+                    <h4 style="margin: 0 0 0.25rem 0; color: #fff; font-size: 0.95rem; font-weight: 800;">
+                        ${escapeHTML(pName)} - <span style="color: #fde047;">${dayFormatted}</span>
+                    </h4>
+                    <p style="margin: 0; font-size: 0.78rem; color: var(--text-muted);">
+                        Compirà <strong>${closest.turningAge ? closest.turningAge + ' anni' : ''}</strong> #${closest.player.number || ''} (${closest.player.role || 'Giocatore'})
+                    </p>
+                </div>
+            `;
+        }
+    }
+
+    // 2. ALERT: PROSSIMA SEDUTA DI ALLENAMENTO & ASSENTI
+    const sortedTrainings = [...trainingsList].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const nextOrLatestTraining = sortedTrainings[0];
+
+    if (nextOrLatestTraining) {
+        alertsCount++;
+        const roster = nextOrLatestTraining.roster || {};
+        const absentPlayerNames = [];
+        const injuredPlayerNames = [];
+        const justifiedPlayerNames = [];
+
+        playersList.forEach(p => {
+            const st = roster[p.id];
+            const pName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+            if (st === 'A') absentPlayerNames.push(`#${p.number || ''} ${pName}`);
+            else if (st === 'I') injuredPlayerNames.push(`#${p.number || ''} ${pName}`);
+            else if (st === 'G') justifiedPlayerNames.push(`#${p.number || ''} ${pName}`);
+        });
+
+        const formattedDate = nextOrLatestTraining.date ? `${nextOrLatestTraining.date.split('-')[2]}/${nextOrLatestTraining.date.split('-')[1]}/${nextOrLatestTraining.date.split('-')[0]}` : '--';
+        const logisticTxt = nextOrLatestTraining.logistic ? ` (${nextOrLatestTraining.logistic.toUpperCase()})` : '';
+
+        let absentsHTML = '';
+        if (absentPlayerNames.length > 0) {
+            absentsHTML += `<div style="font-size: 0.76rem; color: var(--color-danger); margin-top: 0.25rem; font-weight: 600;">🔴 Assenti (${absentPlayerNames.length}): ${escapeHTML(absentPlayerNames.join(', '))}</div>`;
+        }
+        if (injuredPlayerNames.length > 0) {
+            absentsHTML += `<div style="font-size: 0.76rem; color: var(--color-fisi); margin-top: 0.2rem; font-weight: 600;">🩹 Infortunati (${injuredPlayerNames.length}): ${escapeHTML(injuredPlayerNames.join(', '))}</div>`;
+        }
+        if (justifiedPlayerNames.length > 0) {
+            absentsHTML += `<div style="font-size: 0.76rem; color: var(--color-primary); margin-top: 0.2rem; font-weight: 600;">🟡 Giustificati (${justifiedPlayerNames.length}): ${escapeHTML(justifiedPlayerNames.join(', '))}</div>`;
+        }
+        if (!absentsHTML) {
+            absentsHTML = `<div style="font-size: 0.76rem; color: var(--color-tatt); margin-top: 0.25rem; font-weight: 600;">🟢 Rosa al completo per la seduta!</div>`;
+        }
+
+        cardsHTML += `
+            <div class="glass-panel" onclick="switchTabTo('tab-attendance', 'subtab-board')" style="padding: 1rem; border-radius: 10px; background: hsla(224, 45%, 4%, 0.6); border: 1px solid rgba(0, 210, 255, 0.3); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+                    <span style="font-size: 0.75rem; font-weight: 800; color: var(--color-tecn); text-transform: uppercase;">⚽ Seduta Allenamento</span>
+                    <span style="font-size: 0.7rem; background: rgba(0, 210, 255, 0.15); color: var(--color-tecn); padding: 0.15rem 0.5rem; border-radius: 10px; font-weight: bold; border: 1px solid rgba(0, 210, 255, 0.3);">${formattedDate}${logisticTxt}</span>
+                </div>
+                <h4 style="margin: 0 0 0.1rem 0; color: #fff; font-size: 0.95rem; font-weight: 800;">
+                    Report Assenze Seduta
+                </h4>
+                ${absentsHTML}
+            </div>
+        `;
+    }
+
+    // 3. ALERT: PROSSIMA GARA / AMICHEVOLE E CONVOCAZIONI
+    const sortedConvocations = [...convocationsList].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const nextMatch = sortedConvocations[0];
+
+    if (nextMatch) {
+        alertsCount++;
+        const calledCount = nextMatch.selectedIds ? nextMatch.selectedIds.length : 0;
+        const totalPlayersCount = playersList.length;
+        const matchDateFormatted = nextMatch.date ? `${nextMatch.date.split('-')[2]}/${nextMatch.date.split('-')[1]}/${nextMatch.date.split('-')[0]}` : '--';
+        const typeTxt = nextMatch.type === 'friendly' ? 'Amichevole' : 'Gara Ufficiale';
+
+        cardsHTML += `
+            <div class="glass-panel" onclick="switchTabTo('tab-attendance', 'subtab-matches')" style="padding: 1rem; border-radius: 10px; background: hsla(224, 45%, 4%, 0.6); border: 1px solid rgba(255, 0, 127, 0.3); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+                    <span style="font-size: 0.75rem; font-weight: 800; color: #ff007f; text-transform: uppercase;">🏆 Prossima Gara</span>
+                    <span style="font-size: 0.7rem; background: rgba(255, 0, 127, 0.15); color: #ff007f; padding: 0.15rem 0.5rem; border-radius: 10px; font-weight: bold; border: 1px solid rgba(255, 0, 127, 0.3);">${matchDateFormatted}</span>
+                </div>
+                <h4 style="margin: 0 0 0.25rem 0; color: #fff; font-size: 0.95rem; font-weight: 800;">
+                    vs ${escapeHTML(nextMatch.opponent || 'Avversario')}
+                </h4>
+                <p style="margin: 0; font-size: 0.78rem; color: var(--text-muted);">
+                    ${typeTxt} - <strong style="color: var(--color-player);">${calledCount} Convocati</strong> su ${totalPlayersCount} atleti
+                </p>
+            </div>
+        `;
+    }
+
+    // 4. ALERT: GIOCATORI INFORTUNATI IN ROSA
+    const currentlyInjuredPlayers = [];
+    if (nextOrLatestTraining && nextOrLatestTraining.roster) {
+        playersList.forEach(p => {
+            if (nextOrLatestTraining.roster[p.id] === 'I') {
+                const pName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+                currentlyInjuredPlayers.push(`#${p.number || ''} ${pName}`);
+            }
+        });
+    }
+
+    if (currentlyInjuredPlayers.length > 0) {
+        alertsCount++;
+        cardsHTML += `
+            <div class="glass-panel" onclick="switchTabTo('tab-profile', 'subtab-roster-list')" style="padding: 1rem; border-radius: 10px; background: hsla(224, 45%, 4%, 0.6); border: 1px solid rgba(255, 71, 87, 0.4); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+                    <span style="font-size: 0.75rem; font-weight: 800; color: var(--color-danger); text-transform: uppercase;">🚑 Infermeria Squadra</span>
+                    <span style="font-size: 0.7rem; background: rgba(255, 71, 87, 0.2); color: var(--color-danger); padding: 0.15rem 0.5rem; border-radius: 10px; font-weight: bold; border: 1px solid rgba(255, 71, 87, 0.4);">${currentlyInjuredPlayers.length} Infortunat${currentlyInjuredPlayers.length === 1 ? 'o' : 'i'}</span>
+                </div>
+                <h4 style="margin: 0 0 0.25rem 0; color: #fff; font-size: 0.95rem; font-weight: 800;">
+                    Atleti in Recupero
+                </h4>
+                <div style="font-size: 0.76rem; color: var(--color-danger); font-weight: 600;">
+                    ${escapeHTML(currentlyInjuredPlayers.join(', '))}
+                </div>
+            </div>
+        `;
+    }
+
+    // 5. ALERT: ULTIMO TEST ATLETICO
+    if (athleticTestsList.length > 0) {
+        alertsCount++;
+        const latestTest = [...athleticTestsList].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+        const testDateFormatted = latestTest.date ? `${latestTest.date.split('-')[2]}/${latestTest.date.split('-')[1]}/${latestTest.date.split('-')[0]}` : '--';
+
+        cardsHTML += `
+            <div class="glass-panel" onclick="switchTabTo('tab-athletic')" style="padding: 1rem; border-radius: 10px; background: hsla(224, 45%, 4%, 0.6); border: 1px solid rgba(16, 185, 129, 0.3); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+                    <span style="font-size: 0.75rem; font-weight: 800; color: var(--color-fisi); text-transform: uppercase;">📊 Test Fisico Svolto</span>
+                    <span style="font-size: 0.7rem; background: rgba(16, 185, 129, 0.15); color: var(--color-fisi); padding: 0.15rem 0.5rem; border-radius: 10px; font-weight: bold; border: 1px solid rgba(16, 185, 129, 0.3);">${testDateFormatted}</span>
+                </div>
+                <h4 style="margin: 0 0 0.25rem 0; color: #fff; font-size: 0.95rem; font-weight: 800;">
+                    Test: ${escapeHTML(latestTest.type || 'Valutazione')}
+                </h4>
+                <p style="margin: 0; font-size: 0.78rem; color: var(--text-muted);">
+                    Registrazione completata per l'atleta. Clicca per accedere ai test fisici.
+                </p>
+            </div>
+        `;
+    }
+
+    if (badgeEl) {
+        badgeEl.textContent = `${alertsCount} Avvis${alertsCount === 1 ? 'o Attivo' : 'i Attivi'}`;
+    }
+
+    alertsGrid.innerHTML = cardsHTML;
+};
+
+// ==========================================================================
+// MONTHLY ABSENCES CALENDAR TAB ENGINE
+// ==========================================================================
+window.renderAbsencesTab = function() {
+    const statsContainer = document.getElementById('absence-monthly-stats');
+    const matrixGrid = document.getElementById('absence-calendar-grid-matrix');
+    const titleEl = document.getElementById('absence-calendar-month-title');
+    const tbody = document.getElementById('absence-table-tbody');
+    const playerSelect = document.getElementById('absence-player-select');
+    const monthSelect = document.getElementById('absence-month-select');
+    const yearSelect = document.getElementById('absence-year-select');
+
+    if (!matrixGrid || !tbody) return;
+
+    const playersList = (typeof players !== 'undefined' && Array.isArray(players) && players.length > 0) ? players : (window.players || []);
+    let trainingsList = [];
+    if (typeof trainings !== 'undefined' && Array.isArray(trainings) && trainings.length > 0) {
+        trainingsList = trainings;
+    } else if (window.trainings && Array.isArray(window.trainings) && window.trainings.length > 0) {
+        trainingsList = window.trainings;
+    } else {
+        try {
+            trainingsList = JSON.parse(localStorage.getItem('futsal_portal_trainings')) || [];
+        } catch(e) {
+            trainingsList = [];
+        }
+    }
+
+    // Helper to parse any date string format (ISO YYYY-MM-DD or European DD-MM-YYYY / DD/MM/YYYY)
+    function parseDateParts(dateStr) {
+        if (!dateStr) return null;
+        const clean = String(dateStr).trim();
+        const parts = clean.split(/[-\/]/);
+        if (parts.length !== 3) return null;
+        let year, month, day;
+        if (parts[0].length === 4) {
+            year = parseInt(parts[0], 10);
+            month = parseInt(parts[1], 10);
+            day = parseInt(parts[2], 10);
+        } else if (parts[2].length === 4) {
+            day = parseInt(parts[0], 10);
+            month = parseInt(parts[1], 10);
+            year = parseInt(parts[2], 10);
+        } else {
+            return null;
+        }
+        if (isNaN(year) || isNaN(month) || isNaN(day)) return null;
+        return { year, month, day, isoDate: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}` };
+    }
+
+    const today = new Date();
+
+    // Populate playerSelect if not populated
+    if (playerSelect && playerSelect.options.length <= 1) {
+        let optionsHTML = `<option value="all">Tutti i Giocatori (${playersList.length})</option>`;
+        playersList.forEach(p => {
+            const pName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+            optionsHTML += `<option value="${p.id}">#${p.number || ''} ${escapeHTML(pName)}</option>`;
+        });
+        playerSelect.innerHTML = optionsHTML;
+    }
+
+    const selMonthRaw = monthSelect?.value || 'all';
+    const selYearRaw = yearSelect?.value || 'all';
+    const selPlayerId = playerSelect?.value || 'all';
+
+    const monthNamesIt = [
+        "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+        "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
+    ];
+
+    if (titleEl) {
+        if (selMonthRaw === 'all') titleEl.textContent = `Tutti i Mesi della Stagione`;
+        else titleEl.textContent = `${monthNamesIt[parseInt(selMonthRaw, 10) - 1]} ${selYearRaw === 'all' ? '' : selYearRaw}`;
+    }
+
+    // Filter trainings for selected month & year
+    const monthTrainings = trainingsList.filter(t => {
+        const dp = parseDateParts(t.date);
+        if (!dp) return false;
+        if (selYearRaw !== 'all' && dp.year !== parseInt(selYearRaw, 10)) return false;
+        if (selMonthRaw !== 'all' && dp.month !== parseInt(selMonthRaw, 10)) return false;
+        return true;
+    });
+
+    monthTrainings.sort((a, b) => {
+        const dpA = parseDateParts(a.date);
+        const dpB = parseDateParts(b.date);
+        if (dpA && dpB) {
+            return new Date(dpA.year, dpA.month - 1, dpA.day) - new Date(dpB.year, dpB.month - 1, dpB.day);
+        }
+        return 0;
+    });
+
+    // Collect all absence entries for the filtered sessions
+    let monthAbsenceEntries = [];
+    let countA = 0, countG = 0, countI = 0;
+
+    monthTrainings.forEach(t => {
+        const dp = parseDateParts(t.date);
+        if (!dp) return;
+        const roster = t.roster || {};
+        playersList.forEach(p => {
+            if (selPlayerId !== 'all' && String(p.id) !== String(selPlayerId)) return;
+            const st = roster[p.id];
+            if (st === 'A' || st === 'G' || st === 'I') {
+                if (st === 'A') countA++;
+                else if (st === 'G') countG++;
+                else if (st === 'I') countI++;
+
+                // Compute cumulative season absences for player
+                let totalSeasonAbsences = 0;
+                trainingsList.forEach(tr => {
+                    if (tr.roster && tr.roster[p.id] === 'A') totalSeasonAbsences++;
+                });
+
+                monthAbsenceEntries.push({
+                    date: t.date,
+                    dateObj: dp,
+                    player: p,
+                    status: st,
+                    logistic: t.logistic || 'home',
+                    totalSeasonAbsences
+                });
+            }
+        });
+    });
+
+    // 1. Render Monthly Stats Cards
+    if (statsContainer) {
+        statsContainer.innerHTML = `
+            <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.85rem 1rem; border-radius: 8px;">
+                <span style="font-size: 0.75rem; color: var(--color-danger); text-transform: uppercase; font-weight: bold;">🔴 Assenze Ingiustificate</span>
+                <div style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-top: 0.2rem;">${countA}</div>
+            </div>
+            <div style="background: rgba(234, 179, 8, 0.12); border: 1px solid rgba(234, 179, 8, 0.3); padding: 0.85rem 1rem; border-radius: 8px;">
+                <span style="font-size: 0.75rem; color: #fde047; text-transform: uppercase; font-weight: bold;">🟡 Giustificate</span>
+                <div style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-top: 0.2rem;">${countG}</div>
+            </div>
+            <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.85rem 1rem; border-radius: 8px;">
+                <span style="font-size: 0.75rem; color: var(--color-fisi); text-transform: uppercase; font-weight: bold;">🩹 Infortuni</span>
+                <div style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-top: 0.2rem;">${countI}</div>
+            </div>
+            <div style="background: rgba(0, 210, 255, 0.1); border: 1px solid rgba(0, 210, 255, 0.3); padding: 0.85rem 1rem; border-radius: 8px;">
+                <span style="font-size: 0.75rem; color: var(--color-tecn); text-transform: uppercase; font-weight: bold;">⚽ Sedute Monitorate</span>
+                <div style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-top: 0.2rem;">${monthTrainings.length}</div>
+            </div>
+        `;
+    }
+
+    // 2. Render Calendar Grid Matrix
+    const targetGridMonth = selMonthRaw === 'all' ? (today.getMonth() + 1) : parseInt(selMonthRaw, 10);
+    const targetGridYear = selYearRaw === 'all' ? today.getFullYear() : parseInt(selYearRaw, 10);
+
+    const daysInMonth = new Date(targetGridYear, targetGridMonth, 0).getDate();
+    const firstDayIndex = (new Date(targetGridYear, targetGridMonth - 1, 1).getDay() + 6) % 7; // Mon=0..Sun=6
+
+    let gridHTML = `
+        <div style="color:var(--text-muted); font-weight:bold; padding:4px 0; font-size:0.8rem;">LUN</div>
+        <div style="color:var(--text-muted); font-weight:bold; padding:4px 0; font-size:0.8rem;">MAR</div>
+        <div style="color:var(--text-muted); font-weight:bold; padding:4px 0; font-size:0.8rem;">MER</div>
+        <div style="color:var(--text-muted); font-weight:bold; padding:4px 0; font-size:0.8rem;">GIO</div>
+        <div style="color:var(--text-muted); font-weight:bold; padding:4px 0; font-size:0.8rem;">VEN</div>
+        <div style="color:var(--text-muted); font-weight:bold; padding:4px 0; font-size:0.8rem;">SAB</div>
+        <div style="color:var(--text-muted); font-weight:bold; padding:4px 0; font-size:0.8rem;">DOM</div>
+    `;
+
+    for (let i = 0; i < firstDayIndex; i++) {
+        gridHTML += `<div style="padding: 10px;"></div>`;
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const daySession = monthTrainings.find(t => {
+            const dp = parseDateParts(t.date);
+            return dp && dp.year === targetGridYear && dp.month === targetGridMonth && dp.day === d;
+        });
+
+        const dayAbsences = monthAbsenceEntries.filter(e => {
+            const dp = e.dateObj;
+            return dp && dp.year === targetGridYear && dp.month === targetGridMonth && dp.day === d;
+        });
+
+        if (daySession) {
+            const numA = dayAbsences.filter(e => e.status === 'A').length;
+            const numG = dayAbsences.filter(e => e.status === 'G').length;
+            const numI = dayAbsences.filter(e => e.status === 'I').length;
+            const totalAbs = numA + numG + numI;
+
+            if (totalAbs > 0) {
+                const namesList = dayAbsences.map(e => {
+                    const pName = window.getInvertedName ? window.getInvertedName(e.player.name) : e.player.name;
+                    const stTag = e.status === 'A' ? '🔴 Assente' : (e.status === 'G' ? '🟡 Giustificato' : '🩹 Infortunato');
+                    return `${pName} (${stTag})`;
+                }).join('\n');
+
+                gridHTML += `
+                    <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.35), rgba(239, 68, 68, 0.1)); border: 1.5px solid #ef4444; border-radius: 8px; padding: 0.6rem 0.3rem; min-height: 55px; cursor: help; display: flex; flex-direction: column; align-items: center; justify-content: space-between;" title="${escapeHTML(namesList)}">
+                        <strong style="color: #fff; font-size: 0.85rem;">${d}</strong>
+                        <div style="display: flex; gap: 2px; font-size: 0.72rem; font-weight: 800; margin-top: 2px;">
+                            ${numA > 0 ? `<span style="background:#ef4444; color:#fff; padding:1px 4px; border-radius:4px;">🔴 ${numA}</span>` : ''}
+                            ${numG > 0 ? `<span style="background:#eab308; color:#000; padding:1px 4px; border-radius:4px;">🟡 ${numG}</span>` : ''}
+                            ${numI > 0 ? `<span style="background:#10b981; color:#fff; padding:1px 4px; border-radius:4px;">🩹 ${numI}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            } else {
+                gridHTML += `
+                    <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 8px; padding: 0.6rem 0.3rem; min-height: 55px; display: flex; flex-direction: column; align-items: center; justify-content: space-between;" title="Seduta svolta - Rosa al completo!">
+                        <strong style="color: #fff; font-size: 0.85rem;">${d}</strong>
+                        <span style="font-size: 0.68rem; color: #34d399; font-weight: bold;">🟢 100%</span>
+                    </div>
+                `;
+            }
+        } else {
+            gridHTML += `
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); border-radius: 8px; padding: 0.6rem 0.3rem; min-height: 55px; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 0.85rem;">${d}</span>
+                </div>
+            `;
+        }
+    }
+
+    matrixGrid.innerHTML = gridHTML;
+
+    matrixGrid.innerHTML = gridHTML;
+
+    // 3. Render Absence Table (Intervalli vs Singole Sedute)
+    const theadEl = document.getElementById('absence-table-thead');
+    const mode = window.currentAbsenceViewMode || 'intervals';
+
+    if (monthAbsenceEntries.length === 0) {
+        if (theadEl) {
+            theadEl.innerHTML = `
+                <tr style="background: rgba(0,0,0,0.3); border-bottom: 2px solid var(--border-color);">
+                    <th style="padding: 0.75rem;">Giocatore</th>
+                    <th style="padding: 0.75rem;">Intervallo Temporale Assenza</th>
+                    <th style="padding: 0.75rem;">Sedute Saltate</th>
+                    <th style="padding: 0.75rem;">Durata Stimata</th>
+                    <th style="padding: 0.75rem;">Causale Prevalente</th>
+                    <th style="padding: 0.75rem;">Stato Rientro / Presenza</th>
+                </tr>
+            `;
+        }
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                    Nessuna assenza registrata per i filtri selezionati.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    if (mode === 'intervals') {
+        if (theadEl) {
+            theadEl.innerHTML = `
+                <tr style="background: rgba(0,0,0,0.3); border-bottom: 2px solid var(--border-color);">
+                    <th style="padding: 0.75rem;">Giocatore</th>
+                    <th style="padding: 0.75rem;">Intervallo Temporale Assenza</th>
+                    <th style="padding: 0.75rem;">Sedute Saltate</th>
+                    <th style="padding: 0.75rem;">Durata Stimata</th>
+                    <th style="padding: 0.75rem;">Causale Prevalente</th>
+                    <th style="padding: 0.75rem;">Stato Rientro / Presenza</th>
+                </tr>
+            `;
+        }
+
+        // Group absence entries by player into consecutive/close intervals
+        const playerMap = {};
+        monthAbsenceEntries.forEach(item => {
+            const pid = item.player.id;
+            if (!playerMap[pid]) playerMap[pid] = [];
+            playerMap[pid].push(item);
+        });
+
+        let intervalsList = [];
+
+        Object.keys(playerMap).forEach(pid => {
+            const pEntries = playerMap[pid].sort((a, b) => {
+                const dA = new Date(a.dateObj.year, a.dateObj.month - 1, a.dateObj.day);
+                const dB = new Date(b.dateObj.year, b.dateObj.month - 1, b.dateObj.day);
+                return dA - dB;
+            });
+
+            let currentInv = null;
+            pEntries.forEach(entry => {
+                if (!currentInv) {
+                    currentInv = {
+                        player: entry.player,
+                        startDate: entry.dateObj,
+                        endDate: entry.dateObj,
+                        sessionCount: 1,
+                        statuses: [entry.status],
+                        logistics: [entry.logistic]
+                    };
+                } else {
+                    const d1 = new Date(currentInv.endDate.year, currentInv.endDate.month - 1, currentInv.endDate.day);
+                    const d2 = new Date(entry.dateObj.year, entry.dateObj.month - 1, entry.dateObj.day);
+                    const diffDays = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+
+                    if (diffDays <= 7) {
+                        currentInv.endDate = entry.dateObj;
+                        currentInv.sessionCount++;
+                        currentInv.statuses.push(entry.status);
+                        currentInv.logistics.push(entry.logistic);
+                    } else {
+                        intervalsList.push(currentInv);
+                        currentInv = {
+                            player: entry.player,
+                            startDate: entry.dateObj,
+                            endDate: entry.dateObj,
+                            sessionCount: 1,
+                            statuses: [entry.status],
+                            logistics: [entry.logistic]
+                        };
+                    }
+                }
+            });
+            if (currentInv) intervalsList.push(currentInv);
+        });
+
+        intervalsList.sort((a, b) => {
+            const dA = new Date(a.startDate.year, a.startDate.month - 1, a.startDate.day);
+            const dB = new Date(b.startDate.year, b.startDate.month - 1, b.startDate.day);
+            return dB - dA;
+        });
+
+        let rowsHTML = '';
+        intervalsList.forEach(inv => {
+            const p = inv.player;
+            const pName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+            const initials = getInitials(p.name);
+            const avatarImg = p.photo 
+                ? `<img src="${p.photo}" alt="${escapeHTML(p.name)}" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">`
+                : `<div style="width:32px; height:32px; border-radius:50%; background:var(--color-player); color:#000; font-weight:bold; font-size:0.75rem; display:flex; align-items:center; justify-content:center;">${initials}</div>`;
+
+            const dStart = new Date(inv.startDate.year, inv.startDate.month - 1, inv.startDate.day);
+            const dEnd = new Date(inv.endDate.year, inv.endDate.month - 1, inv.endDate.day);
+            const totalDays = Math.max(1, Math.round((dEnd - dStart) / (1000 * 60 * 60 * 24)) + 1);
+
+            const dateStartFormatted = `${String(inv.startDate.day).padStart(2, '0')}/${String(inv.startDate.month).padStart(2, '0')}/${inv.startDate.year}`;
+            const dateEndFormatted = `${String(inv.endDate.day).padStart(2, '0')}/${String(inv.endDate.month).padStart(2, '0')}/${inv.endDate.year}`;
+
+            const dateRangeTxt = (inv.startDate.isoDate === inv.endDate.isoDate)
+                ? `📅 ${dateStartFormatted}`
+                : `📅 Dal ${dateStartFormatted} al ${dateEndFormatted}`;
+
+            const statusCounts = {};
+            inv.statuses.forEach(s => statusCounts[s] = (statusCounts[s] || 0) + 1);
+            let domStatus = 'A';
+            let maxC = 0;
+            Object.keys(statusCounts).forEach(s => {
+                if (statusCounts[s] > maxC) { maxC = statusCounts[s]; domStatus = s; }
+            });
+
+            let statusBadge = '';
+            if (domStatus === 'A') {
+                statusBadge = `<span class="badge" style="background:rgba(239, 68, 68, 0.25); color:#ef4444; border:1px solid #ef4444; font-weight:bold; padding:0.25rem 0.6rem; border-radius:10px;">🔴 ASSENZA INGIUSTIFICATA</span>`;
+            } else if (domStatus === 'G') {
+                statusBadge = `<span class="badge" style="background:rgba(234, 179, 8, 0.25); color:#fde047; border:1px solid #facc15; font-weight:bold; padding:0.25rem 0.6rem; border-radius:10px;">🟡 GIUSTIFICATA</span>`;
+            } else if (domStatus === 'I') {
+                statusBadge = `<span class="badge" style="background:rgba(16, 185, 129, 0.25); color:#34d399; border:1px solid #10b981; font-weight:bold; padding:0.25rem 0.6rem; border-radius:10px;">🩹 INFORTUNIO</span>`;
+            }
+
+            const returnSession = trainingsList.find(t => {
+                const dp = parseDateParts(t.date);
+                if (!dp) return false;
+                const tDate = new Date(dp.year, dp.month - 1, dp.day);
+                return tDate > dEnd && (t.roster && t.roster[p.id] === 'P');
+            });
+
+            let returnBadge = '';
+            if (returnSession) {
+                const dpR = parseDateParts(returnSession.date);
+                const rDateFormatted = `${String(dpR.day).padStart(2, '0')}/${String(dpR.month).padStart(2, '0')}/${dpR.year}`;
+                returnBadge = `<span class="badge" style="background:rgba(16, 185, 129, 0.2); color:#34d399; border:1px solid #10b981; font-weight:bold; padding:0.25rem 0.6rem; border-radius:10px;">🟢 Rientrato il ${rDateFormatted}</span>`;
+            } else {
+                returnBadge = `<span class="badge" style="background:rgba(239, 68, 68, 0.2); color:#f87171; border:1px solid #ef4444; font-weight:bold; padding:0.25rem 0.6rem; border-radius:10px;">🔴 In Corso / Non Rientrato</span>`;
+            }
+
+            rowsHTML += `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.65rem 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.65rem;">
+                            ${avatarImg}
+                            <div>
+                                <div style="font-weight: 700; color: var(--color-player);">
+                                    #${p.number || ''} ${escapeHTML(pName)}
+                                </div>
+                                <span style="font-size:0.72rem; color:var(--text-muted);">${escapeHTML(p.role || 'Giocatore')}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #fff;">
+                        ${dateRangeTxt}
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem; font-weight: 800; color: #fde047;">
+                        ⚽ ${inv.sessionCount} ${inv.sessionCount === 1 ? 'Seduta' : 'Sedute'}
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem; font-weight: 600; color: var(--text-muted);">
+                        ⏱️ ${totalDays} ${totalDays === 1 ? 'Giorno' : 'Giorni'}
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem;">
+                        ${statusBadge}
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem;">
+                        ${returnBadge}
+                    </td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = rowsHTML;
+    } else {
+        // Mode 'single'
+        if (theadEl) {
+            theadEl.innerHTML = `
+                <tr style="background: rgba(0,0,0,0.3); border-bottom: 2px solid var(--border-color);">
+                    <th style="padding: 0.75rem;">Data Seduta</th>
+                    <th style="padding: 0.75rem;">Giocatore</th>
+                    <th style="padding: 0.75rem;">Ruolo</th>
+                    <th style="padding: 0.75rem;">Stato Assenza</th>
+                    <th style="padding: 0.75rem;">Logistica Seduta</th>
+                    <th style="padding: 0.75rem;">Stagione Totale Assenze</th>
+                </tr>
+            `;
+        }
+
+        monthAbsenceEntries.sort((a, b) => {
+            const dpA = a.dateObj;
+            const dpB = b.dateObj;
+            return new Date(dpA.year, dpA.month - 1, dpA.day) - new Date(dpB.year, dpB.month - 1, dpB.day);
+        });
+
+        let rowsHTML = '';
+        monthAbsenceEntries.forEach(item => {
+            const p = item.player;
+            const pName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+            const initials = getInitials(p.name);
+            const avatarImg = p.photo 
+                ? `<img src="${p.photo}" alt="${escapeHTML(p.name)}" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">`
+                : `<div style="width:32px; height:32px; border-radius:50%; background:var(--color-player); color:#000; font-weight:bold; font-size:0.75rem; display:flex; align-items:center; justify-content:center;">${initials}</div>`;
+
+            const dp = item.dateObj;
+            const dateFormatted = `${String(dp.day).padStart(2, '0')}/${String(dp.month).padStart(2, '0')}/${dp.year}`;
+
+            let statusBadge = '';
+            if (item.status === 'A') {
+                statusBadge = `<span class="badge" style="background:rgba(239, 68, 68, 0.25); color:#ef4444; border:1px solid #ef4444; font-weight:bold; padding:0.25rem 0.6rem; border-radius:10px;">🔴 ASSENTE</span>`;
+            } else if (item.status === 'G') {
+                statusBadge = `<span class="badge" style="background:rgba(234, 179, 8, 0.25); color:#fde047; border:1px solid #facc15; font-weight:bold; padding:0.25rem 0.6rem; border-radius:10px;">🟡 GIUSTIFICATO</span>`;
+            } else if (item.status === 'I') {
+                statusBadge = `<span class="badge" style="background:rgba(16, 185, 129, 0.25); color:#34d399; border:1px solid #10b981; font-weight:bold; padding:0.25rem 0.6rem; border-radius:10px;">🩹 INFORTUNATO</span>`;
+            }
+
+            const logTxt = item.logistic === 'beach' ? '🏖️ Spiaggia' : (item.logistic === 'away' ? '🚌 Trasferta' : '🏠 Casa');
+
+            rowsHTML += `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #fff;">
+                        ${dateFormatted}
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.65rem;">
+                            ${avatarImg}
+                            <div style="font-weight: 700; color: var(--color-player);">
+                                #${p.number || ''} ${escapeHTML(pName)}
+                            </div>
+                        </div>
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem;">
+                        <span class="badge" style="background: rgba(255,255,255,0.08); color: var(--text-primary); font-size: 0.75rem;">${escapeHTML(p.role || 'Giocatore')}</span>
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem;">
+                        ${statusBadge}
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem; font-weight: 600;">
+                        ${logTxt}
+                    </td>
+                    <td style="padding: 0.65rem 0.75rem; font-weight: 800; color: var(--color-danger);">
+                        ${item.totalSeasonAbsences} Assenze Totali
+                    </td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = rowsHTML;
+    }
+};
+
+window.currentAbsenceViewMode = 'intervals';
+
+window.setAbsenceViewMode = function(mode) {
+    window.currentAbsenceViewMode = mode;
+    
+    const btnIntervals = document.getElementById('btn-absence-mode-intervals');
+    const btnSingle = document.getElementById('btn-absence-mode-single');
+    
+    if (btnIntervals && btnSingle) {
+        if (mode === 'intervals') {
+            btnIntervals.style.background = 'var(--color-primary)';
+            btnIntervals.style.color = '#fff';
+            btnSingle.style.background = 'rgba(255,255,255,0.08)';
+            btnSingle.style.color = 'var(--text-muted)';
+        } else {
+            btnSingle.style.background = 'var(--color-primary)';
+            btnSingle.style.color = '#fff';
+            btnIntervals.style.background = 'rgba(255,255,255,0.08)';
+            btnIntervals.style.color = 'var(--text-muted)';
+        }
+    }
+    
+    if (typeof window.renderAbsencesTab === 'function') window.renderAbsencesTab();
+};
+
+window.exportAbsencesPDF = function() {
+    if (typeof window.renderAbsencesTab === 'function') {
+        window.renderAbsencesTab();
+    }
+
+    const element = document.getElementById('subtab-absences');
+    if (!element) {
+        window.print();
+        return;
+    }
+
+    // Clone element for print window
+    const clone = element.cloneNode(true);
+    
+    // Remove buttons, selectors, and non-printable elements from clone
+    const selectorsToHide = clone.querySelectorAll('.btn, button, select, label');
+    selectorsToHide.forEach(el => el.style.display = 'none');
+
+    // Replace dark colors with crisp black text in clone
+    const allElements = clone.querySelectorAll('*');
+    allElements.forEach(el => {
+        el.style.color = '#000000';
+        el.style.textShadow = 'none';
+        if (el.classList.contains('glass-panel')) {
+            el.style.background = '#ffffff';
+            el.style.border = '1px solid #cbd5e1';
+            el.style.boxShadow = 'none';
+        }
+    });
+
+    const printWin = window.open('', '_blank', 'width=900,height=700');
+    if (printWin) {
+        printWin.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Report Assenze - ADRIAUTO F.M. C5</title>
+                <style>
+                    body {
+                        font-family: 'Segoe UI', Arial, sans-serif;
+                        padding: 20px;
+                        color: #000000;
+                        background: #ffffff;
+                    }
+                    h2, h3, h4, th, td, div, span, strong {
+                        color: #000000 !important;
+                    }
+                    .header-pdf {
+                        border-bottom: 2px solid #ef4444;
+                        padding-bottom: 10px;
+                        margin-bottom: 20px;
+                    }
+                    .glass-panel {
+                        border: 1px solid #cbd5e1 !important;
+                        background: #ffffff !important;
+                        padding: 15px !important;
+                        margin-bottom: 20px !important;
+                        border-radius: 8px !important;
+                    }
+                    table {
+                        width: 100% !important;
+                        border-collapse: collapse !important;
+                        margin-top: 10px !important;
+                    }
+                    th, td {
+                        border: 1px solid #cbd5e1 !important;
+                        padding: 8px 10px !important;
+                        text-align: left !important;
+                        font-size: 13px !important;
+                        color: #000000 !important;
+                    }
+                    th {
+                        background: #f1f5f9 !important;
+                        font-weight: bold !important;
+                    }
+                    .badge {
+                        padding: 3px 8px !important;
+                        border-radius: 6px !important;
+                        font-size: 11px !important;
+                        font-weight: bold !important;
+                        border: 1px solid #94a3b8 !important;
+                    }
+                    button, .btn, select, label { display: none !important; }
+                    @media print {
+                        @page { margin: 1cm; size: A4 landscape; }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="header-pdf">
+                    <h2 style="margin:0; color:#ef4444 !important;">ADRIAUTO F.M. C5 - REGISTRO & REPORT ASSENZE GIOCATORI</h2>
+                    <p style="margin:4px 0 0 0; font-size:12px; color:#475569 !important;">Data generazione: ${new Date().toLocaleDateString('it-IT')} ${new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'})}</p>
+                </div>
+                ${clone.innerHTML}
+                <script>
+                    window.onload = function() {
+                        setTimeout(function() {
+                            window.print();
+                            window.close();
+                        }, 250);
+                    };
+                </script>
+            </body>
+            </html>
+        `);
+        printWin.document.close();
+    } else {
+        // Direct print fallback if popups are blocked
+        document.body.classList.add('print-absences');
+        setTimeout(() => {
+            window.print();
+            setTimeout(() => {
+                document.body.classList.remove('print-absences');
+            }, 1000);
+        }, 150);
+    }
 };
 

@@ -8,6 +8,11 @@
             alert("JS Error: " + msg + " al rigo " + line);
             return false;
         };
+        function switchTabTo(tabName, subTabName) {
+            if (window.switchTabTo && window.switchTabTo !== switchTabTo) {
+                return window.switchTabTo(tabName, subTabName);
+            }
+        }
     </script>
     <title>Futsal Dashboard - Gestione Rosa & Valutazioni</title>
     <meta name="description" content="Portale premium per la gestione della rosa di calcio a 5, con autovalutazioni dei giocatori, valutazioni del mister, grafici di confronto e piani di crescita individuali.">
@@ -31,29 +36,27 @@
     </div>
 
     <!-- APP HEADER -->
-    <header class="app-header">
-        <div class="header-content container" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 1rem 0;">
-            <!-- SINISTRA: Spazio Vuoto -->
-            <div style="flex: 1; display: flex; justify-content: flex-start;">
-            </div>
-
-            <!-- CENTRO: Logo e Nome Squadra alla stessa altezza -->
-            <div class="logo-area" onclick="switchTabTo('tab-dashboard')" style="flex: 2; display: flex; justify-content: center; align-items: center; gap: 1rem; cursor: pointer;">
-                <div class="team-logo-container" style="position: relative; width: 60px; height: 60px; border-radius: 50%; background: rgba(0,0,0,0.3); border: 2px dashed var(--color-tecn); display: flex; justify-content: center; align-items: center; overflow: hidden; flex-shrink: 0;" title="Torna alla Dashboard">
+    <header class="app-header" style="padding: 0.75rem 0;">
+        <div class="header-content container glass-panel" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0.65rem 1.4rem; border-radius: 50px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.75)); border: 1.5px solid rgba(0, 210, 255, 0.4); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45), inset 0 0 20px rgba(0, 210, 255, 0.08); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);">
+            <!-- SINISTRA: Logo e Nome Squadra -->
+            <div class="logo-area" onclick="switchTabTo('tab-dashboard')" style="display: flex; align-items: center; gap: 1rem; cursor: pointer;">
+                <div class="team-logo-container" style="position: relative; width: 50px; height: 50px; border-radius: 50%; background: rgba(0,0,0,0.4); border: 2px solid var(--color-tecn); display: flex; justify-content: center; align-items: center; overflow: hidden; flex-shrink: 0; box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);" title="Torna alla Dashboard">
                     <img id="team-logo-img" src="" alt="Team Logo" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-                    <span id="team-logo-placeholder" style="color: var(--color-tecn); text-align: center; font-size: 0.6rem;">Nessun<br>Logo</span>
+                    <span id="team-logo-placeholder" style="color: var(--color-tecn); text-align: center; font-size: 0.6rem; font-weight: bold;">Nessun<br>Logo</span>
                 </div>
-                <div class="titles" style="display: flex; align-items: center; gap: 0.8rem;">
-                    <h1 id="team-name-display" style="margin: 0; font-size: 1.6rem; display: flex; align-items: center;" title="Torna alla Dashboard">
+                <div class="titles" style="display: flex; align-items: center; gap: 0.75rem;">
+                    <h1 id="team-name-display" style="margin: 0; font-size: 1.55rem; font-weight: 800; display: flex; align-items: center; color: #ffffff; letter-spacing: 0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.5);" title="Torna alla Dashboard">
                         Nome Squadra Futsal
                     </h1>
-                    <span style="color: rgba(255,255,255,0.2); font-size: 1.5rem; font-weight: 300;">|</span>
-                    <p id="team-season-display" style="margin: 0; color: #a0aec0; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center;">
+                    <span style="color: rgba(0, 210, 255, 0.4); font-size: 1.4rem; font-weight: 300;">|</span>
+                    <p id="team-season-display" style="margin: 0; color: #38bdf8; font-size: 0.92rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; background: rgba(56, 189, 248, 0.12); padding: 0.2rem 0.6rem; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.3);">
                         Stagione Sportiva
                     </p>
                 </div>
             </div>
-            <div style="flex: 1; display: flex; gap: 1rem; align-items: center; justify-content: flex-end;">
+
+            <!-- DESTRA: User, Logout, Fullscreen -->
+            <div style="display: flex; gap: 1rem; align-items: center; justify-content: flex-end;">
                 <span id="current-user-display" style="color: var(--color-tecn); font-weight: 600; font-size: 0.9rem;"></span>
                 <button class="btn-logout" onclick="performLogout()">Logout</button>
                 <button id="btn-fullscreen" onclick="toggleFullScreen()" title="Schermo Intero" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; flex-shrink: 0;" onmouseover="this.style.color='white'; this.style.background='rgba(255,255,255,0.15)';" onmouseout="this.style.color='var(--text-muted)'; this.style.background='rgba(255,255,255,0.05)';">
@@ -71,8 +74,9 @@
              TAB 0: DASHBOARD PRINCIPALE
              ========================================== -->
         <section id="tab-dashboard" class="tab-panel active">
+
             <div class="dashboard-main-grid">
-                <!-- COLONNA SINISTRA -->
+                <!-- COLONNA SINISTRA (APPLICATIVI) -->
                 <div id="dashboard-col-left" class="dashboard-col" style="display: flex; flex-direction: column; gap: 1rem;">
                     <!-- Card: Profilo Giocatori -->
                     <div class="main-dashboard-card glass-panel" data-tab="tab-profile" onclick="switchTabTo('tab-profile', 'subtab-roster-list')">
@@ -109,7 +113,7 @@
                             </svg>
                         </div>
                         <div class="dashboard-card-text">
-                            <h3>Presenze</h3>
+                            <h3>Presenze/Assenze programmate</h3>
                             <p>Tabellone convocazioni e allenamenti</p>
                         </div>
                     </div>
@@ -143,7 +147,7 @@
                     </div>
                 </div>
 
-                <!-- COLONNA DESTRA -->
+                <!-- COLONNA DESTRA (APPLICATIVI 2) -->
                 <div id="dashboard-col-right" class="dashboard-col" style="display: flex; flex-direction: column; gap: 1rem;">
                     <!-- Card: Programma di Allenamento -->
                     <div class="main-dashboard-card glass-panel" data-tab="tab-training-program" onclick="switchTabTo('tab-training-program')">
@@ -204,6 +208,20 @@
                         </div>
                     </div>
 
+                    <!-- Card: Condizione Psicofisica -->
+                    <div class="main-dashboard-card glass-panel" data-tab="tab-psychophysical" onclick="switchTabTo('tab-psychophysical')">
+                        <div class="dashboard-card-icon" style="color: #f472b6;">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M12 21C12 21 4 13.5 4 8.5C4 5.42 6.42 3 9.5 3C11.24 3 12 4 12 4C12 4 12.76 3 14.5 3C17.58 3 20 5.42 20 8.5C20 13.5 12 21 12 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              <path d="M12 8V14M9 11H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="dashboard-card-text">
+                            <h3>Condizione Psicofisica</h3>
+                            <p>Analisi forze e debolezze della squadra</p>
+                        </div>
+                    </div>
+
                     <!-- Card: Performance -->
                     <div class="main-dashboard-card glass-panel" data-tab="tab-roster" onclick="switchTabTo('tab-roster')">
                         <div class="dashboard-card-icon" style="color: var(--color-psic);">
@@ -215,6 +233,31 @@
                             <h3>Performance</h3>
                             <p>Valutazioni, schede giocatore e trend</p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- COLONNA DESTRA ESTERNA: WIDGET AVVISI & ALLERTA SQUADRA -->
+                <div id="dashboard-alerts-widget" class="glass-panel" style="padding: 1.25rem; height: fit-content;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.65rem; flex-wrap: wrap; gap: 0.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="background: rgba(250, 204, 21, 0.2); border: 1px solid #facc15; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+                                🔔
+                            </div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 1.05rem; color: #fff; font-weight: 800;">
+                                    Centro Allerte Squadra
+                                </h3>
+                                <span style="font-size: 0.72rem; color: var(--text-muted);">Avvisi ed assenze in tempo reale</span>
+                            </div>
+                        </div>
+                        <span id="dashboard-alerts-count-badge" class="badge" style="background: rgba(250, 204, 21, 0.25); color: #fde047; border: 1px solid rgba(250, 204, 21, 0.5); padding: 0.25rem 0.65rem; border-radius: 12px; font-weight: 800; font-size: 0.75rem;">
+                            Caricamento...
+                        </span>
+                    </div>
+
+                    <!-- CARDS GRID FOR ALERTS -->
+                    <div id="dashboard-alerts-grid" style="display: flex; flex-direction: column; gap: 0.85rem;">
+                        <!-- Dynamically rendered by JS -->
                     </div>
                 </div>
             </div>
@@ -424,38 +467,74 @@
                     text-align: center;
                     backdrop-filter: blur(2px);
                 }
+                .futsal-pitch-rhombus.drag-over, #unassigned-players-container.drag-over {
+                    border-color: #facc15 !important;
+                    box-shadow: 0 0 20px rgba(250, 204, 21, 0.7) !important;
+                    background: rgba(250, 204, 21, 0.05) !important;
+                }
+                .unassigned-player-card:hover {
+                    transform: translateY(-2px);
+                    border-color: var(--color-player) !important;
+                    background: rgba(255,255,255,0.12) !important;
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+                }
             </style>
             <div id="subtab-quartets" class="profile-subtab-content">
-                <div class="glass-panel" style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+                <div class="glass-panel" style="padding: 1.5rem; max-width: 100%; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
                         <h2 style="margin: 0; color: var(--color-player);">Quartetti di Rotazione (Rombo)</h2>
                         <button class="btn btn-primary" onclick="renderQuartets()">Aggiorna Vista</button>
                     </div>
                     
-                    <div class="quartets-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+                    <div class="quartets-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; width: 100%;">
                         <!-- 1° Quartetto -->
                         <div class="quartet-box">
-                            <h3 style="text-align: center; color: var(--color-player); margin-bottom: 1rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 6px;">1° Quartetto (Titolari)</h3>
-                            <div class="futsal-pitch-rhombus" id="pitch-quartet-1">
+                            <h3 style="text-align: center; color: var(--color-player); margin-bottom: 0.75rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 6px; font-size: 0.95rem;">1° Quartetto (Titolari)</h3>
+                            <div class="futsal-pitch-rhombus" id="pitch-quartet-1" style="height: 480px;">
                                 <!-- Slots generated via JS -->
                             </div>
                         </div>
                         <!-- 2° Quartetto -->
                         <div class="quartet-box">
-                            <h3 style="text-align: center; color: var(--color-player); margin-bottom: 1rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 6px;">2° Quartetto (Prime Rotazioni)</h3>
-                            <div class="futsal-pitch-rhombus" id="pitch-quartet-2">
+                            <h3 style="text-align: center; color: var(--color-player); margin-bottom: 0.75rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 6px; font-size: 0.95rem;">2° Quartetto (Prime Rotazioni)</h3>
+                            <div class="futsal-pitch-rhombus" id="pitch-quartet-2" style="height: 480px;">
                             </div>
                         </div>
                         <!-- 3° Quartetto -->
                         <div class="quartet-box">
-                            <h3 style="text-align: center; color: var(--color-player); margin-bottom: 1rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 6px;">3° Quartetto (Seconde Rotazioni)</h3>
-                            <div class="futsal-pitch-rhombus" id="pitch-quartet-3">
+                            <h3 style="text-align: center; color: var(--color-player); margin-bottom: 0.75rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 6px; font-size: 0.95rem;">3° Quartetto (Seconde Rotazioni)</h3>
+                            <div class="futsal-pitch-rhombus" id="pitch-quartet-3" style="height: 480px;">
+                            </div>
+                        </div>
+                        <!-- 4° Quartetto -->
+                        <div class="quartet-box">
+                            <h3 style="text-align: center; color: var(--color-player); margin-bottom: 0.75rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 6px; font-size: 0.95rem;">4° Quartetto (Terze Rotazioni)</h3>
+                            <div class="futsal-pitch-rhombus" id="pitch-quartet-4" style="height: 480px;">
                             </div>
                         </div>
                     </div>
-                    </div>
-                    
 
+                    <!-- GIOCATORI ANCORA DA IMPIEGARE (PANCHINA) -->
+                    <div class="unassigned-players-section glass-panel" style="margin-top: 1.5rem; padding: 1.25rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; flex-wrap:wrap; gap:0.5rem;">
+                            <h3 style="margin: 0; color: #facc15; font-size: 1.1rem; display:flex; align-items:center; gap:0.5rem;">
+                                <span>📋 Giocatori ancora da impiegare (Panchina)</span>
+                                <span id="unassigned-count-badge" style="background:rgba(250,204,21,0.2); color:#facc15; border:1px solid rgba(250,204,21,0.4); font-size:0.75rem; padding:0.15rem 0.6rem; border-radius:12px; font-weight:700;">0</span>
+                            </h3>
+                            <span style="font-size:0.8rem; color:var(--text-muted);">💡 Trascina i giocatori dal/sul campo per spostarli o scambiarli</span>
+                        </div>
+
+                        <!-- Drop zone container for unassigned players -->
+                        <div id="unassigned-players-container" 
+                             class="unassigned-players-grid" 
+                             ondragover="handleQuartetDragOver(event)"
+                             ondragenter="handleQuartetDragEnter(event)"
+                             ondragleave="handleQuartetDragLeave(event)"
+                             ondrop="handleQuartetDropToBench(event)"
+                             style="display:flex; flex-wrap:wrap; gap:0.75rem; min-height:85px; padding:0.85rem; background:rgba(0,0,0,0.25); border:2px dashed rgba(255,255,255,0.15); border-radius:8px; align-items:center; transition:all 0.2s ease;">
+                            <!-- Rendered dynamically by JS -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -464,7 +543,12 @@
              PERFORMANCE
              ========================================== -->
         <section id="tab-roster" class="tab-panel">
-            <div style="display: flex; justify-content: space-between; align-items: center; max-width: fit-content; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
+            <!-- Print only header for PDF -->
+            <div class="print-only-evaluation-header" style="display: none; text-align: center; margin-bottom: 1.5rem; border-bottom: 2px solid #000; padding-bottom: 0.5rem; width: 100%;">
+                <h2 style="font-size: 18pt; font-weight: 800; text-transform: uppercase; color: #000; margin: 0; font-family: 'Outfit', sans-serif;">Valutazione della Performance</h2>
+            </div>
+
+            <div class="screen-only-evaluation-header" style="display: flex; justify-content: space-between; align-items: center; max-width: fit-content; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
                 <div class="sub-tab-container glass-panel" style="margin-bottom: 0; padding: 0.4rem; display: flex; gap: 0.5rem;">
                     <button class="tab-btn active roster-sub-tab-btn" data-subtab="subtab-evaluation">
                         <span>Nuova Valutazione</span>
@@ -472,10 +556,10 @@
                     <button class="tab-btn roster-sub-tab-btn" data-subtab="subtab-trends">
                         <span>Storico & Trend</span>
                     </button>
+                    <button class="tab-btn roster-sub-tab-btn" data-subtab="subtab-riepilogo" style="color:#f472b6;">
+                        <span>📊 Riepilogo</span>
+                    </button>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="window.print()" style="height: 38px; padding: 0.45rem 1.25rem; font-size: 0.85rem;">
-                    Salva in PDF
-                </button>
             </div>
 
         <!-- ==========================================
@@ -490,9 +574,19 @@
                             <option value="">-- Seleziona Giocatore --</option>
                         </select>
                     </div>
+                    <div class="form-group" id="historical-sheets-select-group" style="display: none;">
+                        <label for="select-historical-sheet">📜 Schede Storiche Salvate</label>
+                        <select id="select-historical-sheet" onchange="if(this.value) loadAssessmentToForm(parseInt(this.value,10) || this.value)">
+                            <option value="">-- Compila Nuova Valutazione (Oggi) --</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="assessment-date">Data Valutazione</label>
                         <input type="date" id="assessment-date">
+                    </div>
+                    <div class="form-group hide-on-print" style="display: flex; align-items: center; gap: 0.5rem; height: 38px; margin-bottom: 0;">
+                        <input type="checkbox" id="hide-coach-evaluation" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
+                        <label for="hide-coach-evaluation" style="cursor: pointer; margin: 0; user-select: none; font-size: 0.85rem; color: var(--text-secondary);">Nascondi valutazione Mister</label>
                     </div>
                 </div>
             </div>
@@ -504,7 +598,7 @@
 
             <!-- ATHLETE MINI PROFILE -->
             <div id="athlete-profile-card" class="athlete-profile-card glass-panel hidden">
-                <div class="profile-header">
+                <div class="profile-card-left">
                     <div class="profile-avatar-wrapper" id="profile-card-avatar-container">
                         <!-- Image or initials rendered dynamically -->
                     </div>
@@ -513,38 +607,106 @@
                             <h3 id="profile-card-name">Nome Giocatore</h3>
                             <span id="profile-card-number" class="jersey-badge">10</span>
                         </div>
+                        <div class="profile-badges-row" style="display:flex; justify-content:center; gap:0.4rem; margin-top:0.4rem;">
+                            <span id="profile-card-role" class="profile-badge">--</span>
+                            <span id="profile-card-foot" class="profile-badge" style="background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15); color:var(--text-primary);">--</span>
+                        </div>
                     </div>
                 </div>
-                <div class="profile-details-grid">
-                    <h3 class="panel-title" style="grid-column: 1 / -1; margin-bottom: 0.5rem;">Profilo personale</h3>
-                    <div class="profile-detail-item">
-                        <span class="lbl">Anno di Nascita:</span>
-                        <strong id="profile-card-birth-year">--</strong>
+
+                <div class="profile-card-right">
+                    <div class="profile-card-top-bar" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:0.4rem; margin-bottom:0.6rem;">
+                        <h4 style="font-size:0.95rem; font-weight:700; color:var(--color-player); margin:0; display:flex; align-items:center; gap:0.4rem;">
+                            👤 Profilo Personale
+                        </h4>
+                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                            <button type="button" class="btn btn-secondary btn-mini hide-on-print" id="btn-toggle-edit-profile-card" onclick="toggleEditProfileCardMode()" style="font-size:0.8rem; padding:0.25rem 0.6rem;">
+                                ✏️ Modifica Dati
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-mini hide-on-print" onclick="closeEvaluationForm()" style="font-size:1.1rem; padding:0.15rem 0.5rem; color:#f87171; border:1px solid rgba(248,113,113,0.3); border-radius:50%; background:rgba(248,113,113,0.15); line-height:1; cursor:pointer;" title="Chiudi Scheda">
+                                ✖
+                            </button>
+                        </div>
                     </div>
-                    <div class="profile-detail-item">
-                        <span class="lbl">Peso:</span>
-                        <strong id="profile-card-weight">--</strong> kg
+
+                    <div class="profile-details-grid-content">
+                        <div class="profile-detail-item">
+                            <span class="lbl">Data di Nascita:</span>
+                            <strong id="profile-card-birth-year">--</strong>
+                        </div>
+                        <div class="profile-detail-item">
+                            <span class="lbl">Altezza:</span>
+                            <strong id="profile-card-height">--</strong> cm
+                        </div>
+                        <div class="profile-detail-item">
+                            <span class="lbl">Peso:</span>
+                            <strong id="profile-card-weight">--</strong> kg
+                        </div>
+                        <div class="profile-detail-item">
+                            <span class="lbl">Professione:</span>
+                            <strong id="profile-card-job">--</strong>
+                        </div>
+                        <div class="profile-detail-item bio" style="grid-column: 1 / -1; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 0.4rem; margin-top: 0.2rem;">
+                            <span class="lbl">Esperienze Pregresse:</span>
+                            <p id="profile-card-experience" style="font-weight: 600; color: var(--text-primary); margin-top: 0.15rem; font-size:0.85rem; line-height:1.35;">--</p>
+                        </div>
                     </div>
-                    <div class="profile-detail-item">
-                        <span class="lbl">Altezza:</span>
-                        <strong id="profile-card-height">--</strong> cm
-                    </div>
-                    <div class="profile-detail-item">
-                        <span class="lbl">Ruolo:</span>
-                        <strong id="profile-card-role">--</strong>
-                    </div>
-                    <div class="profile-detail-item">
-                        <span class="lbl">Piede Dominante:</span>
-                        <strong id="profile-card-foot">--</strong>
-                    </div>
-                    <div class="profile-detail-item bio" style="grid-column: 1 / -1; border-top: 1px solid hsla(224, 20%, 90%, 0.05); padding-top: 0.5rem; margin-top: 0.25rem;">
-                        <span class="lbl">Esperienze Pregresse:</span>
-                        <p id="profile-card-experience" style="font-weight: 700; color: var(--text-primary); margin-top: 0.2rem;">--</p>
-                    </div>
-                    <div class="profile-detail-item">
-                        <span class="lbl">Professione:</span>
-                        <strong id="profile-card-job">--</strong>
-                    </div>
+
+                    <!-- INLINE PROFILE EDIT FORM -->
+                    <form id="form-profile-card-edit" class="hidden" style="display:flex; flex-direction:column; gap:0.6rem; margin-top:0.4rem;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.6rem;">
+                            <div class="form-group">
+                                <label style="font-size:0.75rem; color:var(--text-muted);">Nome e Cognome</label>
+                                <input type="text" id="prof-card-input-name" style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.3rem 0.5rem; border-radius:4px; font-size:0.85rem;" required>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:0.75rem; color:var(--text-muted);">Numero Maglia</label>
+                                <input type="number" id="prof-card-input-number" style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.3rem 0.5rem; border-radius:4px; font-size:0.85rem;">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:0.75rem; color:var(--text-muted);">Ruolo</label>
+                                <select id="prof-card-input-role" style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.3rem 0.5rem; border-radius:4px; font-size:0.85rem;">
+                                    <option value="Universale">Universale</option>
+                                    <option value="Laterale">Laterale</option>
+                                    <option value="Pivot">Pivot</option>
+                                    <option value="Back">Back</option>
+                                    <option value="Portiere">Portiere</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:0.75rem; color:var(--text-muted);">Data di Nascita</label>
+                                <input type="date" id="prof-card-input-birth" style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.3rem 0.5rem; border-radius:4px; font-size:0.85rem;">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:0.75rem; color:var(--text-muted);">Altezza (cm)</label>
+                                <input type="number" id="prof-card-input-height" style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.3rem 0.5rem; border-radius:4px; font-size:0.85rem;">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:0.75rem; color:var(--text-muted);">Peso (kg)</label>
+                                <input type="number" id="prof-card-input-weight" style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.3rem 0.5rem; border-radius:4px; font-size:0.85rem;">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:0.75rem; color:var(--text-muted);">Piede Dominante</label>
+                                <select id="prof-card-input-foot" style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.3rem 0.5rem; border-radius:4px; font-size:0.85rem;">
+                                    <option value="Destro">Destro</option>
+                                    <option value="Mancino">Mancino</option>
+                                    <option value="Ambidestro">Ambidestro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:0.75rem; color:var(--text-muted);">Professione</label>
+                                <input type="text" id="prof-card-input-job" style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.3rem 0.5rem; border-radius:4px; font-size:0.85rem;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:0.75rem; color:var(--text-muted);">Esperienze Pregresse</label>
+                            <input type="text" id="prof-card-input-experience" style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.3rem 0.5rem; border-radius:4px; font-size:0.85rem; width:100%;">
+                        </div>
+                        <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.25rem;">
+                            <button type="button" class="btn btn-secondary btn-mini" onclick="toggleEditProfileCardMode(false)">Annulla</button>
+                            <button type="button" class="btn btn-primary btn-mini" onclick="saveAthleteProfileCardEdit()">💾 Salva Profilo</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -565,13 +727,16 @@
                             </div>
                             <div class="category-averages-box">
                                 <span class="avg-label">Gioc: <strong id="avg-psicologia-player">5.0</strong></span>
-                                <span class="avg-label">Mist: <strong id="avg-psicologia-coach">5.0</strong></span>
+                                <span class="avg-label coach-avg-label">Mist: <strong id="avg-psicologia-coach">5.0</strong></span>
                             </div>
                         </div>
                         <div class="sliders-list">
                             <!-- Slider 1 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Focus</div>
+                                <div class="slider-header-title">
+                                    <span>Focus</span>
+                                    <small class="slider-header-desc">Concentrazione mentale e costanza dell'attenzione.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -587,7 +752,10 @@
                             </div>
                             <!-- Slider 2 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Stress</div>
+                                <div class="slider-header-title">
+                                    <span>Stress</span>
+                                    <small class="slider-header-desc">Gestione della pressione emotiva e delle situazioni critiche.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -603,7 +771,10 @@
                             </div>
                             <!-- Slider 3 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Grinta</div>
+                                <div class="slider-header-title">
+                                    <span>Grinta</span>
+                                    <small class="slider-header-desc">Spirito combattivo, determinazione e sacrificio.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -619,7 +790,10 @@
                             </div>
                             <!-- Slider 4 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Team</div>
+                                <div class="slider-header-title">
+                                    <span>Team</span>
+                                    <small class="slider-header-desc">Spirito cooperativo, comunicazione e supporto reciproco.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -651,13 +825,16 @@
                             </div>
                             <div class="category-averages-box">
                                 <span class="avg-label">Gioc: <strong id="avg-tecnica-player">5.0</strong></span>
-                                <span class="avg-label">Mist: <strong id="avg-tecnica-coach">5.0</strong></span>
+                                <span class="avg-label coach-avg-label">Mist: <strong id="avg-tecnica-coach">5.0</strong></span>
                             </div>
                         </div>
                         <div class="sliders-list">
                             <!-- Slider 1 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Controllo</div>
+                                <div class="slider-header-title">
+                                    <span>Controllo</span>
+                                    <small class="slider-header-desc">Qualità e orientamento della ricezione della palla.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -673,7 +850,10 @@
                             </div>
                             <!-- Slider 2 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Passaggio</div>
+                                <div class="slider-header-title">
+                                    <span>Passaggio</span>
+                                    <small class="slider-header-desc">Precisione, forza e scelta del tempo nel servire i compagni.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -689,7 +869,10 @@
                             </div>
                             <!-- Slider 3 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Tiro</div>
+                                <div class="slider-header-title">
+                                    <span>Tiro</span>
+                                    <small class="slider-header-desc">Precisione e potenza nella conclusione in porta.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -705,7 +888,10 @@
                             </div>
                             <!-- Slider 4 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Dribbling</div>
+                                <div class="slider-header-title">
+                                    <span>Dribbling</span>
+                                    <small class="slider-header-desc">Uno contro uno e capacità di superare l'avversario.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -735,13 +921,16 @@
                             </div>
                             <div class="category-averages-box">
                                 <span class="avg-label">Gioc: <strong id="avg-fisica-player">5.0</strong></span>
-                                <span class="avg-label">Mist: <strong id="avg-fisica-coach">5.0</strong></span>
+                                <span class="avg-label coach-avg-label">Mist: <strong id="avg-fisica-coach">5.0</strong></span>
                             </div>
                         </div>
                         <div class="sliders-list">
                             <!-- Slider 1 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Velocità</div>
+                                <div class="slider-header-title">
+                                    <span>Velocità</span>
+                                    <small class="slider-header-desc">Accelerazione, progressione e velocità di punta.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -757,7 +946,10 @@
                             </div>
                             <!-- Slider 2 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Resistenza</div>
+                                <div class="slider-header-title">
+                                    <span>Resistenza</span>
+                                    <small class="slider-header-desc">Capacità di mantenere un'intensità elevata nel tempo.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -773,7 +965,10 @@
                             </div>
                             <!-- Slider 3 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Forza</div>
+                                <div class="slider-header-title">
+                                    <span>Forza</span>
+                                    <small class="slider-header-desc">Tenuta nei contrasti fisici e difesa della palla col corpo.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -789,7 +984,10 @@
                             </div>
                             <!-- Slider 4 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Agilità</div>
+                                <div class="slider-header-title">
+                                    <span>Agilità</span>
+                                    <small class="slider-header-desc">Velocità nei cambi di direzione e coordinazione nello stretto.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -823,13 +1021,16 @@
                             </div>
                             <div class="category-averages-box">
                                 <span class="avg-label">Gioc: <strong id="avg-tattica-player">5.0</strong></span>
-                                <span class="avg-label">Mist: <strong id="avg-tattica-coach">5.0</strong></span>
+                                <span class="avg-label coach-avg-label">Mist: <strong id="avg-tattica-coach">5.0</strong></span>
                             </div>
                         </div>
                         <div class="sliders-list">
                             <!-- Slider 1 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Movimento</div>
+                                <div class="slider-header-title">
+                                    <span>Movimento</span>
+                                    <small class="slider-header-desc">Smarcamento e occupazione degli spazi senza palla.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -845,7 +1046,10 @@
                             </div>
                             <!-- Slider 2 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Difesa</div>
+                                <div class="slider-header-title">
+                                    <span>Difesa</span>
+                                    <small class="slider-header-desc">Posizionamento, postura nell'1v1 e tempismo d'intercetto.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -861,7 +1065,10 @@
                             </div>
                             <!-- Slider 3 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Transizioni</div>
+                                <div class="slider-header-title">
+                                    <span>Transizioni</span>
+                                    <small class="slider-header-desc">Reattività nel ripiegamento difensivo e contropiede.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -877,7 +1084,10 @@
                             </div>
                             <!-- Slider 4 -->
                             <div class="slider-group-dual">
-                                <div class="slider-header-title">Lettura</div>
+                                <div class="slider-header-title">
+                                    <span>Lettura</span>
+                                    <small class="slider-header-desc">Comprensione del gioco e velocità nel prendere decisioni.</small>
+                                </div>
                                 <div class="dual-sliders-container">
                                     <div class="single-slider-wrapper player-slider">
                                         <span class="role-lbl">Gioc:</span>
@@ -907,7 +1117,7 @@
                         <div class="plan-section">
                             <div class="plan-header strength">
                                 <span class="dot"></span>
-                                <span>Punto di Forza Principale: <strong id="detected-strength">Rilevamento...</strong></span>
+                                <span>Punto di Forza Principale<strong id="detected-strength" style="display:none;"></strong></span>
                             </div>
                             <div class="form-group">
                                 <label for="strength-plan">Obiettivo e Piano di Valorizzazione</label>
@@ -918,7 +1128,7 @@
                         <div class="plan-section">
                             <div class="plan-header weakness">
                                 <span class="dot"></span>
-                                <span>Punto Debole Principale: <strong id="detected-weakness">Rilevamento...</strong></span>
+                                <span>Punto Debole Principale<strong id="detected-weakness" style="display:none;"></strong></span>
                             </div>
                             <div class="form-group">
                                 <label for="weakness-goal">Obiettivo Specifico di Miglioramento (Goal)</label>
@@ -961,23 +1171,31 @@
                         </div>
 
                         <div class="action-buttons">
-                            <button id="btn-save" class="btn btn-primary">
+                            <button id="btn-save" class="btn btn-primary" onclick="saveAssessment()">
                                 <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M8 4H16M8 4V8H16V4M8 4H4V20H20V4H16M12 12V18M9 15H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                 </svg>
                                 <span>Salva Scheda</span>
                             </button>
-                            <button id="btn-print" class="btn btn-secondary">
+                            <button id="btn-print" class="btn btn-secondary" onclick="handlePrint()">
                                 <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M6 9V2H18V9M6 18H4C2.89543 18 2 17.1046 2 16V11C2 9.89543 2.89543 9 4 9H20C21.1046 9 22 9.89543 22 11V16C22 17.1046 21.1046 18 20 18H18M6 14H18V22H6V14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                 </svg>
                                 <span>Stampa / Salva PDF</span>
                             </button>
-                            <button id="btn-reset" class="btn btn-danger">
+                            <button id="btn-export-txt" class="btn btn-secondary" onclick="exportEvaluationToTXT()">
                                 <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19 7L18.1327 19.1422C18.051 20.1859 17.1882 21 16.1402 21H7.85978C6.81175 21 5.94899 20.1859 5.86732 19.1422L5 7M4 7H20M16 7L14.7397 3.52C14.5369 2.96 14 2.6 13.4 2.6H10.6C10 2.6 9.46307 2.96 9.26027 3.52L8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                                <span>Resetta Valori</span>
+                                <span>Esporta in TXT</span>
+                            </button>
+                            <button id="btn-close-sheet" type="button" class="btn btn-secondary hide-on-print" onclick="closeEvaluationForm()" style="color:#f87171; border-color:rgba(248,113,113,0.4);">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Chiudi Scheda</span>
                             </button>
                         </div>
                     </div>
@@ -1038,49 +1256,203 @@
                 </div>
             </div>
         </div>
+
+        <!-- ==========================================
+             SUB-TAB: RIEPILOGO PSICOFISICO
+             ========================================== -->
+        <div id="subtab-riepilogo" class="roster-subtab-content hidden">
+            <div class="glass-panel" style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+                <!-- HEADER -->
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.5rem; flex-wrap:wrap; gap:1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                    <div style="display:flex; align-items:center; gap:1rem;">
+                        <span style="font-size:2rem;">📊</span>
+                        <div>
+                            <h2 style="margin:0; color:#f472b6;">Riepilogo Psicofisico della Squadra</h2>
+                            <p style="margin:0.25rem 0 0; color:var(--text-secondary); font-size:0.9rem;">Analisi aggregata delle valutazioni &mdash; punti di forza, debolezze ed esercizi correttivi</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-primary" onclick="printRiepilogoPsicofisico()">Salva in PDF</button>
+                    </div>
+                </div>
+
+                <!-- OVERVIEW MACROAREE -->
+                <div id="riepilogo-overview-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-bottom:2rem;">
+                </div>
+
+                <!-- GRAFICI -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem; margin-bottom:2rem;">
+                    <div class="glass-panel" style="padding:1.5rem;">
+                        <h3 style="margin:0 0 1rem; color:#f472b6; font-size:1rem;">📊 Radar Medio Squadra</h3>
+                        <div style="position:relative; width:100%; height:420px;">
+                            <canvas id="riepilogo-radar-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="glass-panel" style="padding:1.5rem;">
+                        <h3 style="margin:0 0 1rem; color:#f472b6; font-size:1rem;">📈 Distribuzione Parametri</h3>
+                        <div style="position:relative; width:100%; height:420px;">
+                            <canvas id="riepilogo-bar-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORZE E DEBOLEZZE -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom:2rem;">
+                    <div class="glass-panel" style="padding:1.5rem; border-left: 3px solid var(--color-tatt);">
+                        <h3 style="margin:0 0 1rem; color:var(--color-tatt); font-size:1rem;">💪 Punti Positivi</h3>
+                        <div id="riepilogo-strengths" style="display:flex; flex-direction:column; gap:0.6rem;"></div>
+                    </div>
+                    <div class="glass-panel" style="padding:1.5rem; border-left: 3px solid var(--color-fisi);">
+                        <h3 style="margin:0 0 1rem; color:var(--color-fisi); font-size:1rem;">⚠️ Punti Negativi</h3>
+                        <div id="riepilogo-weaknesses" style="display:flex; flex-direction:column; gap:0.6rem;"></div>
+                    </div>
+                </div>
+
+                <!-- ESERCIZI -->
+                <div class="glass-panel" style="padding:1.5rem; margin-bottom:2rem; border-left: 3px solid #f472b6;">
+                    <h3 style="margin:0 0 1rem; color:#f472b6; font-size:1rem;">🏋️ Esercizi Correttivi Consigliati</h3>
+                    <div id="riepilogo-exercises" style="display:flex; flex-direction:column; gap:0.75rem;"></div>
+                </div>
+
+                <!-- TABELLA GIOCATORI -->
+                <div class="glass-panel" style="padding:1.5rem;">
+                    <h3 style="margin:0 0 1rem; color:#f472b6; font-size:1rem;">👥 Dettaglio per Giocatore di Movimento</h3>
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+                            <thead>
+                                <tr style="border-bottom:2px solid var(--border-color); color:var(--text-secondary); text-align:left;">
+                                    <th style="padding:0.6rem 0.8rem;">Giocatore</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Psicologia</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Tecnica</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Fisica</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Tattica</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Media</th>
+                                    <th style="padding:0.6rem 0.5rem;">Punto Forte</th>
+                                    <th style="padding:0.6rem 0.5rem;">Punto Debole</th>
+                                </tr>
+                            </thead>
+                            <tbody id="riepilogo-player-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TABELLA & STATISTICA PORTIERI -->
+                <div class="glass-panel" style="padding:1.5rem; margin-top:2rem; border-left: 3px solid #60a5fa;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+                        <h3 style="margin:0; color:#60a5fa; font-size:1.05rem;">🧤 Statistiche & Dettaglio Portieri</h3>
+                        <div id="riepilogo-gk-stats-summary" style="font-size:0.85rem; color:var(--text-secondary); font-weight:600;"></div>
+                    </div>
+                    <div id="riepilogo-gk-overview-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:1.5rem;">
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+                            <thead>
+                                <tr style="border-bottom:2px solid var(--border-color); color:var(--text-secondary); text-align:left;">
+                                    <th style="padding:0.6rem 0.8rem;">Portiere</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Psicologia</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Tecnica Portiere</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Fisica</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Tattica</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Media</th>
+                                    <th style="padding:0.6rem 0.5rem;">Punto Forte</th>
+                                    <th style="padding:0.6rem 0.5rem;">Punto Debole</th>
+                                </tr>
+                            </thead>
+                            <tbody id="riepilogo-gk-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         </section>
 
         <!-- ==========================================
              TAB 4: PRESENZE & CONVOCAZIONI
              ========================================== -->
         <section id="tab-attendance" class="tab-panel">
-            <!-- SUB-TAB NAVIGATION -->
-            <div style="display: flex; justify-content: space-between; align-items: center; max-width: fit-content; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
-                <div class="sub-tab-container glass-panel" style="margin-bottom: 0; padding: 0.4rem; display: flex; gap: 0.5rem;">
-                    <button class="tab-btn active sub-tab-btn" data-subtab="subtab-board">
-                        <span>Tabellone Stagionale</span>
+            <!-- SUB-TAB NAVIGATION & ACTION CONTROLS -->
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 0.15rem; gap: 0.35rem; flex-wrap: wrap;">
+                <div class="sub-tab-container glass-panel" style="margin-bottom: 0; padding: 0.12rem 0.25rem; display: flex; gap: 0.25rem; flex-wrap: wrap;">
+                    <button class="tab-btn active sub-tab-btn" data-subtab="subtab-board" style="padding: 0.2rem 0.55rem; font-size: 0.75rem;">
+                        <span>Presenze/Assenze programmate</span>
                     </button>
-                    <button class="tab-btn sub-tab-btn" data-subtab="subtab-trainings">
+                    <button class="tab-btn sub-tab-btn" data-subtab="subtab-trainings" style="padding: 0.2rem 0.55rem; font-size: 0.75rem;">
                         <span>Allenamenti</span>
                     </button>
-                    <button class="tab-btn sub-tab-btn" data-subtab="subtab-matches">
+                    <button class="tab-btn sub-tab-btn" data-subtab="subtab-matches" style="padding: 0.2rem 0.55rem; font-size: 0.75rem;">
                         <span>Convocazioni Partita</span>
                     </button>
+                    <button class="tab-btn sub-tab-btn" data-subtab="subtab-birthdays" style="color: #fde047; padding: 0.2rem 0.55rem; font-size: 0.75rem;">
+                        <span>🎂 Compleanni</span>
+                    </button>
+                    <button class="tab-btn sub-tab-btn" data-subtab="subtab-absences" style="color: #ef4444; padding: 0.2rem 0.55rem; font-size: 0.75rem;">
+                        <span>🚫 Assenze</span>
+                    </button>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="window.print()" style="height: 38px; padding: 0.45rem 1.25rem; font-size: 0.85rem;">
-                    Salva in PDF
-                </button>
+
+                <!-- RIGHT: ACTION CONTROLS ALIGNED WITH SUB-TABS -->
+                <div style="display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap;">
+                    <!-- SALVA PDF BUTTON -->
+                    <button type="button" class="btn btn-primary" onclick="exportAbsencesPDF()" style="height: 24px; padding: 0 0.55rem; font-size: 0.7rem; font-weight: bold; background: linear-gradient(135deg, #ef4444, #dc2626); border: none; box-shadow: 0 2px 5px rgba(239, 68, 68, 0.35); cursor: pointer; color: #fff; display: inline-flex; align-items: center; gap: 0.2rem;" title="Salva Report Assenze in PDF">
+                        <span>📄 Salva PDF</span>
+                    </button>
+                    <!-- MONTH FILTER -->
+                    <div class="form-group" style="margin: 0; display:flex; align-items:center; gap:0.15rem;">
+                        <label for="board-month-filter" style="font-size: 0.7rem; margin:0; white-space:nowrap; color: var(--text-muted);">Mese:</label>
+                        <select id="board-month-filter" style="height:24px; padding:0 0.3rem; font-size:0.7rem; border-radius: 4px;">
+                            <option value="all">Tutta la Stagione</option>
+                            <option value="2026-08">Agosto 2026</option>
+                            <option value="2026-09">Settembre 2026</option>
+                            <option value="2026-10">Ottobre 2026</option>
+                            <option value="2026-11">Novembre 2026</option>
+                            <option value="2026-12">Dicembre 2026</option>
+                            <option value="2027-01">Gennaio 2027</option>
+                            <option value="2027-02">Febbraio 2027</option>
+                            <option value="2027-03">Marzo 2027</option>
+                            <option value="2027-04">Aprile 2027</option>
+                            <option value="2027-05">Maggio 2027</option>
+                        </select>
+                    </div>
+                    <!-- RIEPILOGO PRE-CAMPIONATO BUTTON -->
+                    <button type="button" class="btn btn-secondary" onclick="openPreseasonSummaryModal()" style="height: 24px; padding: 0 0.5rem; font-size: 0.7rem; display: inline-flex; align-items: center; gap: 0.15rem;" title="Riepilogo sintesi dal 1° Giorno al 18/09/2026">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:0.75rem; height:0.75rem; color: var(--color-tatt);">
+                            <path d="M8 7V3M16 7V3M3 11H21M5 5H19C20.1046 5 21 5.89543 21 7V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V7C3 5.89543 3.89543 5 5 5Z"/>
+                            <path d="M9 15L11 17L15 13" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Pre-Campionato</span>
+                    </button>
+                    <!-- PIANIFICA PARTITA BUTTON -->
+                    <button type="button" class="btn btn-primary" onclick="openAddMatchModal()" style="height: 24px; padding: 0 0.5rem; font-size: 0.7rem; display: inline-flex; align-items: center; gap: 0.15rem;">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:0.75rem; height:0.75rem;">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>+ Pianifica Seduta</span>
+                    </button>
+                </div>
             </div>
 
             <!-- SUB-TAB 1: ALLENAMENTI -->
+            <!-- SUB-TAB 1: ALLENAMENTI -->
             <div id="subtab-trainings" class="subtab-panel-content hidden">
-                <!-- CHART CONTAINER -->
+                <!-- CHART CONTAINER: PRESENZE PER SEDUTA DI ALLENAMENTO -->
                 <div id="training-chart-container" class="glass-panel" style="margin-bottom: 1.5rem; padding: 1.5rem;">
-                    <h3 style="margin-bottom: 0.25rem;">Presenze Allenamento per Giocatore</h3>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0 0 1.25rem 0;">Numero totale di allenamenti disputati (stato Presente) da ciascun giocatore.</p>
-                    <div style="position: relative; height: 260px; width: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                        <div>
+                            <h3 style="margin: 0 0 0.25rem 0; color: #fff; font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>📊 Presenze Giocatori per Seduta di Allenamento</span>
+                            </h3>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">Andamento del numero di giocatori presenti ad ogni seduta di allenamento registrata nel tempo.</p>
+                        </div>
+                        <span id="training-count" class="badge" style="background: rgba(0, 242, 254, 0.15); color: var(--color-player); border: 1px solid rgba(0, 242, 254, 0.4); font-size: 0.85rem; padding: 0.35rem 0.75rem;">0 Sessioni</span>
+                    </div>
+                    <div style="position: relative; height: 340px; width: 100%;">
                         <canvas id="trainings-attendance-chart"></canvas>
                     </div>
                 </div>
 
-                <div class="attendance-history-container">
-                    <div class="section-title-bar">
-                        <h3>Storico Allenamenti</h3>
-                        <span id="training-count" class="badge">0 Sessioni</span>
-                    </div>
-                    <div id="training-history-grid" class="training-history-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.25rem;">
-                        <!-- Dynamic training sessions list -->
-                    </div>
+                <div class="attendance-history-container" style="display: none;">
+                    <div id="training-history-grid" class="training-history-grid"></div>
                 </div>
             </div>
 
@@ -1131,57 +1503,223 @@
                 </div>
             </div>
 
-            <!-- SUB-TAB 3: TABELLONE STAGIONALE -->
-            <div id="subtab-board" class="subtab-panel-content">
+            <!-- SUB-TAB 3: COMPLEANNI -->
+            <div id="subtab-birthdays" class="subtab-panel-content hidden">
                 <div class="glass-panel" style="padding: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.85rem;">
                         <div>
-                            <h3 style="margin-bottom: 0.25rem;">Tabellone Presenze Stagionale</h3>
-                            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Monitora e modifica lo stato di presenza dei giocatori per l'intera stagione sportiva 2026/2027.</p>
+                            <h3 style="margin: 0; color: #fde047; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🎂 Calendario Compleanni Stagione Sportiva (Agosto - Giugno)</span>
+                            </h3>
+                            <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: var(--text-muted);">
+                                Calendario completo della stagione agonistica 2026/2027 con tutti i compleanni dei giocatori in evidenza.
+                            </p>
                         </div>
-                        <div style="display: flex; align-items: flex-end; gap: 1rem; flex-wrap: wrap;">
-                            <!-- MONTH FILTER -->
-                            <div class="form-group" style="margin: 0; min-width: 180px;">
-                                <label for="board-month-filter" style="font-size: 0.75rem;">Filtra per Mese</label>
-                                <select id="board-month-filter">
-                                    <option value="all">Tutta la Stagione</option>
-                                    <option value="2026-08">Agosto 2026</option>
-                                    <option value="2026-09">Settembre 2026</option>
-                                    <option value="2026-10">Ottobre 2026</option>
-                                    <option value="2026-11">Novembre 2026</option>
-                                    <option value="2026-12">Dicembre 2026</option>
-                                    <option value="2027-01">Gennaio 2027</option>
-                                    <option value="2027-02">Febbraio 2027</option>
-                                    <option value="2027-03">Marzo 2027</option>
-                                    <option value="2027-04">Aprile 2027</option>
-                                    <option value="2027-05">Maggio 2027</option>
+                        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                            <!-- VIEW SWITCHER BUTTONS -->
+                            <div style="display: flex; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 2px; gap: 2px;">
+                                <button type="button" id="bday-view-calendar-btn" onclick="switchBirthdayView('calendar')" class="btn btn-secondary" style="height: 30px; font-size: 0.78rem; padding: 0 0.75rem; background: var(--color-player); color: #000; font-weight: bold; border: none;">
+                                    📅 Calendario Stagione
+                                </button>
+                                <button type="button" id="bday-view-table-btn" onclick="switchBirthdayView('table')" class="btn btn-secondary" style="height: 30px; font-size: 0.78rem; padding: 0 0.75rem; background: transparent; color: var(--text-muted); border: none;">
+                                    📋 Elenco Rosa
+                                </button>
+                            </div>
+                            <!-- SEARCH INPUT -->
+                            <input type="text" id="birthday-search-input" oninput="renderBirthdaysTab()" placeholder="🔍 Cerca atleta..." style="height: 34px; padding: 0 0.75rem; font-size: 0.82rem; border-radius: 6px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: #fff; width: 180px;">
+                        </div>
+                    </div>
+
+                    <!-- SPOTLIGHT SPOT FOR TODAY OR UPCOMING BIRTHDAY -->
+                    <div id="birthday-spotlight-container" style="margin-bottom: 1.5rem;"></div>
+
+                    <!-- CONTAINER 1: CALENDARIO STAGIONALE (AGOS-GIU) -->
+                    <div id="birthday-calendar-view" style="display: block;">
+                        <div id="season-calendar-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1.25rem;">
+                            <!-- Rendered dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- CONTAINER 2: TABELLA DETTAGLIATA -->
+                    <div id="birthday-table-view" style="display: none;">
+                        <div style="display: flex; justify-content: flex-end; margin-bottom: 0.75rem;">
+                            <div class="form-group" style="margin: 0; display: flex; align-items: center; gap: 0.35rem;">
+                                <label for="birthday-month-filter" style="font-size: 0.8rem; margin: 0; white-space: nowrap;">Filtra Mese:</label>
+                                <select id="birthday-month-filter" onchange="renderBirthdaysTab()" style="height: 32px; padding: 0 0.6rem; font-size: 0.8rem;">
+                                    <option value="all">Tutti i Mesi</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Settembre</option>
+                                    <option value="10">Ottobre</option>
+                                    <option value="11">Novembre</option>
+                                    <option value="12">Dicembre</option>
+                                    <option value="1">Gennaio</option>
+                                    <option value="2">Febbraio</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Aprile</option>
+                                    <option value="5">Maggio</option>
+                                    <option value="6">Giugno</option>
+                                    <option value="7">Luglio</option>
                                 </select>
                             </div>
-                            <!-- PIANIFICA PARTITA BUTTON -->
-                            <button type="button" class="btn btn-primary" onclick="openAddMatchModal()" style="height: 38px; padding: 0.45rem 1.25rem; font-size: 0.85rem;">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:1.1rem; height:1.1rem;">
-                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                                    <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                </svg>
-                                <span>Pianifica Seduta</span>
+                        </div>
+                        <div class="table-responsive" style="overflow-x: auto;">
+                            <table class="data-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                                <thead>
+                                    <tr style="background: rgba(0,0,0,0.3); border-bottom: 2px solid var(--border-color);">
+                                        <th onclick="sortBirthdaysTable('name')" style="padding: 0.75rem; color: var(--color-player); cursor: pointer; user-select: none;" title="Clicca per ordinare per Giocatore">
+                                            Giocatore <span id="bday-sort-icon-name">↕</span>
+                                        </th>
+                                        <th onclick="sortBirthdaysTable('role')" style="padding: 0.75rem; cursor: pointer; user-select: none;" title="Clicca per ordinare per Ruolo">
+                                            Ruolo <span id="bday-sort-icon-role">↕</span>
+                                        </th>
+                                        <th onclick="sortBirthdaysTable('birthDate')" style="padding: 0.75rem; cursor: pointer; user-select: none;" title="Clicca per ordinare per Data di Nascita">
+                                            Data di Nascita <span id="bday-sort-icon-birthDate">↕</span>
+                                        </th>
+                                        <th onclick="sortBirthdaysTable('age')" style="padding: 0.75rem; cursor: pointer; user-select: none;" title="Clicca per ordinare per Età">
+                                            Età Attuale <span id="bday-sort-icon-age">↕</span>
+                                        </th>
+                                        <th onclick="sortBirthdaysTable('nextBday')" style="padding: 0.75rem; cursor: pointer; user-select: none;" title="Clicca per ordinare per Prossimo Compleanno">
+                                            Prossimo Compleanno <span id="bday-sort-icon-nextBday">↕</span>
+                                        </th>
+                                        <th onclick="sortBirthdaysTable('zodiac')" style="padding: 0.75rem; cursor: pointer; user-select: none;" title="Clicca per ordinare per Segno Zodiacale">
+                                            Segno Zodiacale <span id="bday-sort-icon-zodiac">↕</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="birthdays-tbody">
+                                    <!-- Rendered by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TAB: CALENDARIO MENSILE ASSENZE -->
+            <div id="subtab-absences" class="subtab-panel-content hidden">
+                <!-- Header & Controls -->
+                <div class="glass-panel" style="padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.85rem; margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                🚫
+                            </div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 1.25rem; color: #fff; font-weight: 800;">
+                                    Calendario Mensile Assenze
+                                </h3>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">Monitoraggio assenze, infortuni e giustificazioni per seduta</span>
+                            </div>
+                        </div>
+
+                        <!-- Month & Year Selector -->
+                        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                <label for="absence-month-select" style="font-size: 0.85rem; font-weight: bold; color: var(--text-muted); margin: 0;">Mese:</label>
+                                <select id="absence-month-select" onchange="renderAbsencesTab()" style="height: 36px; padding: 0 0.75rem; font-size: 0.85rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; color: #fff;">
+                                    <option value="all" selected>Tutti i Mesi della Stagione</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Settembre</option>
+                                    <option value="10">Ottobre</option>
+                                    <option value="11">Novembre</option>
+                                    <option value="12">Dicembre</option>
+                                    <option value="1">Gennaio</option>
+                                    <option value="2">Febbraio</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Aprile</option>
+                                    <option value="5">Maggio</option>
+                                    <option value="6">Giugno</option>
+                                    <option value="7">Luglio</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                <label for="absence-year-select" style="font-size: 0.85rem; font-weight: bold; color: var(--text-muted); margin: 0;">Anno:</label>
+                                <select id="absence-year-select" onchange="renderAbsencesTab()" style="height: 36px; padding: 0 0.75rem; font-size: 0.85rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; color: #fff;">
+                                    <option value="all" selected>Tutti gli Anni</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                <label for="absence-player-select" style="font-size: 0.85rem; font-weight: bold; color: var(--text-muted); margin: 0;">Giocatore:</label>
+                                <select id="absence-player-select" onchange="renderAbsencesTab()" style="height: 36px; padding: 0 0.75rem; font-size: 0.85rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; color: #fff;">
+                                    <option value="all">Tutti i Giocatori</option>
+                                </select>
+                            </div>
+                            <button type="button" onclick="exportAbsencesPDF()" style="height: 38px; padding: 0 1.25rem; font-size: 0.85rem; background: linear-gradient(135deg, #ef4444, #b91c1c); border: 1px solid #f87171; font-weight: 800; border-radius: 6px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.45);" title="Stampa o Salva Report Assenze in PDF">
+                                <span style="font-size: 1rem;">📄</span>
+                                <span>SALVA PDF ASSENZE</span>
                             </button>
                         </div>
                     </div>
 
-                    <div class="board-legend" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; padding: 0.5rem 1rem; background: hsla(224, 45%, 4%, 0.4); border-radius: var(--border-radius-sm); border: 1px solid var(--border-color); font-size: 0.75rem;">
-                        <span style="font-weight: 700; color: var(--text-muted); margin-right: 0.5rem;">LEGENDA:</span>
-                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-tatt);"></span> P: Presente</span>
-                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-danger);"></span> A: Assente</span>
-                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-fisi);"></span> I: Infortunato</span>
-                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-primary);"></span> G: Giustificato</span>
-                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-player);"></span> C: Convocato</span>
-                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-psic);"></span> T: Test</span>
-                        <span style="display: inline-flex; align-items: center; gap: 0.25rem;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: hsla(224, 45%, 2%, 0.6); border: 1px solid var(--border-color);"></span> -: Non registrato</span>
+                    <!-- Monthly Stats Summary Cards -->
+                    <div id="absence-monthly-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- MAIN CONTENT: MONTHLY CALENDAR GRID + DETAILED ABSENCE LIST -->
+                <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                    <!-- 1. GRIGLIA CALENDARIO MENSILE -->
+                    <div class="glass-panel" style="padding: 1.25rem;">
+                        <h4 style="margin: 0 0 1rem 0; font-size: 1.05rem; color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: space-between;">
+                            <span>📅 Griglia Calendario Mensile Assenze</span>
+                            <span id="absence-calendar-month-title" style="color: var(--color-player); font-size: 0.95rem;"></span>
+                        </h4>
+
+                        <div id="absence-calendar-grid-matrix" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center;">
+                            <!-- Rendered dynamically by JS -->
+                        </div>
                     </div>
 
-                    <!-- TABLE WRAPPER FOR HORIZONTAL SCROLLING -->
-                    <div class="board-table-wrapper" style="overflow-x: auto; overflow-y: auto; max-height: 65vh; max-width: 100%; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); background: hsla(224, 45%, 2%, 0.4);">
-                        <table id="attendance-board-table" class="attendance-board-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                    <!-- 2. TABELLA DETTAGLIATA ASSENZE MESE E INTERVALLI -->
+                    <div class="glass-panel" style="padding: 1.25rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+                            <h4 style="margin: 0; font-size: 1.05rem; color: #fff; font-weight: 800;">
+                                📋 Registro ed Intervalli di Assenza per Giocatore
+                            </h4>
+                            <div style="display: flex; gap: 0.5rem; background: rgba(0,0,0,0.3); padding: 0.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <button id="btn-absence-mode-intervals" onclick="setAbsenceViewMode('intervals')" class="btn btn-sm" style="font-size: 0.78rem; padding: 0.35rem 0.85rem; border-radius: 6px; background: var(--color-primary); color: #fff; font-weight: bold; border: none;">
+                                    📊 Intervalli di Assenza
+                                </button>
+                                <button id="btn-absence-mode-single" onclick="setAbsenceViewMode('single')" class="btn btn-sm" style="font-size: 0.78rem; padding: 0.35rem 0.85rem; border-radius: 6px; background: rgba(255,255,255,0.08); color: var(--text-muted); font-weight: bold; border: none;">
+                                    📄 Singole Sedute
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-responsive" style="overflow-x: auto;">
+                            <table class="data-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                                <thead id="absence-table-thead">
+                                    <!-- Rendered dynamically by JS -->
+                                </thead>
+                                <tbody id="absence-table-tbody">
+                                    <!-- Rendered by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 3: TABELLONE STAGIONALE -->
+            <div id="subtab-board" class="subtab-panel-content">
+                <div class="glass-panel" style="padding: 0.15rem 0.35rem;">
+                    <!-- LEGENDA BAR -->
+                    <div class="board-legend" style="display: flex; gap: 0.4rem; align-items:center; flex-wrap: wrap; padding: 0.08rem 0.45rem; margin-bottom: 0.12rem; background: hsla(224, 45%, 4%, 0.4); border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.68rem; line-height: 1.1;">
+                        <span style="font-weight: 700; color: var(--text-muted);">LEGENDA:</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.12rem;"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 2px; background: var(--color-tatt);"></span> P: Presente</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.12rem;"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 2px; background: var(--color-danger);"></span> A: Assente</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.12rem;"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 2px; background: var(--color-fisi);"></span> I: Infortunato</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.12rem;"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 2px; background: var(--color-primary);"></span> G: Giustificato</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.12rem;"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 2px; background: var(--color-player);"></span> C: Convocato</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.12rem;"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 2px; background: var(--color-psic);"></span> T: Test</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.12rem; color:#fde047;">🎂 Compleanno</span>
+                    </div>
+
+                    <!-- TABLE WRAPPER FOR HORIZONTAL & COMPACT VERTICAL SCROLLING -->
+                    <div class="board-table-wrapper" style="overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 125px); max-width: 100%; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); background: hsla(224, 45%, 2%, 0.4);">
+                        <table id="attendance-board-table" class="attendance-board-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.75rem;">
                             <!-- Dynamically generated head and body -->
                         </table>
                     </div>
@@ -1588,8 +2126,22 @@
 
                 <!-- ELENCO SCHEMI -->
                 <div id="schemi-list-view" class="glass-panel" style="flex: 1; padding: 1.5rem; display: flex; flex-direction: column;">
-                    <h2 id="schemi-list-title" style="margin-top: 0; color: var(--text-main);">Tutti gli Schemi</h2>
-                    <div id="schemi-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; overflow-y: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+                        <h2 id="schemi-list-title" style="margin: 0; color: var(--text-main);">Tutti gli Schemi</h2>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                            <select id="schema-filter-defense" onchange="renderSchemiGrid()" class="form-control" style="height: 38px; padding: 0 1rem; font-size: 0.85rem; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+                                <option value="all">Filtra: Tutte le difese</option>
+                                <option value="uomo">Difesa a Uomo</option>
+                                <option value="zona">Difesa a Zona</option>
+                            </select>
+                            <select id="schema-sort-defense" onchange="renderSchemiGrid()" class="form-control" style="height: 38px; padding: 0 1rem; font-size: 0.85rem; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+                                <option value="default">Ordina: Default (Manuale)</option>
+                                <option value="uomo-first">Uomo prima</option>
+                                <option value="zona-first">Zona prima</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="schemi-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; overflow-y: auto;">
                         <!-- Le card verranno generate via JS -->
                     </div>
                 </div>
@@ -1664,6 +2216,20 @@
                                     </label>
                                 </div>
                             </div>
+
+                            <div class="form-group" style="margin:0 0 0.5rem 0;">
+                                <label style="font-size:0.85rem; margin-bottom: 0.2rem; display:block;">Difesa Avversaria Adatta</label>
+                                <div style="display: flex; gap: 1rem; align-items: center;">
+                                    <label style="display:flex; align-items:center; gap:0.25rem; font-size:0.85rem; cursor:pointer;">
+                                        <input type="checkbox" id="schema-def-uomo">
+                                        Uomo
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:0.25rem; font-size:0.85rem; cursor:pointer;">
+                                        <input type="checkbox" id="schema-def-zona">
+                                        Zona
+                                    </label>
+                                </div>
+                            </div>
                             
                             <div class="form-group" style="margin:0;">
                                 <label for="schema-notes" style="font-size:0.85rem; margin-bottom: 0.2rem;">Descrizione e Note</label>
@@ -1682,6 +2248,110 @@
                 </div>
             </div>
         </section>
+
+        <!-- ==========================================
+             TAB: CONDIZIONE PSICOFISICA
+             ========================================== -->
+        <section id="tab-psychophysical" class="tab-panel">
+            <div class="glass-panel" style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+                <!-- HEADER -->
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.5rem; flex-wrap:wrap; gap:1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                    <div style="display:flex; align-items:center; gap:1rem;">
+                        <div style="color: #f472b6;">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px;">
+                              <path d="M12 21C12 21 4 13.5 4 8.5C4 5.42 6.42 3 9.5 3C11.24 3 12 4 12 4C12 4 12.76 3 14.5 3C17.58 3 20 5.42 20 8.5C20 13.5 12 21 12 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              <path d="M12 8V14M9 11H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 style="margin:0; color: #f472b6;">Condizione Psicofisica della Squadra</h2>
+                            <p style="margin:0.25rem 0 0; color:var(--text-secondary); font-size:0.9rem;">Riepilogo delle valutazioni medie di tutti i giocatori &mdash; punti di forza e debolezze della rosa</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="window.print()">Salva in PDF</button>
+                </div>
+
+                <!-- OVERVIEW: 4 Macroaree media squadra -->
+                <div id="psych-overview-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-bottom:2rem;">
+                    <!-- Dynamically rendered by JS -->
+                </div>
+
+                <!-- RADAR SQUADRA -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem; margin-bottom:2rem;">
+                    <div class="glass-panel" style="padding:1.5rem;">
+                        <h3 style="margin:0 0 1rem; color:#f472b6; font-size:1rem;">📊 Radar Medio Squadra</h3>
+                        <div style="max-width:350px; margin:0 auto;">
+                            <canvas id="psych-team-radar-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="glass-panel" style="padding:1.5rem;">
+                        <h3 style="margin:0 0 1rem; color:#f472b6; font-size:1rem;">📈 Distribuzione Parametri</h3>
+                        <div style="max-width:350px; margin:0 auto;">
+                            <canvas id="psych-team-bar-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PUNTI DI FORZA E DEBOLEZZA -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom:2rem;">
+                    <!-- Punti di Forza -->
+                    <div class="glass-panel" style="padding:1.5rem; border-left: 3px solid var(--color-tatt);">
+                        <h3 style="margin:0 0 1rem; color:var(--color-tatt); font-size:1rem; display:flex; align-items:center; gap:0.5rem;">
+                            💪 Punti di Forza della Squadra
+                        </h3>
+                        <div id="psych-team-strengths" style="display:flex; flex-direction:column; gap:0.75rem;">
+                            <!-- Dynamically rendered by JS -->
+                        </div>
+                    </div>
+                    <!-- Punti Deboli -->
+                    <div class="glass-panel" style="padding:1.5rem; border-left: 3px solid var(--color-fisi);">
+                        <h3 style="margin:0 0 1rem; color:var(--color-fisi); font-size:1rem; display:flex; align-items:center; gap:0.5rem;">
+                            ⚠️ Punti Deboli della Squadra
+                        </h3>
+                        <div id="psych-team-weaknesses" style="display:flex; flex-direction:column; gap:0.75rem;">
+                            <!-- Dynamically rendered by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ESERCIZI CONSIGLIATI -->
+                <div class="glass-panel" style="padding:1.5rem; margin-bottom:2rem; border-left: 3px solid #f472b6;">
+                    <h3 style="margin:0 0 1rem; color:#f472b6; font-size:1rem; display:flex; align-items:center; gap:0.5rem;">
+                        🏋️ Esercizi Correttivi Consigliati
+                    </h3>
+                    <div id="psych-corrective-exercises" style="display:flex; flex-direction:column; gap:0.75rem;">
+                        <!-- Dynamically rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- TABELLA DETTAGLIO PER GIOCATORE -->
+                <div class="glass-panel" style="padding:1.5rem;">
+                    <h3 style="margin:0 0 1rem; color:#f472b6; font-size:1rem; display:flex; align-items:center; gap:0.5rem;">
+                        👥 Dettaglio per Giocatore
+                    </h3>
+                    <div style="overflow-x:auto;">
+                        <table id="psych-player-detail-table" style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+                            <thead>
+                                <tr style="border-bottom:2px solid var(--border-color); color:var(--text-secondary); text-align:left;">
+                                    <th style="padding:0.6rem 0.8rem;">Giocatore</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Psicologia</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Tecnica</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Fisica</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Tattica</th>
+                                    <th style="padding:0.6rem 0.5rem; text-align:center;">Media</th>
+                                    <th style="padding:0.6rem 0.5rem;">Punto Forte</th>
+                                    <th style="padding:0.6rem 0.5rem;">Punto Debole</th>
+                                </tr>
+                            </thead>
+                            <tbody id="psych-player-detail-tbody">
+                                <!-- Dynamically rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
 
         <!-- ==========================================
              TAB 6: IMPOSTAZIONI
@@ -1799,19 +2469,30 @@
         <section id="tab-training-program" class="tab-panel">
             <div class="section-title-bar">
                 <h2 style="margin: 0; color: var(--color-coach);">Programma di Allenamento</h2>
-                <button class="btn btn-primary" onclick="openTrainingForm()">+ Nuova Seduta</button>
-                <button class="btn btn-secondary" onclick="document.getElementById('import-training-file').click()">📥 Importa Scheda</button>
-                <input type="file" id="import-training-file" accept=".json" style="display:none;" onchange="importTrainingSession(event)">
+                <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                    <select id="training-sort-order" onchange="renderTrainingProgramList()" style="height: 38px; padding: 0 1rem; font-size: 0.85rem; border-radius: var(--border-radius-sm); background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--border-color); cursor: pointer; outline: none;">
+                        <option value="asc" selected>Data: Meno recenti prima</option>
+                        <option value="desc">Data: Più recenti prima</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="openTrainingForm()">+ Nuova Seduta</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('import-training-file').click()">📥 Importa Scheda</button>
+                    <input type="file" id="import-training-file" accept=".json" style="display:none;" onchange="importTrainingSession(event)">
+                </div>
             </div>
             
             <!-- LISTA ALLENAMENTI -->
-            <div id="training-sessions-list" style="display: grid; gap: 1rem; margin-top: 2rem;">
+            <div id="training-sessions-list" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
                 <!-- Popolato via JS -->
             </div>
 
             <!-- FORM SCHEDA ALLENAMENTO -->
             <div id="training-session-form-container" class="glass-panel" style="display: none; margin-top: 2rem; padding: 2rem; animation: slideInUp 0.3s ease;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <!-- Intestazione per la stampa PDF -->
+                <div class="print-only-training-header" style="display: none; text-align: center; margin-bottom: 2rem; border-bottom: 2px solid #000; padding-bottom: 1rem;">
+                    <h1 style="font-size: 24px; font-weight: bold; color: #000; margin: 0 0 0.5rem 0;">Futsal Dashboard - Programma di Allenamento</h1>
+                    <h2 style="font-size: 18px; font-weight: bold; color: #ef4444; margin: 0;">Scheda di allenamento</h2>
+                </div>
+                <div class="screen-only-training-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                     <h3 id="training-form-title" style="margin: 0; color: var(--color-coach);">Nuova Scheda Allenamento</h3>
                     <button type="button" class="btn btn-secondary" onclick="exportTrainingToPDF()" id="btn-export-pdf">📄 Stampa PDF</button>
                 </div>
@@ -1827,6 +2508,15 @@
                         <label for="training-type">Obiettivo Principale</label>
                         <input type="text" id="training-type" placeholder="Es: Tattica offensiva, Scarico, ecc." required>
                     </div>
+                    <div class="form-group">
+                        <label for="training-logistic">Luogo / Logistica</label>
+                        <select id="training-logistic">
+                            <option value="">-- Seleziona Luogo --</option>
+                            <option value="casa">🏠 Casa</option>
+                            <option value="trasferta">🚌 Trasferta</option>
+                            <option value="spiaggia">🏖️ Spiaggia</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-row">
@@ -1841,25 +2531,195 @@
                             <div class="tactical-board-container inline-board half-pitch" id="board-warmup-half" data-phase="warmup-half" style="flex: none; position: relative; height: 320px; width: 359px; background: url('futsal_pitch.svg') center/100% 100% no-repeat; background-size: 100% 200%; background-position: top center; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
                         </div>
                     </div>
-                    <div class="form-group" style="flex: 1;">
-                        <label for="training-warmup-mins">Minutaggio (min)</label>
-                        <input type="number" id="training-warmup-mins" placeholder="Es: 15" min="0">
+                    <div class="form-group" style="flex: 1; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div>
+                            <label for="training-warmup-mins">Minutaggio (min)</label>
+                            <input type="number" id="training-warmup-mins" placeholder="Es: 15" min="0">
+                        </div>
+                        <div>
+                            <label for="training-warmup-link" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Link Video/Foto/Doc</span>
+                                <a id="training-warmup-link-btn" href="#" target="_blank" style="display: none; font-size: 0.75rem; color: var(--color-coach); text-decoration: underline; font-weight: bold;">🔗 Apri</a>
+                            </label>
+                            <input type="url" id="training-warmup-link" placeholder="https://..." oninput="updateLinkButton('training-warmup-link')">
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group" style="flex: 3;">
-                        <label for="training-main">Fase Centrale</label>
+                        <label for="training-athletic">Lavoro Atletico</label>
+                        <textarea id="training-athletic" rows="2" placeholder="Esercizi di forza, resistenza, velocità..."></textarea>
+                        
+                        <div style="display: flex; gap: 2rem; margin-top: 1rem; justify-content: center; align-items: center;">
+                            <div class="tactical-board-container inline-board" id="board-athletic-full" data-phase="athletic-full" style="flex: none; position: relative; height: 320px; width: 570px; background: url('futsal_pitch_horizontal.svg') center/100% 100% no-repeat; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
+                            <div class="tactical-board-container inline-board half-pitch" id="board-athletic-half" data-phase="athletic-half" style="flex: none; position: relative; height: 320px; width: 359px; background: url('futsal_pitch.svg') center/100% 100% no-repeat; background-size: 100% 200%; background-position: top center; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="flex: 1; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div>
+                            <label for="training-athletic-mins">Minutaggio (min)</label>
+                            <input type="number" id="training-athletic-mins" placeholder="Es: 20" min="0">
+                        </div>
+                        <div>
+                            <label for="training-athletic-link" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Link Video/Foto/Doc</span>
+                                <a id="training-athletic-link-btn" href="#" target="_blank" style="display: none; font-size: 0.75rem; color: var(--color-coach); text-decoration: underline; font-weight: bold;">🔗 Apri</a>
+                            </label>
+                            <input type="url" id="training-athletic-link" placeholder="https://..." oninput="updateLinkButton('training-athletic-link')">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 3;">
+                        <label for="training-main">Fase Centrale - Esercizio 1</label>
                         <textarea id="training-main" rows="3" placeholder="Sviluppo tattico, partitelle a tema..."></textarea>
                         
                         <div style="display: flex; gap: 2rem; margin-top: 1rem; justify-content: center; align-items: center;">
                             <div class="tactical-board-container inline-board" id="board-mainPhase-full" data-phase="mainPhase-full" style="flex: none; position: relative; height: 320px; width: 570px; background: url('futsal_pitch_horizontal.svg') center/100% 100% no-repeat; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
                             <div class="tactical-board-container inline-board half-pitch" id="board-mainPhase-half" data-phase="mainPhase-half" style="flex: none; position: relative; height: 320px; width: 359px; background: url('futsal_pitch.svg') center/100% 100% no-repeat; background-size: 100% 200%; background-position: top center; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
                         </div>
+
+                        <!-- QUARTETTI DA PROVARE - FASE CENTRALE 1 -->
+                        <div class="glass-panel" style="margin-top: 1.25rem; padding: 1rem; border-left: 4px solid var(--color-tatt);">
+                            <h5 style="margin: 0 0 0.75rem 0; color: var(--color-tatt); font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                                <span>👥 Quartetti da Provare (Fase Centrale - Esercizio 1)</span>
+                                <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: normal;">Giocatori assenti <strong>(A)</strong> non selezionabili.</span>
+                            </h5>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                                <!-- 1° Quartetto -->
+                                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-player); margin-bottom: 0.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.25rem;">
+                                        1° Quartetto
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                        <select id="training-main-q1-slot-1" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q1-slot-2" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q1-slot-3" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q1-slot-4" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q1-slot-5" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                    </div>
+                                </div>
+
+                                <!-- 2° Quartetto -->
+                                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-fisi); margin-bottom: 0.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.25rem;">
+                                        2° Quartetto
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                        <select id="training-main-q2-slot-1" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q2-slot-2" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q2-slot-3" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q2-slot-4" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q2-slot-5" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                    </div>
+                                </div>
+
+                                <!-- 3° Quartetto -->
+                                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-tecn); margin-bottom: 0.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.25rem;">
+                                        3° Quartetto
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                        <select id="training-main-q3-slot-1" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q3-slot-2" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q3-slot-3" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q3-slot-4" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main-q3-slot-5" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group" style="flex: 1;">
-                        <label for="training-main-mins">Minutaggio (min)</label>
-                        <input type="number" id="training-main-mins" placeholder="Es: 45" min="0">
+                    <div class="form-group" style="flex: 1; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div>
+                            <label for="training-main-mins">Minutaggio (min)</label>
+                            <input type="number" id="training-main-mins" placeholder="Es: 45" min="0">
+                        </div>
+                        <div>
+                            <label for="training-main-link" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Link Video/Foto/Doc</span>
+                                <a id="training-main-link-btn" href="#" target="_blank" style="display: none; font-size: 0.75rem; color: var(--color-coach); text-decoration: underline; font-weight: bold;">🔗 Apri</a>
+                            </label>
+                            <input type="url" id="training-main-link" placeholder="https://..." oninput="updateLinkButton('training-main-link')">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 3;">
+                        <label for="training-main2">Fase Centrale - Esercizio 2 / Variante</label>
+                        <textarea id="training-main2" rows="3" placeholder="Ulteriori esercitazioni, varianti o appunti..."></textarea>
+                        
+                        <div style="display: flex; gap: 2rem; margin-top: 1rem; justify-content: center; align-items: center;">
+                            <div class="tactical-board-container inline-board" id="board-main2Phase-full" data-phase="main2Phase-full" style="flex: none; position: relative; height: 320px; width: 570px; background: url('futsal_pitch_horizontal.svg') center/100% 100% no-repeat; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
+                            <div class="tactical-board-container inline-board half-pitch" id="board-main2Phase-half" data-phase="main2Phase-half" style="flex: none; position: relative; height: 320px; width: 359px; background: url('futsal_pitch.svg') center/100% 100% no-repeat; background-size: 100% 200%; background-position: top center; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
+                        </div>
+
+                        <!-- QUARTETTI DA PROVARE - FASE CENTRALE 2 -->
+                        <div class="glass-panel" style="margin-top: 1.25rem; padding: 1rem; border-left: 4px solid var(--color-tatt);">
+                            <h5 style="margin: 0 0 0.75rem 0; color: var(--color-tatt); font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                                <span>👥 Quartetti da Provare (Fase Centrale - Esercizio 2)</span>
+                                <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: normal;">Giocatori assenti <strong>(A)</strong> non selezionabili.</span>
+                            </h5>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                                <!-- 1° Quartetto -->
+                                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-player); margin-bottom: 0.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.25rem;">
+                                        1° Quartetto
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                        <select id="training-main2-q1-slot-1" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q1-slot-2" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q1-slot-3" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q1-slot-4" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q1-slot-5" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                    </div>
+                                </div>
+
+                                <!-- 2° Quartetto -->
+                                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-fisi); margin-bottom: 0.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.25rem;">
+                                        2° Quartetto
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                        <select id="training-main2-q2-slot-1" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q2-slot-2" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q2-slot-3" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q2-slot-4" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q2-slot-5" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                    </div>
+                                </div>
+
+                                <!-- 3° Quartetto -->
+                                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-tecn); margin-bottom: 0.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.25rem;">
+                                        3° Quartetto
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                        <select id="training-main2-q3-slot-1" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q3-slot-2" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q3-slot-3" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q3-slot-4" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-main2-q3-slot-5" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="flex: 1; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div>
+                            <label for="training-main2-mins">Minutaggio (min)</label>
+                            <input type="number" id="training-main2-mins" placeholder="Es: 30" min="0">
+                        </div>
+                        <div>
+                            <label for="training-main2-link" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Link Video/Foto/Doc</span>
+                                <a id="training-main2-link-btn" href="#" target="_blank" style="display: none; font-size: 0.75rem; color: var(--color-coach); text-decoration: underline; font-weight: bold;">🔗 Apri</a>
+                            </label>
+                            <input type="url" id="training-main2-link" placeholder="https://..." oninput="updateLinkButton('training-main2-link')">
+                        </div>
                     </div>
                 </div>
 
@@ -1867,15 +2727,75 @@
                     <div class="form-group" style="flex: 3;">
                         <label for="training-final">Fase Finale / Defaticamento</label>
                         <textarea id="training-final" rows="2" placeholder="Partita libera, scarico, stretching..."></textarea>
-
+ 
                         <div style="display: flex; gap: 2rem; margin-top: 1rem; justify-content: center; align-items: center;">
                             <div class="tactical-board-container inline-board" id="board-finalPhase-full" data-phase="finalPhase-full" style="flex: none; position: relative; height: 320px; width: 570px; background: url('futsal_pitch_horizontal.svg') center/100% 100% no-repeat; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
                             <div class="tactical-board-container inline-board half-pitch" id="board-finalPhase-half" data-phase="finalPhase-half" style="flex: none; position: relative; height: 320px; width: 359px; background: url('futsal_pitch.svg') center/100% 100% no-repeat; background-size: 100% 200%; background-position: top center; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: crosshair;"></div>
                         </div>
+
+                        <!-- QUARTETTI DA PROVARE - FASE FINALE -->
+                        <div class="glass-panel" style="margin-top: 1.25rem; padding: 1rem; border-left: 4px solid var(--color-tatt);">
+                            <h5 style="margin: 0 0 0.75rem 0; color: var(--color-tatt); font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                                <span>👥 Quartetti da Provare (Fase Finale / Defaticamento)</span>
+                                <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: normal;">Giocatori assenti <strong>(A)</strong> non selezionabili.</span>
+                            </h5>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                                <!-- 1° Quartetto -->
+                                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-player); margin-bottom: 0.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.25rem;">
+                                        1° Quartetto
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                        <select id="training-final-q1-slot-1" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q1-slot-2" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q1-slot-3" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q1-slot-4" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q1-slot-5" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                    </div>
+                                </div>
+
+                                <!-- 2° Quartetto -->
+                                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-fisi); margin-bottom: 0.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.25rem;">
+                                        2° Quartetto
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                        <select id="training-final-q2-slot-1" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q2-slot-2" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q2-slot-3" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q2-slot-4" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q2-slot-5" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                    </div>
+                                </div>
+
+                                <!-- 3° Quartetto -->
+                                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-tecn); margin-bottom: 0.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.25rem;">
+                                        3° Quartetto
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                        <select id="training-final-q3-slot-1" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q3-slot-2" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q3-slot-3" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q3-slot-4" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                        <select id="training-final-q3-slot-5" class="form-control quartet-slot-select" onchange="renderQuartetDropdowns()" style="background:#1e293b; color:#fff; border:1px solid rgba(255,255,255,0.2); font-size:0.8rem; padding:0.35rem; border-radius:6px; cursor:pointer; width:100%;"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group" style="flex: 1;">
-                        <label for="training-final-mins">Minutaggio (min)</label>
-                        <input type="number" id="training-final-mins" placeholder="Es: 15" min="0">
+                    <div class="form-group" style="flex: 1; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div>
+                            <label for="training-final-mins">Minutaggio (min)</label>
+                            <input type="number" id="training-final-mins" placeholder="Es: 15" min="0">
+                        </div>
+                        <div>
+                            <label for="training-final-link" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Link Video/Foto/Doc</span>
+                                <a id="training-final-link-btn" href="#" target="_blank" style="display: none; font-size: 0.75rem; color: var(--color-coach); text-decoration: underline; font-weight: bold;">🔗 Apri</a>
+                            </label>
+                            <input type="url" id="training-final-link" placeholder="https://..." oninput="updateLinkButton('training-final-link')">
+                        </div>
                     </div>
                 </div>
                 
@@ -1902,8 +2822,8 @@
     </div>
 
     <!-- APP FOOTER -->
-    <footer class="app-footer container">
-        <p>&copy; 2026 Futsal Dashboard. Sviluppato per la gestione tecnica di squadre di Calcio a 5.</p>
+    <footer class="app-footer container" style="padding: 0.15rem 0; margin-top: 0.3rem; margin-bottom: 0.1rem;">
+        <p style="margin: 0; padding: 0; line-height: 1; font-size: 0.68rem; color: var(--text-muted);">&copy; 2026 Futsal Dashboard. Sviluppato per la gestione tecnica di squadre di Calcio a 5.</p>
     </footer>
 
     <!-- MODAL OVERLAY (GENERAL POPUPS) -->
@@ -1953,6 +2873,15 @@
                     <div class="form-group">
                         <label for="popup-match-type">Tipo Sessione / Descrizione</label>
                         <input type="text" id="popup-match-type" placeholder="Es. Tattica, Fisica, Tecnica">
+                    </div>
+                    <div class="form-group">
+                        <label for="popup-training-logistic">Luogo Seduta</label>
+                        <select id="popup-training-logistic">
+                            <option value="">-- Seleziona Luogo --</option>
+                            <option value="casa">🏠 Casa</option>
+                            <option value="trasferta">🚌 Trasferta</option>
+                            <option value="spiaggia">🏖️ Spiaggia</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-actions" style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
@@ -2011,6 +2940,15 @@
                         <label for="edit-col-type">Tipo Sessione / Descrizione</label>
                         <input type="text" id="edit-col-type" placeholder="Es. Tattica, Fisica, Tecnica">
                     </div>
+                    <div class="form-group">
+                        <label for="edit-col-training-logistic">Luogo Seduta</label>
+                        <select id="edit-col-training-logistic">
+                            <option value="">-- Seleziona Luogo --</option>
+                            <option value="casa">🏠 Casa</option>
+                            <option value="trasferta">🚌 Trasferta</option>
+                            <option value="spiaggia">🏖️ Spiaggia</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <div class="modal-actions" style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; width: 100%;">
@@ -2035,6 +2973,33 @@
             </div>
             <div class="modal-body" id="player-summary-body" style="display: flex; flex-direction: column; gap: 1.5rem;">
                 <!-- Populated dynamically via JS -->
+            </div>
+        </div>
+
+        <!-- POPUP: RIEPILOGO PRE-CAMPIONATO (SEDUTE E AMICHEVOLI) -->
+        <div id="popup-preseason-summary" class="modal-content glass-panel hidden" style="max-width: 900px; width: 95%; max-height: 90vh; overflow-y: auto; padding: 2rem;">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3 style="margin: 0; color: var(--color-player); font-size: 1.3rem; display: flex; align-items: center; gap: 0.5rem;">
+                        📋 Riepilogo Pre-Campionato
+                    </h3>
+                    <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--text-muted);">Sintesi sedute di allenamento e amichevoli (dal 1° Giorno 17/08/2026 fino al 18/09/2026)</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="preseason-summary-body" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <!-- Populated dynamically via JS -->
+            </div>
+            <div class="modal-actions" style="margin-top: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="button" class="btn btn-primary" onclick="downloadPreseasonSummaryTXT()">
+                        📄 Scarica File TXT
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="printPreseasonSummary()">
+                        🖨️ Stampa / PDF
+                    </button>
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Chiudi</button>
             </div>
         </div>
 
@@ -2081,8 +3046,8 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="new-player-birth-year">Anno di Nascita</label>
-                        <input type="number" id="new-player-birth-year" min="1950" max="2020" placeholder="Es. 1995">
+                        <label for="new-player-birth-year">Data di Nascita</label>
+                        <input type="date" id="new-player-birth-year">
                     </div>
                     <div class="form-group">
                         <label for="new-player-weight">Peso (Kg)</label>
