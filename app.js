@@ -8673,6 +8673,15 @@ window.exportDatabase = function() {
         if (typeof futsalUsers !== 'undefined' && Array.isArray(futsalUsers) && futsalUsers.length > 0) {
             db['futsal_users'] = JSON.stringify(futsalUsers);
         }
+        if (typeof evaluations !== 'undefined' && Array.isArray(evaluations) && evaluations.length > 0) {
+            db['futsal_portal_evaluations'] = JSON.stringify(evaluations);
+        }
+        if (typeof performanceAssessments !== 'undefined' && Array.isArray(performanceAssessments) && performanceAssessments.length > 0) {
+            db['futsal_portal_assessments'] = JSON.stringify(performanceAssessments);
+        }
+        if (typeof window.savedSchemi !== 'undefined' && Array.isArray(window.savedSchemi) && window.savedSchemi.length > 0) {
+            db['futsal_portal_schemi'] = JSON.stringify(window.savedSchemi);
+        }
         
         const jsonStr = JSON.stringify(db, null, 2);
         const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });

@@ -709,8 +709,360 @@ function openTrainingForm(dateStr = '') {
         }
     }
 
+    window.renderTrainingPhotoQuartets(dateStr);
     updateAllQuartetAbsenceAlerts();
 }
+
+window.resetPhaseQuartets = function(phaseKey) {
+    const dateStr = document.getElementById('training-date')?.value || '';
+    if (!dateStr || !window.trainings) return;
+
+    let session = window.trainings.find(t => t.date === dateStr);
+    if (!session) {
+        session = { date: dateStr };
+        window.trainings.push(session);
+    }
+
+    const phasesToReset = phaseKey ? [phaseKey] : ['mainPhase', 'main2Phase', 'finalPhase'];
+
+    phasesToReset.forEach(pK => {
+        session[pK] = {
+            quartet1: 'EMPTY',
+            quartet2: 'EMPTY',
+            quartet3: 'EMPTY',
+            isReset: true
+        };
+    });
+
+    localStorage.setItem('futsal_portal_trainings', JSON.stringify(window.trainings));
+    
+    if (window.renderTrainingPhotoQuartets) {
+        window.renderTrainingPhotoQuartets(dateStr);
+    }
+
+    if (window.showToast) {
+        window.showToast("Tutti i giocatori della fase sono stati riposizionati in panchina.", "info");
+    }
+};
+
+window.quartetDragData = null;
+
+window.handleQuartetDragStart = function(ev, pId, phaseKey, qKey, slotIdx) {
+    window.quartetDragData = { pId: String(pId), phaseKey, qKey, slotIdx: parseInt(slotIdx) };
+    if (ev.dataTransfer) {
+        ev.dataTransfer.setData('text/plain', JSON.stringify(window.quartetDragData));
+        ev.dataTransfer.effectAllowed = 'move';
+    }
+};
+
+window.handleQuartetDragOver = function(ev) {
+    ev.preventDefault();
+    if (ev.dataTransfer) ev.dataTransfer.dropEffect = 'move';
+};
+
+window.handleQuartetDrop = function(ev, targetPhaseKey, targetQKey, targetSlotIdx) {
+    ev.preventDefault();
+    let data = window.quartetDragData;
+    if (!data) {
+        try {
+            data = JSON.parse(ev.dataTransfer.getData('text/plain'));
+        } catch(e) {}
+    }
+    if (!data || !data.pId) return;
+
+    const dateStr = document.getElementById('training-date')?.value || '';
+    if (!dateStr || !window.trainings) return;
+
+    let session = window.trainings.find(t => t.date === dateStr);
+    if (!session) {
+        session = { date: dateStr };
+        window.trainings.push(session);
+    }
+
+    if (!session[targetPhaseKey]) session[targetPhaseKey] = {};
+    if (data.phaseKey && !session[data.phaseKey]) session[data.phaseKey] = {};
+
+    const playersList = (typeof players !== 'undefined' && Array.isArray(players) && players.length > 0) ? players : (window.players || []);
+    const movedPlayer = playersList.find(p => String(p.id) === String(data.pId) || p.name === data.pId);
+    if (!movedPlayer) return;
+
+    const movedName = window.getInvertedName ? window.getInvertedName(movedPlayer.name) : movedPlayer.name;
+
+    const getQuartetSlots = (phaseK, qK) => {
+        const pData = session[phaseK] || {};
+        const qStr = pData[qK] || session[qK] || '';
+        if (!qStr || qStr === 'EMPTY') return ['', '', '', '', ''];
+        
+        let parts = qStr.split('|');
+        if (parts.length !== 5) {
+            parts = qStr.split(/\s*-\s*/);
+            if (parts.length !== 5) {
+                const filtered = qStr.split(/\s*(?:,| - | -|-)\s*/).filter(Boolean);
+                parts = ['', '', '', '', ''];
+                filtered.forEach((n, i) => { if (i < 5) parts[i] = n; });
+            }
+        }
+        while (parts.length < 5) parts.push('');
+        return parts.slice(0, 5).map(s => (s || '').trim());
+    };
+
+    const setQuartetSlots = (phaseK, qK, slotsArr) => {
+        if (!session[phaseK]) session[phaseK] = {};
+        const fixedArr = slotsArr.slice(0, 5).map(s => (s && s !== 'EMPTY') ? s.trim() : '');
+        if (fixedArr.every(s => !s)) {
+            session[phaseK][qK] = 'EMPTY';
+        } else {
+            session[phaseK][qK] = fixedArr.join('|');
+        }
+    };
+
+    if (targetQKey === 'bench') {
+        if (data.qKey && data.qKey !== 'bench') {
+            const srcSlots = getQuartetSlots(data.phaseKey, data.qKey);
+            if (data.slotIdx >= 0 && data.slotIdx < 5) {
+                srcSlots[data.slotIdx] = '';
+            } else {
+                const idx = srcSlots.findIndex(n => n.toLowerCase() === movedName.toLowerCase() || n.toLowerCase() === movedPlayer.name.toLowerCase());
+                if (idx !== -1) srcSlots[idx] = '';
+            }
+            setQuartetSlots(data.phaseKey, data.qKey, srcSlots);
+        }
+    } else if (['quartet1', 'quartet2', 'quartet3'].includes(targetQKey)) {
+        const destSlots = getQuartetSlots(targetPhaseKey, targetQKey);
+        const existingTargetName = destSlots[targetSlotIdx] || '';
+
+        if (data.qKey && data.qKey !== 'bench') {
+            const srcSlots = getQuartetSlots(data.phaseKey, data.qKey);
+            if (data.slotIdx >= 0 && data.slotIdx < 5) {
+                srcSlots[data.slotIdx] = existingTargetName;
+            }
+            setQuartetSlots(data.phaseKey, data.qKey, srcSlots);
+        }
+
+        destSlots[targetSlotIdx] = movedName;
+        setQuartetSlots(targetPhaseKey, targetQKey, destSlots);
+    }
+
+    localStorage.setItem('futsal_portal_trainings', JSON.stringify(window.trainings));
+    window.renderTrainingPhotoQuartets(dateStr);
+    window.quartetDragData = null;
+};
+
+window.renderTrainingPhotoQuartets = function(dateStr) {
+    if (!dateStr) {
+        dateStr = document.getElementById('training-date')?.value || '';
+    }
+    const playersList = (typeof players !== 'undefined' && Array.isArray(players) && players.length > 0) ? players : (window.players || []);
+    
+    let roster = {};
+    let session = null;
+    if (dateStr && window.trainings) {
+        session = window.trainings.find(t => t.date === dateStr);
+        if (session && session.roster) roster = session.roster;
+    }
+
+    const phases = [
+        { id: 'training-main-quartets-display', key: 'mainPhase' },
+        { id: 'training-main2-quartets-display', key: 'main2Phase' },
+        { id: 'training-final-quartets-display', key: 'finalPhase' }
+    ];
+
+    const slotLabels = ['PIV', 'LAT SX', 'LAT DX', 'CEN', 'POR'];
+    const slotPos = [
+        { top: '15%', left: '50%' }, // Pivot
+        { top: '42%', left: '22%' }, // Lat Sx
+        { top: '42%', left: '78%' }, // Lat Dx
+        { top: '68%', left: '50%' }, // Centrale
+        { top: '89%', left: '50%' }  // Portiere
+    ];
+
+    phases.forEach(phase => {
+        const container = document.getElementById(phase.id);
+        if (!container) return;
+
+        const phaseData = session ? session[phase.key] : null;
+
+        const getQuartetPlayersArr = (qKey) => {
+            const qStr = (phaseData && phaseData[qKey]) || (session && session[qKey]) || '';
+            if (!qStr || qStr === 'EMPTY') return [null, null, null, null, null];
+            
+            let rawParts = qStr.split('|');
+            if (rawParts.length !== 5) {
+                rawParts = qStr.split(/\s*-\s*/);
+                if (rawParts.length !== 5) {
+                    const filtered = qStr.split(/\s*(?:,| - | -|-)\s*/).filter(Boolean);
+                    rawParts = ['', '', '', '', ''];
+                    filtered.forEach((n, i) => { if (i < 5) rawParts[i] = n; });
+                }
+            }
+            while (rawParts.length < 5) rawParts.push('');
+            
+            return rawParts.slice(0, 5).map(name => {
+                const cleanName = (name || '').trim();
+                if (!cleanName || cleanName === 'EMPTY') return null;
+                return playersList.find(p => {
+                    const pName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+                    return pName.toLowerCase().trim() === cleanName.toLowerCase().trim() || p.name.toLowerCase().trim() === cleanName.toLowerCase().trim();
+                }) || null;
+            });
+        };
+
+        let q1Slots = getQuartetPlayersArr('quartet1');
+        let q2Slots = getQuartetPlayersArr('quartet2');
+        let q3Slots = getQuartetPlayersArr('quartet3');
+
+        if (!phaseData && !q1Slots.some(Boolean) && !q2Slots.some(Boolean) && !q3Slots.some(Boolean)) {
+            const q1List = playersList.filter(p => p.quartets && p.quartets.includes('1'));
+            const q2List = playersList.filter(p => p.quartets && p.quartets.includes('2'));
+            const q3List = playersList.filter(p => p.quartets && p.quartets.includes('3'));
+            q1List.forEach((p, idx) => { if (idx < 5) q1Slots[idx] = p; });
+            q2List.forEach((p, idx) => { if (idx < 5) q2Slots[idx] = p; });
+            q3List.forEach((p, idx) => { if (idx < 5) q3Slots[idx] = p; });
+        }
+
+        const assignedIds = new Set();
+        [...q1Slots, ...q2Slots, ...q3Slots].forEach(p => { if (p && p.id) assignedIds.add(String(p.id)); });
+
+        const benchAvailable = [];
+        const absentPlayers = [];
+
+        playersList.forEach(p => {
+            const pId = String(p.id);
+            const st = roster[p.id] !== undefined ? roster[p.id] : roster[pId];
+            const isAbsent = (st === 'A' || st === 'I' || st === 'G');
+
+            if (isAbsent) {
+                const reason = st === 'A' ? 'Assente' : (st === 'I' ? 'Infortunato' : 'Giustificato');
+                absentPlayers.push({ player: p, reason });
+            } else if (!assignedIds.has(pId)) {
+                benchAvailable.push(p);
+            }
+        });
+
+        const renderSlotNode = (p, label, phaseKey, qKey, slotIdx, isAbsentBadge = '') => {
+            const pos = slotPos[slotIdx];
+            if (!p) {
+                return `
+                    <div style="position: absolute; top: ${pos.top}; left: ${pos.left}; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5;"
+                         ondragover="window.handleQuartetDragOver(event)"
+                         ondrop="window.handleQuartetDrop(event, '${phase.key}', '${qKey}', ${slotIdx})">
+                        <div style="width: 38px; height: 38px; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.3); background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.4); font-weight: 800; font-size: 0.62rem;" title="Trascina qui un atleta (${label})">
+                            ${label}
+                        </div>
+                    </div>
+                `;
+            }
+
+            const pName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+            const photoUrl = p.photo || '';
+            const isFieldPlayerAsGK = (slotIdx === 4 && p.role !== 'Portiere' && p.role !== 'POR');
+
+            let tooltipText = `${pName}${p.number ? ' #' + p.number : ''} (${p.role || label})`;
+            if (isFieldPlayerAsGK) tooltipText += ' - 🧤 Portiere di Movimento (5v4)';
+            if (isAbsentBadge) tooltipText += ` - ${isAbsentBadge}`;
+
+            let borderColor = isAbsentBadge ? '#ef4444' : (slotIdx === 4 ? (isFieldPlayerAsGK ? '#ec4899' : '#f59e0b') : '#38bdf8');
+
+            const photoHtml = photoUrl
+                ? `<img src="${escapeHTML(photoUrl)}" alt="${escapeHTML(pName)}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2.5px solid ${borderColor}; box-shadow: 0 4px 12px rgba(0,0,0,0.6); cursor: grab; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';" title="${escapeHTML(tooltipText)}">`
+                : `<div style="width: 42px; height: 42px; border-radius: 50%; background: #1e293b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; color: #fff; border: 2.5px solid ${borderColor}; box-shadow: 0 4px 12px rgba(0,0,0,0.6); cursor: grab; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';" title="${escapeHTML(tooltipText)}">${escapeHTML((pName[0] || 'P').toUpperCase())}</div>`;
+
+            return `
+                <div style="position: absolute; top: ${pos.top}; left: ${pos.left}; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10;"
+                     draggable="true"
+                     ondragstart="window.handleQuartetDragStart(event, '${p.id || pName}', '${phase.key}', '${qKey}', ${slotIdx})"
+                     ondragover="window.handleQuartetDragOver(event)"
+                     ondrop="window.handleQuartetDrop(event, '${phase.key}', '${qKey}', ${slotIdx})">
+                    ${photoHtml}
+                    ${isFieldPlayerAsGK ? `<span style="position: absolute; bottom: -4px; right: -4px; background: #ec4899; color: #fff; font-size: 0.55rem; font-weight: 900; padding: 1px 3px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.5);" title="Portiere di Movimento">PdM</span>` : ''}
+                </div>
+            `;
+        };
+
+        const renderDiamondPitch = (title, color, qKey, slotsArr) => {
+            const nodesHtml = slotsArr.map((p, idx) => renderSlotNode(p, slotLabels[idx], phase.key, qKey, idx)).join('');
+
+            return `
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 0.65rem; display: flex; flex-direction: column; gap: 0.5rem; min-width: 200px;">
+                    <div style="font-size: 0.8rem; font-weight: 800; color: ${color}; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.3rem; display: flex; justify-content: space-between; align-items: center;">
+                        <span>${title}</span>
+                        <span style="font-size: 0.68rem; color: var(--text-muted); font-weight: normal;">Rombo + Portiere</span>
+                    </div>
+                    
+                    <div style="position: relative; height: 210px; width: 100%; background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; background-image: radial-gradient(rgba(56, 189, 248, 0.1) 1px, transparent 0); background-size: 16px 16px;">
+                        <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 90px; height: 40px; border: 1px solid rgba(255,255,255,0.12); border-bottom: none; border-radius: 45px 45px 0 0;"></div>
+                        <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 70px; height: 35px; border: 1px solid rgba(255,255,255,0.08); border-top: none; border-radius: 0 0 35px 35px;"></div>
+                        
+                        ${nodesHtml}
+                    </div>
+                </div>
+            `;
+        };
+
+        const renderBenchPlayerAvatar = (p, badgeText = '') => {
+            const pName = window.getInvertedName ? window.getInvertedName(p.name) : p.name;
+            const photoUrl = p.photo || '';
+            const tooltipText = `${pName}${p.number ? ' #' + p.number : ''} (${p.role || 'Giocatore'})${badgeText ? ' - ' + badgeText : ''}`;
+            const borderColor = badgeText ? '#ef4444' : 'rgba(56, 189, 248, 0.6)';
+
+            const avatarInner = photoUrl
+                ? `<img src="${escapeHTML(photoUrl)}" alt="${escapeHTML(pName)}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid ${borderColor}; box-shadow: 0 2px 8px rgba(0,0,0,0.4); cursor: grab; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.18)';" onmouseout="this.style.transform='scale(1)';" title="${escapeHTML(tooltipText)}">`
+                : `<div title="${escapeHTML(tooltipText)}" onmouseover="this.style.transform='scale(1.18)';" onmouseout="this.style.transform='scale(1)';" style="width: 40px; height: 40px; border-radius: 50%; background: #1e293b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; color: #fff; border: 2px solid ${borderColor}; box-shadow: 0 2px 8px rgba(0,0,0,0.4); transition: transform 0.2s; cursor: grab;">${escapeHTML((pName[0] || 'P').toUpperCase())}</div>`;
+
+            return `
+                <div style="position: relative; display: inline-flex;"
+                     draggable="${badgeText ? 'false' : 'true'}"
+                     ondragstart="window.handleQuartetDragStart(event, '${p.id || pName}', '${phase.key}', 'bench', -1)"
+                     title="${escapeHTML(tooltipText)}">
+                    ${avatarInner}
+                </div>
+            `;
+        };
+
+        let benchAvailableHtml = benchAvailable.length > 0
+            ? `<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; padding: 0.25rem 0;">${benchAvailable.map(p => renderBenchPlayerAvatar(p)).join('')}</div>`
+            : `<div style="font-size: 0.7rem; color: var(--text-muted); font-style: italic; padding: 0.25rem 0;">Tutti gli atleti impiegati nei quartetti</div>`;
+
+        let absentHtml = absentPlayers.length > 0
+            ? `<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; padding: 0.25rem 0;">${absentPlayers.map(item => renderBenchPlayerAvatar(item.player, `⚠️ ${item.reason}`)).join('')}</div>`
+            : `<div style="font-size: 0.7rem; color: #86efac; font-style: italic; padding: 0.25rem 0;">Nessuna assenza per questa data</div>`;
+
+        const benchBlockHtml = `
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 0.65rem; display: flex; flex-direction: column; gap: 0.5rem; min-width: 230px;"
+                 ondragover="window.handleQuartetDragOver(event)"
+                 ondrop="window.handleQuartetDrop(event, '${phase.key}', 'bench', -1)">
+                <div style="font-size: 0.8rem; font-weight: 800; color: #38bdf8; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.35rem; display: flex; justify-content: space-between; align-items: center;">
+                    <span>🪑 Panchina & Assenti</span>
+                    <span style="font-size: 0.68rem; color: var(--text-muted);">${benchAvailable.length} a disp. | ${absentPlayers.length} assenti</span>
+                </div>
+                
+                <!-- Layout a due colonne affiancate interne: A Disposizione a sinistra, Assenti a destra -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; width: 100%;">
+                    <!-- Colonna 1: A Disposizione -->
+                    <div style="display: flex; flex-direction: column; gap: 0.3rem; border-right: 1px dashed rgba(255,255,255,0.12); padding-right: 0.4rem;">
+                        <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">🟢 A Disposizione</span>
+                        ${benchAvailableHtml}
+                    </div>
+
+                    <!-- Colonna 2: Assenti Programmati -->
+                    <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                        <span style="font-size: 0.65rem; font-weight: 800; color: #f87171; text-transform: uppercase; display: flex; align-items: center; gap: 0.2rem;">
+                            🔴 Assenti (${absentPlayers.length})
+                        </span>
+                        ${absentHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.innerHTML = `
+            ${renderDiamondPitch('1° Quartetto', 'var(--color-player)', 'quartet1', q1Slots)}
+            ${renderDiamondPitch('2° Quartetto', 'var(--color-fisi)', 'quartet2', q2Slots)}
+            ${renderDiamondPitch('3° Quartetto', 'var(--color-tecn)', 'quartet3', q3Slots)}
+            ${benchBlockHtml}
+        `;
+    });
+};
 
 function closeTrainingForm() {
     document.getElementById('training-session-form-container').style.display = 'none';
