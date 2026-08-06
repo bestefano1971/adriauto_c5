@@ -6203,7 +6203,12 @@ function setupAthleticSubTabs() {
             });
             
             // Subtab-specific actions
-            if (targetSub === 'subtab-athletic-history') {
+            if (targetSub === 'subtab-athletic-insert') {
+                const dateInput = document.getElementById('athletic-test-date');
+                if (dateInput && !dateInput.value) {
+                    dateInput.value = new Date().toISOString().split('T')[0];
+                }
+            } else if (targetSub === 'subtab-athletic-history') {
                 renderAthleticTestsTable();
             } else if (targetSub === 'subtab-athletic-analysis') {
                 handleAthleticAnalysisPlayerChange();
@@ -6248,24 +6253,24 @@ function getTestRating(testType, value) {
             badgeClass = 'badge-danger';
             desc = `Cilindrata aerobica insufficiente (VO2max stimato: ${vo2} ml/kg/min). Richiede lavoro specifico di fondo e interval training.`;
         }
-    } else if (testType === 'Agilità') {
+    } else if (testType === 'Agilità' || testType === 'agility' || testType === 'illinois' || testType === 'Illinois') {
         const t = parseFloat(value) || 99;
-        if (t < 9.5) {
+        if (t <= 15.2) {
             rating = 'Eccellente';
             badgeClass = 'badge-success';
-            desc = 'Rapidità e fluidità eccezionale nei cambi di direzione. Ottima coordinazione motoria e frenata.';
-        } else if (t <= 10.5) {
+            desc = 'Rapidità e fluidità eccezionale nei cambi di direzione e nello slalom dell\'Illinois Test.';
+        } else if (t <= 16.5) {
             rating = 'Buono';
             badgeClass = 'badge-info';
-            desc = 'Ottimo controllo motorio e reattività. Agile nei cambi di orientamento tipici del futsal.';
-        } else if (t <= 11.5) {
+            desc = 'Ottimo controllo motorio e reattività nello slalom e nelle inversioni del Test Illinois.';
+        } else if (t <= 18.2) {
             rating = 'Medio';
             badgeClass = 'badge-warning';
-            desc = 'Agilità nella media. Margini di miglioramento nell\'esplosività laterale e nella rapidità del passo.';
+            desc = 'Agilità nella media. Margini di miglioramento nella frequenza di passo e nei cambi di direzione.';
         } else {
             rating = 'Insufficiente';
             badgeClass = 'badge-danger';
-            desc = 'Movimenti rigidi o lenti nei cambi di direzione. Richiede esercizi coordinativi e di forza esplosiva laterale.';
+            desc = 'Tempo elevato nel Test Illinois. Richiede lavoro specifico sulla frequenza d\'appoggio e cambi di senso.';
         }
     } else if (testType === 'sprint') {
         const t = parseFloat(value) || 99;
@@ -6402,9 +6407,14 @@ function populateAthleticDropdowns() {
     const selVal2 = filterPlayer.value;
     const selVal3 = analysisPlayer.value;
     
-    playerSelect.innerHTML = '<option value="">-- Seleziona giÃ  --</option>';
+    playerSelect.innerHTML = '<option value="">-- Seleziona Giocatore --</option>';
     filterPlayer.innerHTML = '<option value="all">Tutti i Giocatori</option>';
-    analysisPlayer.innerHTML = '<option value="">-- Seleziona giÃ  --</option>';
+    analysisPlayer.innerHTML = '<option value="">-- Seleziona Giocatore --</option>';
+    
+    const dateInput = document.getElementById('athletic-test-date');
+    if (dateInput && !dateInput.value) {
+        dateInput.value = new Date().toISOString().split('T')[0];
+    }
     
     // Sort players by name
     const sorted = [...players].sort((a, b) => a.name.localeCompare(b.name));

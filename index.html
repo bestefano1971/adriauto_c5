@@ -1771,7 +1771,7 @@
                     <form id="form-athletic-test-inline" style="display: flex; flex-direction: column; gap: 1rem;">
                         <div class="form-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 1rem;">
                             <div class="form-group">
-                                <label for="athletic-player-select">Giocatore</label>
+                                <label for="athletic-player-select">Seleziona Giocatore</label>
                                 <select id="athletic-player-select" required style="width: 100%; padding: 0.75rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-color);">
                                     <option value="">-- Seleziona Giocatore --</option>
                                 </select>
@@ -1782,33 +1782,61 @@
                             </div>
                         </div>
                         
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                            <div class="form-group">
-                                <label for="input-yoyo-distance">Yo-Yo IR1 (Metri)</label>
-                                <input type="number" id="input-yoyo-distance" placeholder="Es. 1600" min="40" max="4000" step="40" style="width: 100%; padding: 0.75rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-color);">
-                                <img src="yoyo_test.png" style="width: 100%; border-radius: var(--border-radius-sm); margin-top: 0.5rem; opacity: 0.8;" alt="Yo-Yo Test">
-                                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.4;"><strong>Svolgimento:</strong> Navette da 20m a ritmo di bip sonori progressivi. Dopo ogni navetta (40m) ci sono 10s di recupero attivo (camminata in zona 5m). Il test finisce alla seconda volta che non si rientra nel tempo.</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+                            <!-- TEST 1: YO-YO IR1 -->
+                            <div class="form-group" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 0.85rem; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div>
+                                    <label for="input-yoyo-distance" style="font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 0.35rem;">🏃 Yo-Yo IR1 (Metri)</label>
+                                    <input type="number" id="input-yoyo-distance" placeholder="Es. 1600" min="40" max="4000" step="40" style="width: 100%; padding: 0.6rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-color); font-weight: bold;">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.65rem; margin-top: 0.65rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 0.4rem 0.5rem; border-radius: 6px;">
+                                    <img src="Media/tools/yoyo_test.png" style="height: 75px; width: 110px; object-fit: contain; border-radius: 4px; background: #0f172a; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;" alt="Yo-Yo Test" title="Clicca per ingrandire l'immagine" onclick="window.open(this.src)">
+                                    <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0; line-height: 1.3;">
+                                        <strong style="color: #94a3b8;">Svolgimento:</strong> Navette 20m a bip sonori con 10s di recupero (5m). Stop al 2° errore.
+                                    </p>
+                                </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="input-agility-time">T-Test Agility (Secondi)</label>
-                                <input type="number" id="input-agility-time" placeholder="Es. 10.5" step="0.01" min="8" max="20" style="width: 100%; padding: 0.75rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-color);">
-                                <img src="t_test_agility.png" style="width: 100%; border-radius: var(--border-radius-sm); margin-top: 0.5rem; opacity: 0.8;" alt="T-Test Agility">
-                                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.4;"><strong>Svolgimento:</strong> Scatto in avanti di 10m fino al cono centrale, scivolamento laterale a sx (5m), scivolamento a dx (10m), ritorno al centro (5m) e corsa all'indietro (10m) fino alla partenza.</p>
+                            <!-- TEST 2: ILLINOIS AGILITY TEST -->
+                            <div class="form-group" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 0.85rem; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div>
+                                    <label for="input-agility-time" style="font-weight: 700; color: #a855f7; display: flex; align-items: center; gap: 0.35rem;">⚡ Illinois Agility Test (Secondi)</label>
+                                    <input type="number" id="input-agility-time" placeholder="Es. 15.20" step="0.01" min="12" max="25" style="width: 100%; padding: 0.6rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-color); font-weight: bold;">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.65rem; margin-top: 0.65rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 0.4rem 0.5rem; border-radius: 6px;">
+                                    <img src="Media/tools/illinois_agility_test.png" style="height: 75px; width: 110px; object-fit: contain; border-radius: 4px; background: #0f172a; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;" alt="Illinois Agility Test" title="Clicca per ingrandire la mappa del test" onclick="window.open(this.src)">
+                                    <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0; line-height: 1.3;">
+                                        <strong style="color: #94a3b8;">Svolgimento (10m x 5m):</strong> Partenza prona (pancia a terra). Scatto 10m, slalom tra 4 coni centrali (3.3m), scatto top dx e volata finale STOP. Ripetere 2 volte.
+                                    </p>
+                                </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="input-sprint-time">30m Sprint (Secondi)</label>
-                                <input type="number" id="input-sprint-time" placeholder="Es. 4.20" step="0.01" min="3.5" max="8" style="width: 100%; padding: 0.75rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-color);">
-                                <img src="sprint_30m.png" style="width: 100%; border-radius: var(--border-radius-sm); margin-top: 0.5rem; opacity: 0.8;" alt="30m Sprint">
-                                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.4;"><strong>Svolgimento:</strong> Partenza da fermo, l'atleta esegue un'accelerazione massimale in linea retta per 30 metri. Il tempo parte al primo movimento e si ferma al superamento della linea d'arrivo.</p>
+                            <!-- TEST 3: 30M SPRINT -->
+                            <div class="form-group" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 0.85rem; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div>
+                                    <label for="input-sprint-time" style="font-weight: 700; color: #f59e0b; display: flex; align-items: center; gap: 0.35rem;">💨 30m Sprint (Secondi)</label>
+                                    <input type="number" id="input-sprint-time" placeholder="Es. 4.20" step="0.01" min="3.5" max="8" style="width: 100%; padding: 0.6rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-color); font-weight: bold;">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.65rem; margin-top: 0.65rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 0.4rem 0.5rem; border-radius: 6px;">
+                                    <img src="Media/tools/sprint_30m.png" style="height: 75px; width: 110px; object-fit: contain; border-radius: 4px; background: #0f172a; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;" alt="30m Sprint" title="Clicca per ingrandire l'immagine" onclick="window.open(this.src)">
+                                    <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0; line-height: 1.3;">
+                                        <strong style="color: #94a3b8;">Svolgimento:</strong> Partenza da fermo, accelerazione massimale in linea retta per 30 metri.
+                                    </p>
+                                </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="input-cmj-height">Vertical CMJ (Centimetri)</label>
-                                <input type="number" id="input-cmj-height" placeholder="Es. 45" step="0.5" min="20" max="80" style="width: 100%; padding: 0.75rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-color);">
-                                <img src="cmj_jump.png" style="width: 100%; border-radius: var(--border-radius-sm); margin-top: 0.5rem; opacity: 0.8;" alt="CMJ Jump">
-                                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.4;"><strong>Svolgimento:</strong> Posizione eretta, mani fisse sui fianchi. Rapido piegamento sulle gambe (contro-movimento) e salto verticale immediato cercando la massima elevazione possibile. Le gambe restano tese in volo.</p>
+                            <!-- TEST 4: VERTICAL CMJ -->
+                            <div class="form-group" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 0.85rem; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div>
+                                    <label for="input-cmj-height" style="font-weight: 700; color: #22c55e; display: flex; align-items: center; gap: 0.35rem;">🚀 Vertical CMJ (Centimetri)</label>
+                                    <input type="number" id="input-cmj-height" placeholder="Es. 45" step="0.5" min="20" max="80" style="width: 100%; padding: 0.6rem; border-radius: var(--border-radius-md); background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-color); font-weight: bold;">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.65rem; margin-top: 0.65rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 0.4rem 0.5rem; border-radius: 6px;">
+                                    <img src="Media/tools/cmj_jump.png" style="height: 75px; width: 110px; object-fit: contain; border-radius: 4px; background: #0f172a; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;" alt="CMJ Jump" title="Clicca per ingrandire l'immagine" onclick="window.open(this.src)">
+                                    <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0; line-height: 1.3;">
+                                        <strong style="color: #94a3b8;">Svolgimento:</strong> Mani ai fianchi, rapido contromovimento e salto verticale alla massima altezza.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         
@@ -1849,7 +1877,7 @@
                                     <th>Giocatore</th>
                                     <th>Data</th>
                                     <th>Yo-Yo IR1</th>
-                                    <th>T-Test Agility</th>
+                                    <th>Illinois Agility</th>
                                     <th>30m Sprint</th>
                                     <th>Vertical CMJ</th>
                                     <th style="text-align: center;">Azioni</th>
@@ -1910,7 +1938,7 @@
                             </div>
                             <!-- Agility Progress Chart -->
                             <div class="glass-panel" style="padding: 1rem; background: hsla(224, 45%, 4%, 0.3);">
-                                <h4 style="color: var(--color-tatt); margin-bottom: 0.75rem; font-size: 0.9rem;">Evoluzione Agilità (T-Test - Secondi)</h4>
+                                <h4 style="color: var(--color-tatt); margin-bottom: 0.75rem; font-size: 0.9rem;">Evoluzione Agilità (Illinois Test - Secondi)</h4>
                                 <div style="height: 220px; position: relative;">
                                     <canvas id="chart-progress-agility"></canvas>
                                 </div>
